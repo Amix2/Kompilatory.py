@@ -53,18 +53,19 @@ t_GE = r">="
 t_NE = r"!="
 t_EQ = r"="
 
-t_FLOATNUM = r"[\.[0-9]+|[0-9]+\.|[0-9]+\.[0-9]+] ( [E|e] [+|–]?[0-9]+ )?"
-t_INTNUM = r"[0-9]+"
+t_FLOATNUM = r"((\d+\.\d+|\.\d+|\d+\.)([Ee][+–]?\d+)?)|\d+[Ee][+–]?\d+"
+t_INTNUM = r"\d+"
 
 t_ignore = ' \t'
 
 def t_STRING(t):
-    r"\"[a-z|A-Z|0-9| ]+\""
+    r"\"\w*\""
+    t.value = t.value[1:-1]
     return t
 
 def t_ID(t):    
-    r"[a-z|A-Z|_] [a-z|A-Z|0-9]*"    
-    t.type = reserved.get(t.value,'ID')     
+    r"[a-zA-Z_]\w*"    
+    t.type = reserved.get(t.value,'ID')
     return t
 
 def t_COMMENT(t):
@@ -72,7 +73,7 @@ def t_COMMENT(t):
     #return t
 
 def t_newline(t):
-    r'\n+'
+    r'\n'
     t.lexer.lineno += len(t.value)
 
 def find_column(input, token):

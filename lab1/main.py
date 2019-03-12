@@ -1,11 +1,9 @@
 
 import sys
 import ply.lex as lex
-import scanner  # scanner.py is a file you create, (it is not an external library)
-
+import scanner 
 
 if __name__ == '__main__':
-
     try:
         filename = sys.argv[1] if len(sys.argv) > 1 else "example.txt"
         file = open(filename, "r")
@@ -15,7 +13,7 @@ if __name__ == '__main__':
 
     text = file.read()
     lexer = scanner.lexer  
-    lexer.input(text) # Give the lexer some input
+    lexer.input(text)
 
     # Tokenize
     while True:
