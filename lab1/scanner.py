@@ -53,15 +53,18 @@ t_GE = r">="
 t_NE = r"!="
 t_EQ = r"="
 
-t_FLOATNUM = r"[0-9]+\.[0-9]+"
+t_FLOATNUM = r"[\.[0-9]+|[0-9]+\.|[0-9]+\.[0-9]+] ( [E|e] [+|–]?[0-9]+ )?"
 t_INTNUM = r"[0-9]+"
-t_STRING = "\"[a-z|A-Z|0-9]+\""
 
 t_ignore = ' \t'
 
-def t_ID(t):
-    r"[a-z|A-Z|_] [a-z|A-Z|0-9]*"
-    t.type = reserved.get(t.value,'ID') 
+def t_STRING(t):
+    r"\"[a-z|A-Z|0-9| ]+\""
+    return t
+
+def t_ID(t):    
+    r"[a-z|A-Z|_] [a-z|A-Z|0-9]*"    
+    t.type = reserved.get(t.value,'ID')     
     return t
 
 def t_COMMENT(t):
