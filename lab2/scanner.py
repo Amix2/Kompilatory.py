@@ -36,7 +36,7 @@ tokens = [
     "STRING",
     "COMMENT",
     ] + list(reserved.values())
-literals = r"+-*/()[]{}:',;"
+literals = r"+-*/()[]{}:',;="
 
 t_DOTADD = r"\.\+"
 t_DOTSUB = r"\.-"
@@ -51,15 +51,15 @@ t_GT = r">"
 t_LE = r"<="
 t_GE = r">="
 t_NE = r"!="
-t_EQ = r"="
+t_EQ = r"=="
 
-t_FLOATNUM = r"((\d+\.\d*|\.\d+)([Ee][+–]?\d+)?)|\d+[Ee][+–]?\d+"
+t_FLOATNUM = r"((\d+\.\d+|\.\d+|\d+\.)([Ee][+–]?\d+)?)|\d+[Ee][+–]?\d+"
 t_INTNUM = r"\d+"
 
 t_ignore = ' \t'
 
 def t_STRING(t):
-    r"\".*?\""
+    r"\"\w*\""
     t.value = t.value[1:-1]
     return t
 
