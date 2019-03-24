@@ -1,0 +1,18 @@
+tokens = DOTADD, DOTSUB, DOTMUL, DOTDIV, ADDASSIGN, SUBASSIGN, MULASSIGN, DIVASSIGN, 
+  LT, GT, LE, GE, NE, EQ, 
+  ID, 
+  INTNUM, FLOATNUM, STRING, 
+  COMMENT, 
+  FOR, IF, ELSE, WHILE, BREAK, CONTINUE, RETURN, EYE, ZEROS, ONES, PRINT
+literals = "	+-*/()[]{}:',;	"
+
+===================================================================================================
+VALUE 						==> INTNUM | FLOATNUM | ID
+ARITHMETIC_OP 		==> + | - | * | / | | : 
+RELATION_OP 			==> > | < | >= | <= | == | !=
+
+ARTHMETIC_EXP			==> ARTHMETIC_EXP ARTHMETIC_OP VALUE |
+                  	  ( ARTHMETIC_EXP ) | +( ARTHMETIC_EXP ) | -( ARTHMETIC_EXP ) |
+                  	  VALUE | + VALUE | - VALUE
+                      
+RELATION_EXP			==> VALUE RELATION_OP VALUE

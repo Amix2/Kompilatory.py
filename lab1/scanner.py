@@ -57,7 +57,8 @@ t_FLOATNUM = r"[\.[0-9]+|[0-9]+\.|[0-9]+\.[0-9]+] ( [E|e] [+|–]?[0-9]+ )?"
 t_INTNUM = r"[0-9]+"
 
 t_ignore = ' \t'
-
+print (tokens)
+print (literals)
 def t_STRING(t):
     r"\"[a-z|A-Z|0-9| ]+\""
     return t
