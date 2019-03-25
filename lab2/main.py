@@ -7,7 +7,7 @@ import Mparser
 if __name__ == '__main__':
 
     try:
-        filename = sys.argv[1] if len(sys.argv) > 1 else "example1.m"
+        filename = sys.argv[1] if len(sys.argv) > 1 else "example.txt"
         file = open(filename, "r")
     except IOError:
         print("Cannot open {0} file".format(filename))
@@ -24,6 +24,6 @@ if __name__ == '__main__':
             break    # No more input
         column = scanner.find_column(text,tok)
         print("(%d,%d): %s(%s)" %(tok.lineno, column, tok.type, tok.value))
-
+    print("===========================")
     parser = Mparser.parser
-    parser.parse(text, lexer=scanner.lexer)
+    print(parser.parse(text, lexer=scanner.lexer))

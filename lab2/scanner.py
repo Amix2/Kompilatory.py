@@ -59,7 +59,7 @@ t_INTNUM = r"\d+"
 t_ignore = ' \t'
 
 def t_STRING(t):
-    r"\"\w*\""
+    r"\".*?\""
     t.value = t.value[1:-1]
     return t
 

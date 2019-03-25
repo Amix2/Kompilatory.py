@@ -5,7 +5,8 @@ import ply.yacc as yacc;
 
 literals = [ '+','-','*','/','(',')' ]
 
-tokens = ( "VAR", "NUMBER", "MUL");
+tokens = ( "VAR", "NUMBER", "MUL", "DOTDIV");
+t_DOTDIV = r"./"
 
 t_ignore = ' \t'
 
@@ -32,7 +33,9 @@ def t_NUMBER(t):
 
 precedence = (
    ("left", '+', '-'),
-   ("left", '*', '/') )
+   ("left", '*', '/'),
+   ("nonassoc", "MUL"),
+   ("nonassoc", "DOTDIV") )
 
 def p_error(p):
     print("parsing error\n")
@@ -43,33 +46,32 @@ def p_start(p):
 
 def p_expression_number(p):
     """EXPRESSION : NUMBER"""
-    p[0] = p[1]
+    pass
 
 def p_expression_var(p):
     """EXPRESSION : VAR"""
-    p[0] = p[1]
+    pass
 
 
 def p_expression_sum(p):
     """EXPRESSION : EXPRESSION '+' EXPRESSION
                   | EXPRESSION '-' EXPRESSION"""
     # 0                 1       2       3 
-    if   p[2]=='+': p[0] = p[1] + p[3];
-    elif p[2]=='-': p[0] = p[1] - p[3];
+    pass
 
 
 def p_expression_mul(p):
     """EXPRESSION : EXPRESSION '*' EXPRESSION
                   | EXPRESSION '/' EXPRESSION
                   | EXPRESSION MUL EXPRESSION"""
-    if   p[2]=='*': p[0] = p[1] * p[3];
-    elif p[2]=='/': p[0] = p[1] / p[3];
-    else: p[0] = str(p[1]) +"mul"+ str(p[3]);
-
+    pass
+def p_expression_do(p):
+    """EXPRESSION : EXPRESSION DOTDIV EXPRESSION"""
+    pass
 
 def p_expression_group(p):
-    """EXPRESSION : '(' EXPRESSION ')'"""
-    p[0] = p[2]
+    """EXPRESSION : '(' EXPRESSION ']'"""
+    pass
 
 file = open("example.txt", "r");
 
