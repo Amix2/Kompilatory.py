@@ -38,7 +38,7 @@ def p_start(p):
              | WHILE_INSTR 
              | FOR_INSTR 
              | PRINT_FUN 
-             | RETURN_FUN ';'
+             | RETURN_FUN
              | BREAK ';' 
              | CONTINUE ';'"""
     pass
@@ -136,7 +136,7 @@ def p_fun_print(p):
     """PRINT_FUN : PRINT LIST_VALUE ';'"""
     pass
 def p_fun_return(p):
-    """RETURN_FUN : RETURN LIST_VALUE ';'"""
+    """RETURN_FUN : RETURN LIST_VALUE ';' """
     pass
 
 
