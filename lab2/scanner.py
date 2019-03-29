@@ -34,7 +34,6 @@ tokens = [
     "INTNUM",
     "FLOATNUM",
     "STRING",
-    "COMMENT",
     ] + list(reserved.values())
 literals = r"+-*/()[]{}:',;="
 
