@@ -66,7 +66,8 @@ def p_basic_value(p):
              | ONES '(' ARITHMETIC_EXP ')'
              | MATRIX
              | MATRIX "'" """
-    pass
+    print(p[0], p[1])
+    if(len(p) == 2): p[0] = p[1]
 def p_basic_list_values(p):
     """LIST_VALUE : VALUE
                   | VALUE ',' LIST_VALUE"""
@@ -80,7 +81,7 @@ def p_basic_arithmetic_op(p):
                      | DOTSUB
                      | DOTMUL
                      | DOTDIV """
-    pass
+    p[0] = p[1]
 def p_basic_assign_op(p):
     """ASSIGN_OP : ADDASSIGN
                  | SUBASSIGN
