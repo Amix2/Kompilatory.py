@@ -31,5 +31,5 @@ if __name__ == '__main__':
     parser = Mparser.parser
     ast = parser.parse(text, lexer=scanner.lexer)
     print(ast)
-    #ast.printTree()
+    ast.printTree()
 
