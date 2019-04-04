@@ -51,29 +51,21 @@ def p_instruction(p):
 def p_empty(p):
     """empty : """
     pass
-def p_basic_vector_list(p):
-    """VECTOR_LIST : VECTOR_LIST ',' '[' LIST_VALUE ']' %prec expr
-                   | '[' LIST_VALUE ']' ',' '[' LIST_VALUE ']' """
-    p[0] = str(p[1])
-    for q in p[2:]:
-        p[0] += str(q)
 def p_basic_matix(p):
-    """MATRIX : '[' LIST_VALUE ']'
-              | '[' VECTOR_LIST ']' """
+    """VECTOR : '[' LIST_VALUE ']'"""
     p[0] = str(p[1])
     for q in p[2:]:
         p[0] += str(q)
 def p_basic_value(p):
     """VALUE : INTNUM
              | FLOATNUM
-             | ID "'"
              | ID
              | STRING
              | EYE '(' ARITHMETIC_EXP ')'
              | ZEROS '(' ARITHMETIC_EXP ')'
              | ONES '(' ARITHMETIC_EXP ')'
-             | MATRIX
-             | MATRIX "'" """
+             | VECTOR
+             | VALUE "'" """
     p[0] = str(p[1])
     for q in p[2:]:
         p[0] += str(q)

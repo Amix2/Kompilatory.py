@@ -2,6 +2,7 @@
 
 import scanner
 import ply.yacc as yacc
+import AST
 
 
 tokens = scanner.tokens
@@ -31,11 +32,17 @@ def find_column(input, token):
 
 def p_start(p):
     """START : START INSTRUCTION
-             | INSTRUCTION"""
-    pass
+             | INSTRUCTION """
+    if(len(p) == 2):
+        p[0]= AST.InstructionSet([])
+        p[0].append(AST.Instruction(p[1]))
+    else:
+        p[0] = p[1]
+        p[0].append(AST.Instruction(p[2]))
+
 def p_instruction(p):
     """INSTRUCTION : '{' START '}'
-                   | ASSIGN_EXP ';'
+                   | ASSIGN_EXP
                    | IF_INSTRUCTION
                    | WHILE_INSTRUCTION
                    | FOR_INSTRUCTION
@@ -43,34 +50,52 @@ def p_instruction(p):
                    | RETURN_FUN
                    | BREAK ';'
                    | CONTINUE ';' """
-    pass
-def p_empty(p):
-    """empty : """
-    pass
-def p_basic_vector_list(p):
-    """VECTOR_LIST : VECTOR_LIST ',' '[' LIST_VALUE ']' %prec expr
-                   | '[' LIST_VALUE ']' ',' '[' LIST_VALUE ']' """
-    pass
-def p_basic_matix(p):
-    """MATRIX : '[' LIST_VALUE ']'
-              | '[' VECTOR_LIST ']' """
-    pass
+    if(p[1] == "BREAK"):
+        p[0] = AST.Break()
+    elif(p[1] == "CONTINUE"):
+        p[0] = AST.Continue()
+    elif(len(p) < 3):
+        p[0] = AST.Instruction(p[1])
+    else:
+        p[0] = p[2]
+
+def p_basic_vector(p):
+    """VECTOR : '[' LIST_VALUE ']'"""
+    p[0] = AST.Vector(p[2])
+
 def p_basic_value(p):
     """VALUE : INTNUM
              | FLOATNUM
-             | ID "'"
              | ID
              | STRING
              | EYE '(' ARITHMETIC_EXP ')'
              | ZEROS '(' ARITHMETIC_EXP ')'
              | ONES '(' ARITHMETIC_EXP ')'
-             | MATRIX
-             | MATRIX "'" """
-    pass
+             | VECTOR
+             | ID VECTOR
+             | VALUE "'" """
+    if(len(p) == 2):
+        p[0] = AST.Value(p[1])
+    elif(len(p) == 3):
+        p[0] = AST.Value(AST.Transpose(AST.Value(p[1])))
+    else:
+        if(p[1] == "EYE"):
+            p[0] = AST.Value(AST.Eye(AST.Value(p[3])))
+        elif(p[1] == "ZEROS"):
+            p[0] = AST.Value(AST.Zeros(AST.Value(p[3])))
+        else:
+            p[0] = AST.Value(AST.Ones(AST.Value(p[3])))
+
 def p_basic_list_values(p):
     """LIST_VALUE : VALUE
                   | VALUE ',' LIST_VALUE"""
-    pass
+    if(len(p) == 2):
+        p[0] = []
+        p[0].append(AST.Value(p[1]))
+    else:
+        p[0] = p[3]
+        p[0].insert(0, p[1])
+
 def p_basic_arithmetic_op(p):
     """ARITHMETIC_OP : '+'
                      | '-'
@@ -80,14 +105,16 @@ def p_basic_arithmetic_op(p):
                      | DOTSUB
                      | DOTMUL
                      | DOTDIV """
-    pass
+    p[0] = p[1]
+
 def p_basic_assign_op(p):
     """ASSIGN_OP : ADDASSIGN
                  | SUBASSIGN
                  | MULASSIGN
                  | DIVASSIGN
                  | '=' """
-    pass
+    p[0] = p[1]
+
 def p_basic_relation_op(p):
     """RELATION_OP : GT
                    | LT
@@ -95,46 +122,62 @@ def p_basic_relation_op(p):
                    | GE
                    | NE
                    | EQ """
-    pass
+    p[0] = p[1]
+
+def p_basic_arithmetic_op_unar(p):
+    """ARITHMETIC_OP_UNARY : '+'
+                           | '-' """
+    p[0] = p[1]
+
 def p_exp_arithmetic(p):
     """ARITHMETIC_EXP : ARITHMETIC_EXP ARITHMETIC_OP ARITHMETIC_EXP %prec expr
                      | '(' ARITHMETIC_EXP ')'
                      | ARITHMETIC_OP_UNARY ARITHMETIC_EXP %prec uminus
                      | VALUE"""
-    pass
-def p_basic_arithmetic_op_unar(p):
-    """ARITHMETIC_OP_UNARY : '+'
-                           | '-' """
-    pass
+    if(len(p) == 2):
+        p[0] = p[1]
+    elif(len(p) == 3):
+        p[0] = AST.UnarExpr(p[1], p[2])
+    elif(p[1] == "("):
+        p[0] = p[2] ## uwaga
+    else:
+        p[0] = AST.BinExpr(p[2], p[1], p[3])
+
 def p_exp_relation(p):
     """RELATION_EXP : ARITHMETIC_EXP RELATION_OP ARITHMETIC_EXP
                     | '(' RELATION_EXP ')'"""
-    pass
+    if(p[1] == "("):
+        p[0] = p[2] ## uwaga
+    else:
+        p[0] = AST.RelExpr(p[2], p[1], p[3])
+
 def p_exp_assign(p):
-    """ASSIGN_EXP : ID ASSIGN_OP ARITHMETIC_EXP
-                    | ID '[' LIST_VALUE ']' ASSIGN_OP ARITHMETIC_EXP"""
-    pass
+    """ASSIGN_EXP : ID ASSIGN_OP ARITHMETIC_EXP ';'
+                    | ID '[' LIST_VALUE ']' ASSIGN_OP ARITHMETIC_EXP ';' """
+    if(len(p) == 5):
+        p[0] = AST.Assign(AST.Value(p[1]), p[2], p[3])
+    else:
+        p[0] = AST.Assign(AST.Ref(p[1], p[3]), p[5], p[6])
+    
 def p_instruction_if(p):
     """IF_INSTRUCTION : IF '(' RELATION_EXP  ')' INSTRUCTION %prec IF
                       | IF '(' RELATION_EXP  ')' INSTRUCTION  ELSE INSTRUCTION """
-    if(len(p) == 6):
-        print("short if")
-    else:
-        print("long if")
-    pass
+    p[0] = AST.IfExp(p[3], p[5], p[7]) #uwaga
 
 def p_instruction_while(p):
     """WHILE_INSTRUCTION : WHILE '(' RELATION_EXP  ')' INSTRUCTION """
-    pass
+    p[0] = AST.IfExp(p[3], p[5])
+
 def p_instruction_for(p):
     """FOR_INSTRUCTION : FOR ID '=' ARITHMETIC_EXP ':' ARITHMETIC_EXP INSTRUCTION """
-    pass
+    p[0] = AST.For(p[2], p[4], p[6], p[7])
+    
 def p_fun_print(p):
     """PRINT_FUN : PRINT LIST_VALUE ';'"""
-    pass
+    p[0] = AST.Print(p[2])
 def p_fun_return(p):
     """RETURN_FUN : RETURN LIST_VALUE ';'"""
-    pass
+    p[0] = AST.Return(p[2])
 
 
 parser = yacc.yacc()
