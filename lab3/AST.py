@@ -23,21 +23,16 @@ class BinExpr(Node):
         self.left = left
         self.right = right
 
-class Compare(Node):
+class RelExpr(Node):
     def __init__(self, left, ops, comparators):
         self.left = left
         self.ops = ops
         self.comparators = comparators
 
-class AugAssign(Node):
+class Assign(Node):
     def __init__(self, target, op, value):
         self.op = op
         self.target = target
-        self.value = value
-
-class Assign(Node):
-    def __init__(self, targets, value):
-        self.targets = targets
         self.value = value
 
 class IfExp(Node):
@@ -72,11 +67,8 @@ class Continue(Node):
         pass
 
 class PrintFun(Node):
-    def __init__(self, dest, values, nl):
-        self.dest = dest
+    def __init__(self, values):
         self.values = values
-        self.nl = nl
-
 
 class Error(Node):
     def __init__(self):
