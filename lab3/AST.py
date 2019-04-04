@@ -12,7 +12,6 @@ class FloatNum(Node):
     def __init__(self, value):
         self.value = value
 
-
 class Variable(Node):
     def __init__(self, name):
         self.name = name
