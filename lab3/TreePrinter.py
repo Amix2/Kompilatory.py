@@ -78,6 +78,7 @@ class TreePrinter:
 
     @addToClass(AST.Ref)
     def printTree(self, indent=0):
+        print("| "*indent + self.target)
         print("| "*indent + "Ref")
         for node in self.nodes:
             node.printTree(indent+1)
@@ -110,8 +111,8 @@ class TreePrinter:
         print("| "*indent + "For")
         print("| "*(indent+1) + str(self.itera))
         print("| "*(indent+1) + "Range")
-        self.rangeStart.printTree(indent+1)
-        self.rangeEnd.printTree(indent+1)
+        self.rangeStart.printTree(indent+2)
+        self.rangeEnd.printTree(indent+2)
         print("| "*indent + "Do")
         self.body.printTree(indent+1)
 
