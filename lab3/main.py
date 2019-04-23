@@ -30,5 +30,6 @@ if __name__ == '__main__':
     print("===========================")
     parser = Mparser.parser
     ast = parser.parse(text, lexer=scanner.lexer)
+    print(ast.__class__)
     ast.printTree()
 
