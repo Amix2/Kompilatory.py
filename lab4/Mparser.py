@@ -27,8 +27,8 @@ def p_error(p):
         print("Unexpected end of input")
 
 def find_column(input, token):
-    line_start = input.rfind('\n', 0, token.lexpos) + 1
-    return (token.lexpos - line_start) + 1
+    line_start = input.rfind('\n', 0, token.lineno) + 1
+    return (token.lineno - line_start) + 1
 
 def p_start(p):
     """START : START INSTRUCTION
@@ -51,24 +51,25 @@ def p_instruction(p):
                    | BREAK ';'
                    | CONTINUE ';' """
     if(p[1] == "BREAK"):
-        p[0] = AST.Break()
+        p[0] = AST.Break(p.lineno(1))
     elif(p[1] == "CONTINUE"):
-        p[0] = AST.Continue()
+        p[0] = AST.Continue(p.lineno(1))
     elif(len(p) < 3):
-        p[0] = AST.Instruction(p[1])
+        p[0] = AST.Instruction(p[1], p.lineno(1))
     else:
         p[0] = p[2]
 
 def p_basic_vector(p):
     """VECTOR : '[' LIST_VALUE ']'"""
-    p[0] = AST.Vector(p[2])
+    p[0] = AST.Vector(p[2], p.lineno(2))
 
 def p_basic_string(p):
     """STRING_GR : STRING"""
-    p[0] = AST.String(p[1])
+    p[0] = AST.String(p[1], p.lineno(1))
 def p_basic_int(p):
     """INT_GR : INTNUM"""
-    p[0] = AST.Int(p[1])
+    print(p.lineno(1) )
+    p[0] = AST.Int(p[1], p.lineno(1))
 def p_basic_float(p):
     """FLOAT_GR : FLOATNUM"""
     p[0] = AST.Float(p[1])
@@ -88,10 +89,10 @@ def p_basic_value(p):
              | ID VECTOR 
              | VALUE "'" """
     if(len(p) == 2):
-        p[0] = AST.Value(p[1])
+        p[0] = AST.Value(p[1], p.lineno(1))
     elif(len(p) == 3):
         if(p[-1] == "\'"):
-            p[0] = AST.Value(AST.Transpose(AST.Value(p[1])))
+            p[0] = AST.Value(AST.Transpose(AST.Value(p[1], p.lineno(1)), p.lineno(1)), p.lineno(1))
         else:
             p[0] = AST.Value(AST.Ref(p[1], p[2]))
     else:

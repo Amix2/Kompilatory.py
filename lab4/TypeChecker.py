@@ -2,35 +2,40 @@
 import AST
 
 good_operations_and_types = {
-    (AST.Int.__name__, AST.Int.__name__, "+") : AST.Int,
-    (AST.Int.__name__, AST.Int.__name__, "*") : AST.Int,
-    (AST.Int.__name__, AST.Int.__name__, "-") : AST.Int,
-    (AST.Int.__name__, AST.Int.__name__, "/") : AST.Int,
-    (AST.Float.__name__, AST.Int.__name__, "+") : AST.Float,
-    (AST.Float.__name__, AST.Int.__name__, "*") : AST.Float,
-    (AST.Float.__name__, AST.Int.__name__, "-") : AST.Float,
-    (AST.Float.__name__, AST.Int.__name__, "/") : AST.Float,
-    (AST.Float.__name__, AST.Float.__name__, "+") : AST.Float,
-    (AST.Float.__name__, AST.Float.__name__, "*") : AST.Float,
-    (AST.Float.__name__, AST.Float.__name__, "-") : AST.Float,
-    (AST.Float.__name__, AST.Float.__name__, "/") : AST.Float,
-    (AST.String.__name__, AST.String.__name__, "+") : AST.String,
-    (AST.Vector.__name__, AST.Vector.__name__, "+") : AST.Vector,
-    (AST.Vector.__name__, AST.Vector.__name__, "-") : AST.Vector,
-    (AST.Vector.__name__, AST.Vector.__name__, "*") : AST.Vector,
-    (AST.Vector.__name__, AST.Vector.__name__, "/") : AST.Vector
+    ("int", "int", "+") : "int",
+    ("int", "int", "-") : "int",
+    ("int", "int", "*") : "int",
+    ("int", "int", "/") : "int",
+    ("int", "float", "+") : "float",
+    ("int", "float", "*") : "float",
+    ("int", "float", "-") : "float",
+    ("int", "float", "/") : "float",
+    ("float", "float", "+") : "float",
+    ("float", "float", "*") : "float",
+    ("float", "float", "-") : "float",
+    ("float", "float", "/") : "float",
+    ("string", "string", "+") : "int",
+    ("vector", "vector", ".+") : "vector",
+    ("vector", "vector", ".-") : "vector",
+    ("vector", "vector", ".*") : "vector",
+    ("vector", "vector", "./") : "vector"
 }
 
 class ValueType():
     def __init__(self, node):
         if(isinstance(node, AST.Int)):
             self.type = "int"
-        elif(isinstalce(node, AST.Float)):
+        elif(isinstance(node, AST.Float)):
             self.type = "float"
         elif(isinstance(node, AST.String)):
             self.type = "string"
         elif(isinstance(node, AST.Vector)):
             self.type = "vector"
+            if(isinstance(node.nodes[0], list)):
+                self.shape = (len(node.nodes), len(node.nodes[0]))
+            else:
+                self.shape = (1, len(node.nodes))
+                
 
 def is_good_operation(operation, node1, node2=None): # binExpr, Transpose, RelExpr, UnarExpr, Eye itp
     if(operation[0] == "."):    oper_type = "matrix"
@@ -65,6 +70,94 @@ class TypeChecker(NodeVisitor):
     czyli do każdego noda sprawdzamy wszystkie potrzebne nody dzieci i potem sprawdzamy czy da sie wykonać operacje na nich
     
     """
+    def visit_String(self, node):
+        return ValueType(node)
+
+    def visit_Int(self, node):
+        return ValueType(node)
+
+    def visit_Float(self, node):
+        return ValueType(node)
+
+    def visit_Vector(self, node):
+        return ValueType(node)
+
+    def visit_Id(self, node): ##        TO DO
+        pass
+
+    def visit_Value(self, node):
+        return self.visit(node.value) 
+
+    def visit_Transpose(self, node):
+        valueType = self.visit(node.value)
+        if(valueType.type != "vector"):
+            
+
+    def visit_(self, node):
+        pass
+
+    def visit_(self, node):
+        pass
+
+    def visit_(self, node):
+        pass
+
+    def visit_(self, node):
+        pass
+
+    def visit_(self, node):
+        pass
+
+    def visit_(self, node):
+        pass
+
+    def visit_(self, node):
+        pass
+
+    def visit_(self, node):
+        pass
+
+    def visit_(self, node):
+        pass
+
+    def visit_(self, node):
+        pass
+
+    def visit_(self, node):
+        pass
+
+    def visit_(self, node):
+        pass
+
+    def visit_(self, node):
+        pass
+
+    def visit_(self, node):
+        pass
+
+    def visit_(self, node):
+        pass
+
+    def visit_(self, node):
+        pass
+
+    def visit_(self, node):
+        pass
+
+    def visit_(self, node):
+        pass
+
+    def visit_(self, node):
+        pass
+
+    def visit_(self, node):
+        pass
+
+    def visit_(self, node):
+        pass
+
+    
+
     def visitor_Assign(self, node):
             pass
     def visit_BinExpr(self, node):
