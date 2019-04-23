@@ -1,0 +1,5 @@
+tablica symboli:
+nazwa -> typ + może wartość
+mogą być zakresy, których nikt nie rozumie w js
+    dla każdego scopa: nowa tablica symboli
+sprawdać czy break / continue jest w if/for/while
