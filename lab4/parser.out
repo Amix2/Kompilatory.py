@@ -27,7 +27,7 @@ Rule 21    VALUE -> EYE ( ARITHMETIC_EXP )
 Rule 22    VALUE -> ZEROS ( ARITHMETIC_EXP )
 Rule 23    VALUE -> ONES ( ARITHMETIC_EXP )
 Rule 24    VALUE -> VECTOR
-Rule 25    VALUE -> ID VECTOR
+Rule 25    VALUE -> ID_GR VECTOR
 Rule 26    VALUE -> VALUE '
 Rule 27    LIST_VALUE -> ARITHMETIC_EXP
 Rule 28    LIST_VALUE -> ARITHMETIC_EXP , LIST_VALUE
@@ -58,12 +58,12 @@ Rule 52    ARITHMETIC_EXP -> ARITHMETIC_OP_UNARY ARITHMETIC_EXP
 Rule 53    ARITHMETIC_EXP -> VALUE
 Rule 54    RELATION_EXP -> ARITHMETIC_EXP RELATION_OP ARITHMETIC_EXP
 Rule 55    RELATION_EXP -> ( RELATION_EXP )
-Rule 56    ASSIGN_EXP -> ID ASSIGN_OP ARITHMETIC_EXP ;
-Rule 57    ASSIGN_EXP -> ID [ LIST_VALUE ] ASSIGN_OP ARITHMETIC_EXP ;
+Rule 56    ASSIGN_EXP -> ID_GR ASSIGN_OP ARITHMETIC_EXP ;
+Rule 57    ASSIGN_EXP -> ID_GR [ LIST_VALUE ] ASSIGN_OP ARITHMETIC_EXP ;
 Rule 58    IF_INSTRUCTION -> IF ( RELATION_EXP ) INSTRUCTION
 Rule 59    IF_INSTRUCTION -> IF ( RELATION_EXP ) INSTRUCTION ELSE INSTRUCTION
 Rule 60    WHILE_INSTRUCTION -> WHILE ( RELATION_EXP ) INSTRUCTION
-Rule 61    FOR_INSTRUCTION -> FOR ID = ARITHMETIC_EXP : ARITHMETIC_EXP INSTRUCTION
+Rule 61    FOR_INSTRUCTION -> FOR ID_GR = ARITHMETIC_EXP : ARITHMETIC_EXP INSTRUCTION
 Rule 62    PRINT_FUN -> PRINT LIST_VALUE ;
 Rule 63    RETURN_FUN -> RETURN LIST_VALUE ;
 
@@ -95,7 +95,7 @@ FLOATNUM             : 15
 FOR                  : 61
 GE                   : 45
 GT                   : 42
-ID                   : 16 25 56 57 61
+ID                   : 16
 IF                   : 58 59
 INTNUM               : 14
 LE                   : 44
@@ -124,7 +124,7 @@ ASSIGN_EXP           : 4
 ASSIGN_OP            : 56 57
 FLOAT_GR             : 18
 FOR_INSTRUCTION      : 7
-ID_GR                : 19
+ID_GR                : 19 25 56 57 61
 IF_INSTRUCTION       : 5
 INSTRUCTION          : 1 2 58 59 59 60 61
 INT_GR               : 17
@@ -155,24 +155,25 @@ state 0
     (9) INSTRUCTION -> . RETURN_FUN
     (10) INSTRUCTION -> . BREAK ;
     (11) INSTRUCTION -> . CONTINUE ;
-    (56) ASSIGN_EXP -> . ID ASSIGN_OP ARITHMETIC_EXP ;
-    (57) ASSIGN_EXP -> . ID [ LIST_VALUE ] ASSIGN_OP ARITHMETIC_EXP ;
+    (56) ASSIGN_EXP -> . ID_GR ASSIGN_OP ARITHMETIC_EXP ;
+    (57) ASSIGN_EXP -> . ID_GR [ LIST_VALUE ] ASSIGN_OP ARITHMETIC_EXP ;
     (58) IF_INSTRUCTION -> . IF ( RELATION_EXP ) INSTRUCTION
     (59) IF_INSTRUCTION -> . IF ( RELATION_EXP ) INSTRUCTION ELSE INSTRUCTION
     (60) WHILE_INSTRUCTION -> . WHILE ( RELATION_EXP ) INSTRUCTION
-    (61) FOR_INSTRUCTION -> . FOR ID = ARITHMETIC_EXP : ARITHMETIC_EXP INSTRUCTION
+    (61) FOR_INSTRUCTION -> . FOR ID_GR = ARITHMETIC_EXP : ARITHMETIC_EXP INSTRUCTION
     (62) PRINT_FUN -> . PRINT LIST_VALUE ;
     (63) RETURN_FUN -> . RETURN LIST_VALUE ;
+    (16) ID_GR -> . ID
 
     {               shift and go to state 3
     BREAK           shift and go to state 10
     CONTINUE        shift and go to state 11
-    ID              shift and go to state 12
     IF              shift and go to state 13
     WHILE           shift and go to state 14
     FOR             shift and go to state 15
     PRINT           shift and go to state 16
     RETURN          shift and go to state 17
+    ID              shift and go to state 18
 
     START                          shift and go to state 1
     INSTRUCTION                    shift and go to state 2
@@ -182,6 +183,7 @@ state 0
     FOR_INSTRUCTION                shift and go to state 7
     PRINT_FUN                      shift and go to state 8
     RETURN_FUN                     shift and go to state 9
+    ID_GR                          shift and go to state 12
 
 state 1
 
@@ -196,32 +198,34 @@ state 1
     (9) INSTRUCTION -> . RETURN_FUN
     (10) INSTRUCTION -> . BREAK ;
     (11) INSTRUCTION -> . CONTINUE ;
-    (56) ASSIGN_EXP -> . ID ASSIGN_OP ARITHMETIC_EXP ;
-    (57) ASSIGN_EXP -> . ID [ LIST_VALUE ] ASSIGN_OP ARITHMETIC_EXP ;
+    (56) ASSIGN_EXP -> . ID_GR ASSIGN_OP ARITHMETIC_EXP ;
+    (57) ASSIGN_EXP -> . ID_GR [ LIST_VALUE ] ASSIGN_OP ARITHMETIC_EXP ;
     (58) IF_INSTRUCTION -> . IF ( RELATION_EXP ) INSTRUCTION
     (59) IF_INSTRUCTION -> . IF ( RELATION_EXP ) INSTRUCTION ELSE INSTRUCTION
     (60) WHILE_INSTRUCTION -> . WHILE ( RELATION_EXP ) INSTRUCTION
-    (61) FOR_INSTRUCTION -> . FOR ID = ARITHMETIC_EXP : ARITHMETIC_EXP INSTRUCTION
+    (61) FOR_INSTRUCTION -> . FOR ID_GR = ARITHMETIC_EXP : ARITHMETIC_EXP INSTRUCTION
     (62) PRINT_FUN -> . PRINT LIST_VALUE ;
     (63) RETURN_FUN -> . RETURN LIST_VALUE ;
+    (16) ID_GR -> . ID
 
     {               shift and go to state 3
     BREAK           shift and go to state 10
     CONTINUE        shift and go to state 11
-    ID              shift and go to state 12
     IF              shift and go to state 13
     WHILE           shift and go to state 14
     FOR             shift and go to state 15
     PRINT           shift and go to state 16
     RETURN          shift and go to state 17
+    ID              shift and go to state 18
 
-    INSTRUCTION                    shift and go to state 18
+    INSTRUCTION                    shift and go to state 19
     ASSIGN_EXP                     shift and go to state 4
     IF_INSTRUCTION                 shift and go to state 5
     WHILE_INSTRUCTION              shift and go to state 6
     FOR_INSTRUCTION                shift and go to state 7
     PRINT_FUN                      shift and go to state 8
     RETURN_FUN                     shift and go to state 9
+    ID_GR                          shift and go to state 12
 
 state 2
 
@@ -230,12 +234,12 @@ state 2
     {               reduce using rule 2 (START -> INSTRUCTION .)
     BREAK           reduce using rule 2 (START -> INSTRUCTION .)
     CONTINUE        reduce using rule 2 (START -> INSTRUCTION .)
-    ID              reduce using rule 2 (START -> INSTRUCTION .)
     IF              reduce using rule 2 (START -> INSTRUCTION .)
     WHILE           reduce using rule 2 (START -> INSTRUCTION .)
     FOR             reduce using rule 2 (START -> INSTRUCTION .)
     PRINT           reduce using rule 2 (START -> INSTRUCTION .)
     RETURN          reduce using rule 2 (START -> INSTRUCTION .)
+    ID              reduce using rule 2 (START -> INSTRUCTION .)
     $end            reduce using rule 2 (START -> INSTRUCTION .)
     }               reduce using rule 2 (START -> INSTRUCTION .)
 
@@ -254,26 +258,27 @@ state 3
     (9) INSTRUCTION -> . RETURN_FUN
     (10) INSTRUCTION -> . BREAK ;
     (11) INSTRUCTION -> . CONTINUE ;
-    (56) ASSIGN_EXP -> . ID ASSIGN_OP ARITHMETIC_EXP ;
-    (57) ASSIGN_EXP -> . ID [ LIST_VALUE ] ASSIGN_OP ARITHMETIC_EXP ;
+    (56) ASSIGN_EXP -> . ID_GR ASSIGN_OP ARITHMETIC_EXP ;
+    (57) ASSIGN_EXP -> . ID_GR [ LIST_VALUE ] ASSIGN_OP ARITHMETIC_EXP ;
     (58) IF_INSTRUCTION -> . IF ( RELATION_EXP ) INSTRUCTION
     (59) IF_INSTRUCTION -> . IF ( RELATION_EXP ) INSTRUCTION ELSE INSTRUCTION
     (60) WHILE_INSTRUCTION -> . WHILE ( RELATION_EXP ) INSTRUCTION
-    (61) FOR_INSTRUCTION -> . FOR ID = ARITHMETIC_EXP : ARITHMETIC_EXP INSTRUCTION
+    (61) FOR_INSTRUCTION -> . FOR ID_GR = ARITHMETIC_EXP : ARITHMETIC_EXP INSTRUCTION
     (62) PRINT_FUN -> . PRINT LIST_VALUE ;
     (63) RETURN_FUN -> . RETURN LIST_VALUE ;
+    (16) ID_GR -> . ID
 
     {               shift and go to state 3
     BREAK           shift and go to state 10
     CONTINUE        shift and go to state 11
-    ID              shift and go to state 12
     IF              shift and go to state 13
     WHILE           shift and go to state 14
     FOR             shift and go to state 15
     PRINT           shift and go to state 16
     RETURN          shift and go to state 17
+    ID              shift and go to state 18
 
-    START                          shift and go to state 19
+    START                          shift and go to state 20
     INSTRUCTION                    shift and go to state 2
     ASSIGN_EXP                     shift and go to state 4
     IF_INSTRUCTION                 shift and go to state 5
@@ -281,6 +286,7 @@ state 3
     FOR_INSTRUCTION                shift and go to state 7
     PRINT_FUN                      shift and go to state 8
     RETURN_FUN                     shift and go to state 9
+    ID_GR                          shift and go to state 12
 
 state 4
 
@@ -289,12 +295,12 @@ state 4
     {               reduce using rule 4 (INSTRUCTION -> ASSIGN_EXP .)
     BREAK           reduce using rule 4 (INSTRUCTION -> ASSIGN_EXP .)
     CONTINUE        reduce using rule 4 (INSTRUCTION -> ASSIGN_EXP .)
-    ID              reduce using rule 4 (INSTRUCTION -> ASSIGN_EXP .)
     IF              reduce using rule 4 (INSTRUCTION -> ASSIGN_EXP .)
     WHILE           reduce using rule 4 (INSTRUCTION -> ASSIGN_EXP .)
     FOR             reduce using rule 4 (INSTRUCTION -> ASSIGN_EXP .)
     PRINT           reduce using rule 4 (INSTRUCTION -> ASSIGN_EXP .)
     RETURN          reduce using rule 4 (INSTRUCTION -> ASSIGN_EXP .)
+    ID              reduce using rule 4 (INSTRUCTION -> ASSIGN_EXP .)
     $end            reduce using rule 4 (INSTRUCTION -> ASSIGN_EXP .)
     }               reduce using rule 4 (INSTRUCTION -> ASSIGN_EXP .)
     ELSE            reduce using rule 4 (INSTRUCTION -> ASSIGN_EXP .)
@@ -307,12 +313,12 @@ state 5
     {               reduce using rule 5 (INSTRUCTION -> IF_INSTRUCTION .)
     BREAK           reduce using rule 5 (INSTRUCTION -> IF_INSTRUCTION .)
     CONTINUE        reduce using rule 5 (INSTRUCTION -> IF_INSTRUCTION .)
-    ID              reduce using rule 5 (INSTRUCTION -> IF_INSTRUCTION .)
     IF              reduce using rule 5 (INSTRUCTION -> IF_INSTRUCTION .)
     WHILE           reduce using rule 5 (INSTRUCTION -> IF_INSTRUCTION .)
     FOR             reduce using rule 5 (INSTRUCTION -> IF_INSTRUCTION .)
     PRINT           reduce using rule 5 (INSTRUCTION -> IF_INSTRUCTION .)
     RETURN          reduce using rule 5 (INSTRUCTION -> IF_INSTRUCTION .)
+    ID              reduce using rule 5 (INSTRUCTION -> IF_INSTRUCTION .)
     $end            reduce using rule 5 (INSTRUCTION -> IF_INSTRUCTION .)
     }               reduce using rule 5 (INSTRUCTION -> IF_INSTRUCTION .)
     ELSE            reduce using rule 5 (INSTRUCTION -> IF_INSTRUCTION .)
@@ -325,12 +331,12 @@ state 6
     {               reduce using rule 6 (INSTRUCTION -> WHILE_INSTRUCTION .)
     BREAK           reduce using rule 6 (INSTRUCTION -> WHILE_INSTRUCTION .)
     CONTINUE        reduce using rule 6 (INSTRUCTION -> WHILE_INSTRUCTION .)
-    ID              reduce using rule 6 (INSTRUCTION -> WHILE_INSTRUCTION .)
     IF              reduce using rule 6 (INSTRUCTION -> WHILE_INSTRUCTION .)
     WHILE           reduce using rule 6 (INSTRUCTION -> WHILE_INSTRUCTION .)
     FOR             reduce using rule 6 (INSTRUCTION -> WHILE_INSTRUCTION .)
     PRINT           reduce using rule 6 (INSTRUCTION -> WHILE_INSTRUCTION .)
     RETURN          reduce using rule 6 (INSTRUCTION -> WHILE_INSTRUCTION .)
+    ID              reduce using rule 6 (INSTRUCTION -> WHILE_INSTRUCTION .)
     $end            reduce using rule 6 (INSTRUCTION -> WHILE_INSTRUCTION .)
     }               reduce using rule 6 (INSTRUCTION -> WHILE_INSTRUCTION .)
     ELSE            reduce using rule 6 (INSTRUCTION -> WHILE_INSTRUCTION .)
@@ -343,12 +349,12 @@ state 7
     {               reduce using rule 7 (INSTRUCTION -> FOR_INSTRUCTION .)
     BREAK           reduce using rule 7 (INSTRUCTION -> FOR_INSTRUCTION .)
     CONTINUE        reduce using rule 7 (INSTRUCTION -> FOR_INSTRUCTION .)
-    ID              reduce using rule 7 (INSTRUCTION -> FOR_INSTRUCTION .)
     IF              reduce using rule 7 (INSTRUCTION -> FOR_INSTRUCTION .)
     WHILE           reduce using rule 7 (INSTRUCTION -> FOR_INSTRUCTION .)
     FOR             reduce using rule 7 (INSTRUCTION -> FOR_INSTRUCTION .)
     PRINT           reduce using rule 7 (INSTRUCTION -> FOR_INSTRUCTION .)
     RETURN          reduce using rule 7 (INSTRUCTION -> FOR_INSTRUCTION .)
+    ID              reduce using rule 7 (INSTRUCTION -> FOR_INSTRUCTION .)
     $end            reduce using rule 7 (INSTRUCTION -> FOR_INSTRUCTION .)
     }               reduce using rule 7 (INSTRUCTION -> FOR_INSTRUCTION .)
     ELSE            reduce using rule 7 (INSTRUCTION -> FOR_INSTRUCTION .)
@@ -361,12 +367,12 @@ state 8
     {               reduce using rule 8 (INSTRUCTION -> PRINT_FUN .)
     BREAK           reduce using rule 8 (INSTRUCTION -> PRINT_FUN .)
     CONTINUE        reduce using rule 8 (INSTRUCTION -> PRINT_FUN .)
-    ID              reduce using rule 8 (INSTRUCTION -> PRINT_FUN .)
     IF              reduce using rule 8 (INSTRUCTION -> PRINT_FUN .)
     WHILE           reduce using rule 8 (INSTRUCTION -> PRINT_FUN .)
     FOR             reduce using rule 8 (INSTRUCTION -> PRINT_FUN .)
     PRINT           reduce using rule 8 (INSTRUCTION -> PRINT_FUN .)
     RETURN          reduce using rule 8 (INSTRUCTION -> PRINT_FUN .)
+    ID              reduce using rule 8 (INSTRUCTION -> PRINT_FUN .)
     $end            reduce using rule 8 (INSTRUCTION -> PRINT_FUN .)
     }               reduce using rule 8 (INSTRUCTION -> PRINT_FUN .)
     ELSE            reduce using rule 8 (INSTRUCTION -> PRINT_FUN .)
@@ -379,12 +385,12 @@ state 9
     {               reduce using rule 9 (INSTRUCTION -> RETURN_FUN .)
     BREAK           reduce using rule 9 (INSTRUCTION -> RETURN_FUN .)
     CONTINUE        reduce using rule 9 (INSTRUCTION -> RETURN_FUN .)
-    ID              reduce using rule 9 (INSTRUCTION -> RETURN_FUN .)
     IF              reduce using rule 9 (INSTRUCTION -> RETURN_FUN .)
     WHILE           reduce using rule 9 (INSTRUCTION -> RETURN_FUN .)
     FOR             reduce using rule 9 (INSTRUCTION -> RETURN_FUN .)
     PRINT           reduce using rule 9 (INSTRUCTION -> RETURN_FUN .)
     RETURN          reduce using rule 9 (INSTRUCTION -> RETURN_FUN .)
+    ID              reduce using rule 9 (INSTRUCTION -> RETURN_FUN .)
     $end            reduce using rule 9 (INSTRUCTION -> RETURN_FUN .)
     }               reduce using rule 9 (INSTRUCTION -> RETURN_FUN .)
     ELSE            reduce using rule 9 (INSTRUCTION -> RETURN_FUN .)
@@ -394,56 +400,58 @@ state 10
 
     (10) INSTRUCTION -> BREAK . ;
 
-    ;               shift and go to state 20
+    ;               shift and go to state 21
 
 
 state 11
 
     (11) INSTRUCTION -> CONTINUE . ;
 
-    ;               shift and go to state 21
+    ;               shift and go to state 22
 
 
 state 12
 
-    (56) ASSIGN_EXP -> ID . ASSIGN_OP ARITHMETIC_EXP ;
-    (57) ASSIGN_EXP -> ID . [ LIST_VALUE ] ASSIGN_OP ARITHMETIC_EXP ;
+    (56) ASSIGN_EXP -> ID_GR . ASSIGN_OP ARITHMETIC_EXP ;
+    (57) ASSIGN_EXP -> ID_GR . [ LIST_VALUE ] ASSIGN_OP ARITHMETIC_EXP ;
     (37) ASSIGN_OP -> . ADDASSIGN
     (38) ASSIGN_OP -> . SUBASSIGN
     (39) ASSIGN_OP -> . MULASSIGN
     (40) ASSIGN_OP -> . DIVASSIGN
     (41) ASSIGN_OP -> . =
 
-    [               shift and go to state 23
-    ADDASSIGN       shift and go to state 24
-    SUBASSIGN       shift and go to state 25
-    MULASSIGN       shift and go to state 26
-    DIVASSIGN       shift and go to state 27
-    =               shift and go to state 28
+    [               shift and go to state 24
+    ADDASSIGN       shift and go to state 25
+    SUBASSIGN       shift and go to state 26
+    MULASSIGN       shift and go to state 27
+    DIVASSIGN       shift and go to state 28
+    =               shift and go to state 29
 
-    ASSIGN_OP                      shift and go to state 22
+    ASSIGN_OP                      shift and go to state 23
 
 state 13
 
     (58) IF_INSTRUCTION -> IF . ( RELATION_EXP ) INSTRUCTION
     (59) IF_INSTRUCTION -> IF . ( RELATION_EXP ) INSTRUCTION ELSE INSTRUCTION
 
-    (               shift and go to state 29
+    (               shift and go to state 30
 
 
 state 14
 
     (60) WHILE_INSTRUCTION -> WHILE . ( RELATION_EXP ) INSTRUCTION
 
-    (               shift and go to state 30
+    (               shift and go to state 31
 
 
 state 15
 
-    (61) FOR_INSTRUCTION -> FOR . ID = ARITHMETIC_EXP : ARITHMETIC_EXP INSTRUCTION
+    (61) FOR_INSTRUCTION -> FOR . ID_GR = ARITHMETIC_EXP : ARITHMETIC_EXP INSTRUCTION
+    (16) ID_GR -> . ID
 
-    ID              shift and go to state 31
+    ID              shift and go to state 18
 
+    ID_GR                          shift and go to state 32
 
 state 16
 
@@ -464,7 +472,7 @@ state 16
     (22) VALUE -> . ZEROS ( ARITHMETIC_EXP )
     (23) VALUE -> . ONES ( ARITHMETIC_EXP )
     (24) VALUE -> . VECTOR
-    (25) VALUE -> . ID VECTOR
+    (25) VALUE -> . ID_GR VECTOR
     (26) VALUE -> . VALUE '
     (14) INT_GR -> . INTNUM
     (15) FLOAT_GR -> . FLOATNUM
@@ -472,27 +480,27 @@ state 16
     (13) STRING_GR -> . STRING
     (12) VECTOR -> . [ LIST_VALUE ]
 
-    (               shift and go to state 34
-    +               shift and go to state 37
-    -               shift and go to state 38
-    EYE             shift and go to state 43
-    ZEROS           shift and go to state 44
-    ONES            shift and go to state 45
-    ID              shift and go to state 47
+    (               shift and go to state 35
+    +               shift and go to state 38
+    -               shift and go to state 39
+    EYE             shift and go to state 44
+    ZEROS           shift and go to state 45
+    ONES            shift and go to state 46
     INTNUM          shift and go to state 48
     FLOATNUM        shift and go to state 49
+    ID              shift and go to state 18
     STRING          shift and go to state 50
     [               shift and go to state 51
 
-    LIST_VALUE                     shift and go to state 32
-    ARITHMETIC_EXP                 shift and go to state 33
-    ARITHMETIC_OP_UNARY            shift and go to state 35
-    VALUE                          shift and go to state 36
-    INT_GR                         shift and go to state 39
-    FLOAT_GR                       shift and go to state 40
-    ID_GR                          shift and go to state 41
-    STRING_GR                      shift and go to state 42
-    VECTOR                         shift and go to state 46
+    LIST_VALUE                     shift and go to state 33
+    ARITHMETIC_EXP                 shift and go to state 34
+    ARITHMETIC_OP_UNARY            shift and go to state 36
+    VALUE                          shift and go to state 37
+    INT_GR                         shift and go to state 40
+    FLOAT_GR                       shift and go to state 41
+    ID_GR                          shift and go to state 42
+    STRING_GR                      shift and go to state 43
+    VECTOR                         shift and go to state 47
 
 state 17
 
@@ -513,7 +521,7 @@ state 17
     (22) VALUE -> . ZEROS ( ARITHMETIC_EXP )
     (23) VALUE -> . ONES ( ARITHMETIC_EXP )
     (24) VALUE -> . VECTOR
-    (25) VALUE -> . ID VECTOR
+    (25) VALUE -> . ID_GR VECTOR
     (26) VALUE -> . VALUE '
     (14) INT_GR -> . INTNUM
     (15) FLOAT_GR -> . FLOATNUM
@@ -521,46 +529,87 @@ state 17
     (13) STRING_GR -> . STRING
     (12) VECTOR -> . [ LIST_VALUE ]
 
-    (               shift and go to state 34
-    +               shift and go to state 37
-    -               shift and go to state 38
-    EYE             shift and go to state 43
-    ZEROS           shift and go to state 44
-    ONES            shift and go to state 45
-    ID              shift and go to state 47
+    (               shift and go to state 35
+    +               shift and go to state 38
+    -               shift and go to state 39
+    EYE             shift and go to state 44
+    ZEROS           shift and go to state 45
+    ONES            shift and go to state 46
     INTNUM          shift and go to state 48
     FLOATNUM        shift and go to state 49
+    ID              shift and go to state 18
     STRING          shift and go to state 50
     [               shift and go to state 51
 
     LIST_VALUE                     shift and go to state 52
-    ARITHMETIC_EXP                 shift and go to state 33
-    ARITHMETIC_OP_UNARY            shift and go to state 35
-    VALUE                          shift and go to state 36
-    INT_GR                         shift and go to state 39
-    FLOAT_GR                       shift and go to state 40
-    ID_GR                          shift and go to state 41
-    STRING_GR                      shift and go to state 42
-    VECTOR                         shift and go to state 46
+    ARITHMETIC_EXP                 shift and go to state 34
+    ARITHMETIC_OP_UNARY            shift and go to state 36
+    VALUE                          shift and go to state 37
+    INT_GR                         shift and go to state 40
+    FLOAT_GR                       shift and go to state 41
+    ID_GR                          shift and go to state 42
+    STRING_GR                      shift and go to state 43
+    VECTOR                         shift and go to state 47
 
 state 18
+
+    (16) ID_GR -> ID .
+
+    [               reduce using rule 16 (ID_GR -> ID .)
+    ADDASSIGN       reduce using rule 16 (ID_GR -> ID .)
+    SUBASSIGN       reduce using rule 16 (ID_GR -> ID .)
+    MULASSIGN       reduce using rule 16 (ID_GR -> ID .)
+    DIVASSIGN       reduce using rule 16 (ID_GR -> ID .)
+    =               reduce using rule 16 (ID_GR -> ID .)
+    '               reduce using rule 16 (ID_GR -> ID .)
+    ,               reduce using rule 16 (ID_GR -> ID .)
+    +               reduce using rule 16 (ID_GR -> ID .)
+    -               reduce using rule 16 (ID_GR -> ID .)
+    *               reduce using rule 16 (ID_GR -> ID .)
+    /               reduce using rule 16 (ID_GR -> ID .)
+    DOTADD          reduce using rule 16 (ID_GR -> ID .)
+    DOTSUB          reduce using rule 16 (ID_GR -> ID .)
+    DOTMUL          reduce using rule 16 (ID_GR -> ID .)
+    DOTDIV          reduce using rule 16 (ID_GR -> ID .)
+    ;               reduce using rule 16 (ID_GR -> ID .)
+    ]               reduce using rule 16 (ID_GR -> ID .)
+    GT              reduce using rule 16 (ID_GR -> ID .)
+    LT              reduce using rule 16 (ID_GR -> ID .)
+    LE              reduce using rule 16 (ID_GR -> ID .)
+    GE              reduce using rule 16 (ID_GR -> ID .)
+    NE              reduce using rule 16 (ID_GR -> ID .)
+    EQ              reduce using rule 16 (ID_GR -> ID .)
+    )               reduce using rule 16 (ID_GR -> ID .)
+    :               reduce using rule 16 (ID_GR -> ID .)
+    {               reduce using rule 16 (ID_GR -> ID .)
+    BREAK           reduce using rule 16 (ID_GR -> ID .)
+    CONTINUE        reduce using rule 16 (ID_GR -> ID .)
+    IF              reduce using rule 16 (ID_GR -> ID .)
+    WHILE           reduce using rule 16 (ID_GR -> ID .)
+    FOR             reduce using rule 16 (ID_GR -> ID .)
+    PRINT           reduce using rule 16 (ID_GR -> ID .)
+    RETURN          reduce using rule 16 (ID_GR -> ID .)
+    ID              reduce using rule 16 (ID_GR -> ID .)
+
+
+state 19
 
     (1) START -> START INSTRUCTION .
 
     {               reduce using rule 1 (START -> START INSTRUCTION .)
     BREAK           reduce using rule 1 (START -> START INSTRUCTION .)
     CONTINUE        reduce using rule 1 (START -> START INSTRUCTION .)
-    ID              reduce using rule 1 (START -> START INSTRUCTION .)
     IF              reduce using rule 1 (START -> START INSTRUCTION .)
     WHILE           reduce using rule 1 (START -> START INSTRUCTION .)
     FOR             reduce using rule 1 (START -> START INSTRUCTION .)
     PRINT           reduce using rule 1 (START -> START INSTRUCTION .)
     RETURN          reduce using rule 1 (START -> START INSTRUCTION .)
+    ID              reduce using rule 1 (START -> START INSTRUCTION .)
     $end            reduce using rule 1 (START -> START INSTRUCTION .)
     }               reduce using rule 1 (START -> START INSTRUCTION .)
 
 
-state 19
+state 20
 
     (3) INSTRUCTION -> { START . }
     (1) START -> START . INSTRUCTION
@@ -573,73 +622,75 @@ state 19
     (9) INSTRUCTION -> . RETURN_FUN
     (10) INSTRUCTION -> . BREAK ;
     (11) INSTRUCTION -> . CONTINUE ;
-    (56) ASSIGN_EXP -> . ID ASSIGN_OP ARITHMETIC_EXP ;
-    (57) ASSIGN_EXP -> . ID [ LIST_VALUE ] ASSIGN_OP ARITHMETIC_EXP ;
+    (56) ASSIGN_EXP -> . ID_GR ASSIGN_OP ARITHMETIC_EXP ;
+    (57) ASSIGN_EXP -> . ID_GR [ LIST_VALUE ] ASSIGN_OP ARITHMETIC_EXP ;
     (58) IF_INSTRUCTION -> . IF ( RELATION_EXP ) INSTRUCTION
     (59) IF_INSTRUCTION -> . IF ( RELATION_EXP ) INSTRUCTION ELSE INSTRUCTION
     (60) WHILE_INSTRUCTION -> . WHILE ( RELATION_EXP ) INSTRUCTION
-    (61) FOR_INSTRUCTION -> . FOR ID = ARITHMETIC_EXP : ARITHMETIC_EXP INSTRUCTION
+    (61) FOR_INSTRUCTION -> . FOR ID_GR = ARITHMETIC_EXP : ARITHMETIC_EXP INSTRUCTION
     (62) PRINT_FUN -> . PRINT LIST_VALUE ;
     (63) RETURN_FUN -> . RETURN LIST_VALUE ;
+    (16) ID_GR -> . ID
 
     }               shift and go to state 53
     {               shift and go to state 3
     BREAK           shift and go to state 10
     CONTINUE        shift and go to state 11
-    ID              shift and go to state 12
     IF              shift and go to state 13
     WHILE           shift and go to state 14
     FOR             shift and go to state 15
     PRINT           shift and go to state 16
     RETURN          shift and go to state 17
+    ID              shift and go to state 18
 
-    INSTRUCTION                    shift and go to state 18
+    INSTRUCTION                    shift and go to state 19
     ASSIGN_EXP                     shift and go to state 4
     IF_INSTRUCTION                 shift and go to state 5
     WHILE_INSTRUCTION              shift and go to state 6
     FOR_INSTRUCTION                shift and go to state 7
     PRINT_FUN                      shift and go to state 8
     RETURN_FUN                     shift and go to state 9
+    ID_GR                          shift and go to state 12
 
-state 20
+state 21
 
     (10) INSTRUCTION -> BREAK ; .
 
     {               reduce using rule 10 (INSTRUCTION -> BREAK ; .)
     BREAK           reduce using rule 10 (INSTRUCTION -> BREAK ; .)
     CONTINUE        reduce using rule 10 (INSTRUCTION -> BREAK ; .)
-    ID              reduce using rule 10 (INSTRUCTION -> BREAK ; .)
     IF              reduce using rule 10 (INSTRUCTION -> BREAK ; .)
     WHILE           reduce using rule 10 (INSTRUCTION -> BREAK ; .)
     FOR             reduce using rule 10 (INSTRUCTION -> BREAK ; .)
     PRINT           reduce using rule 10 (INSTRUCTION -> BREAK ; .)
     RETURN          reduce using rule 10 (INSTRUCTION -> BREAK ; .)
+    ID              reduce using rule 10 (INSTRUCTION -> BREAK ; .)
     $end            reduce using rule 10 (INSTRUCTION -> BREAK ; .)
     }               reduce using rule 10 (INSTRUCTION -> BREAK ; .)
     ELSE            reduce using rule 10 (INSTRUCTION -> BREAK ; .)
 
 
-state 21
+state 22
 
     (11) INSTRUCTION -> CONTINUE ; .
 
     {               reduce using rule 11 (INSTRUCTION -> CONTINUE ; .)
     BREAK           reduce using rule 11 (INSTRUCTION -> CONTINUE ; .)
     CONTINUE        reduce using rule 11 (INSTRUCTION -> CONTINUE ; .)
-    ID              reduce using rule 11 (INSTRUCTION -> CONTINUE ; .)
     IF              reduce using rule 11 (INSTRUCTION -> CONTINUE ; .)
     WHILE           reduce using rule 11 (INSTRUCTION -> CONTINUE ; .)
     FOR             reduce using rule 11 (INSTRUCTION -> CONTINUE ; .)
     PRINT           reduce using rule 11 (INSTRUCTION -> CONTINUE ; .)
     RETURN          reduce using rule 11 (INSTRUCTION -> CONTINUE ; .)
+    ID              reduce using rule 11 (INSTRUCTION -> CONTINUE ; .)
     $end            reduce using rule 11 (INSTRUCTION -> CONTINUE ; .)
     }               reduce using rule 11 (INSTRUCTION -> CONTINUE ; .)
     ELSE            reduce using rule 11 (INSTRUCTION -> CONTINUE ; .)
 
 
-state 22
+state 23
 
-    (56) ASSIGN_EXP -> ID ASSIGN_OP . ARITHMETIC_EXP ;
+    (56) ASSIGN_EXP -> ID_GR ASSIGN_OP . ARITHMETIC_EXP ;
     (50) ARITHMETIC_EXP -> . ARITHMETIC_EXP ARITHMETIC_OP ARITHMETIC_EXP
     (51) ARITHMETIC_EXP -> . ( ARITHMETIC_EXP )
     (52) ARITHMETIC_EXP -> . ARITHMETIC_OP_UNARY ARITHMETIC_EXP
@@ -654,7 +705,7 @@ state 22
     (22) VALUE -> . ZEROS ( ARITHMETIC_EXP )
     (23) VALUE -> . ONES ( ARITHMETIC_EXP )
     (24) VALUE -> . VECTOR
-    (25) VALUE -> . ID VECTOR
+    (25) VALUE -> . ID_GR VECTOR
     (26) VALUE -> . VALUE '
     (14) INT_GR -> . INTNUM
     (15) FLOAT_GR -> . FLOATNUM
@@ -662,30 +713,30 @@ state 22
     (13) STRING_GR -> . STRING
     (12) VECTOR -> . [ LIST_VALUE ]
 
-    (               shift and go to state 34
-    +               shift and go to state 37
-    -               shift and go to state 38
-    EYE             shift and go to state 43
-    ZEROS           shift and go to state 44
-    ONES            shift and go to state 45
-    ID              shift and go to state 47
+    (               shift and go to state 35
+    +               shift and go to state 38
+    -               shift and go to state 39
+    EYE             shift and go to state 44
+    ZEROS           shift and go to state 45
+    ONES            shift and go to state 46
     INTNUM          shift and go to state 48
     FLOATNUM        shift and go to state 49
+    ID              shift and go to state 18
     STRING          shift and go to state 50
     [               shift and go to state 51
 
+    ID_GR                          shift and go to state 42
     ARITHMETIC_EXP                 shift and go to state 54
-    ARITHMETIC_OP_UNARY            shift and go to state 35
-    VALUE                          shift and go to state 36
-    INT_GR                         shift and go to state 39
-    FLOAT_GR                       shift and go to state 40
-    ID_GR                          shift and go to state 41
-    STRING_GR                      shift and go to state 42
-    VECTOR                         shift and go to state 46
+    ARITHMETIC_OP_UNARY            shift and go to state 36
+    VALUE                          shift and go to state 37
+    INT_GR                         shift and go to state 40
+    FLOAT_GR                       shift and go to state 41
+    STRING_GR                      shift and go to state 43
+    VECTOR                         shift and go to state 47
 
-state 23
+state 24
 
-    (57) ASSIGN_EXP -> ID [ . LIST_VALUE ] ASSIGN_OP ARITHMETIC_EXP ;
+    (57) ASSIGN_EXP -> ID_GR [ . LIST_VALUE ] ASSIGN_OP ARITHMETIC_EXP ;
     (27) LIST_VALUE -> . ARITHMETIC_EXP
     (28) LIST_VALUE -> . ARITHMETIC_EXP , LIST_VALUE
     (50) ARITHMETIC_EXP -> . ARITHMETIC_EXP ARITHMETIC_OP ARITHMETIC_EXP
@@ -702,7 +753,7 @@ state 23
     (22) VALUE -> . ZEROS ( ARITHMETIC_EXP )
     (23) VALUE -> . ONES ( ARITHMETIC_EXP )
     (24) VALUE -> . VECTOR
-    (25) VALUE -> . ID VECTOR
+    (25) VALUE -> . ID_GR VECTOR
     (26) VALUE -> . VALUE '
     (14) INT_GR -> . INTNUM
     (15) FLOAT_GR -> . FLOATNUM
@@ -710,29 +761,29 @@ state 23
     (13) STRING_GR -> . STRING
     (12) VECTOR -> . [ LIST_VALUE ]
 
-    (               shift and go to state 34
-    +               shift and go to state 37
-    -               shift and go to state 38
-    EYE             shift and go to state 43
-    ZEROS           shift and go to state 44
-    ONES            shift and go to state 45
-    ID              shift and go to state 47
+    (               shift and go to state 35
+    +               shift and go to state 38
+    -               shift and go to state 39
+    EYE             shift and go to state 44
+    ZEROS           shift and go to state 45
+    ONES            shift and go to state 46
     INTNUM          shift and go to state 48
     FLOATNUM        shift and go to state 49
+    ID              shift and go to state 18
     STRING          shift and go to state 50
     [               shift and go to state 51
 
+    ID_GR                          shift and go to state 42
     LIST_VALUE                     shift and go to state 55
-    ARITHMETIC_EXP                 shift and go to state 33
-    ARITHMETIC_OP_UNARY            shift and go to state 35
-    VALUE                          shift and go to state 36
-    INT_GR                         shift and go to state 39
-    FLOAT_GR                       shift and go to state 40
-    ID_GR                          shift and go to state 41
-    STRING_GR                      shift and go to state 42
-    VECTOR                         shift and go to state 46
+    ARITHMETIC_EXP                 shift and go to state 34
+    ARITHMETIC_OP_UNARY            shift and go to state 36
+    VALUE                          shift and go to state 37
+    INT_GR                         shift and go to state 40
+    FLOAT_GR                       shift and go to state 41
+    STRING_GR                      shift and go to state 43
+    VECTOR                         shift and go to state 47
 
-state 24
+state 25
 
     (37) ASSIGN_OP -> ADDASSIGN .
 
@@ -742,14 +793,14 @@ state 24
     EYE             reduce using rule 37 (ASSIGN_OP -> ADDASSIGN .)
     ZEROS           reduce using rule 37 (ASSIGN_OP -> ADDASSIGN .)
     ONES            reduce using rule 37 (ASSIGN_OP -> ADDASSIGN .)
-    ID              reduce using rule 37 (ASSIGN_OP -> ADDASSIGN .)
     INTNUM          reduce using rule 37 (ASSIGN_OP -> ADDASSIGN .)
     FLOATNUM        reduce using rule 37 (ASSIGN_OP -> ADDASSIGN .)
+    ID              reduce using rule 37 (ASSIGN_OP -> ADDASSIGN .)
     STRING          reduce using rule 37 (ASSIGN_OP -> ADDASSIGN .)
     [               reduce using rule 37 (ASSIGN_OP -> ADDASSIGN .)
 
 
-state 25
+state 26
 
     (38) ASSIGN_OP -> SUBASSIGN .
 
@@ -759,14 +810,14 @@ state 25
     EYE             reduce using rule 38 (ASSIGN_OP -> SUBASSIGN .)
     ZEROS           reduce using rule 38 (ASSIGN_OP -> SUBASSIGN .)
     ONES            reduce using rule 38 (ASSIGN_OP -> SUBASSIGN .)
-    ID              reduce using rule 38 (ASSIGN_OP -> SUBASSIGN .)
     INTNUM          reduce using rule 38 (ASSIGN_OP -> SUBASSIGN .)
     FLOATNUM        reduce using rule 38 (ASSIGN_OP -> SUBASSIGN .)
+    ID              reduce using rule 38 (ASSIGN_OP -> SUBASSIGN .)
     STRING          reduce using rule 38 (ASSIGN_OP -> SUBASSIGN .)
     [               reduce using rule 38 (ASSIGN_OP -> SUBASSIGN .)
 
 
-state 26
+state 27
 
     (39) ASSIGN_OP -> MULASSIGN .
 
@@ -776,14 +827,14 @@ state 26
     EYE             reduce using rule 39 (ASSIGN_OP -> MULASSIGN .)
     ZEROS           reduce using rule 39 (ASSIGN_OP -> MULASSIGN .)
     ONES            reduce using rule 39 (ASSIGN_OP -> MULASSIGN .)
-    ID              reduce using rule 39 (ASSIGN_OP -> MULASSIGN .)
     INTNUM          reduce using rule 39 (ASSIGN_OP -> MULASSIGN .)
     FLOATNUM        reduce using rule 39 (ASSIGN_OP -> MULASSIGN .)
+    ID              reduce using rule 39 (ASSIGN_OP -> MULASSIGN .)
     STRING          reduce using rule 39 (ASSIGN_OP -> MULASSIGN .)
     [               reduce using rule 39 (ASSIGN_OP -> MULASSIGN .)
 
 
-state 27
+state 28
 
     (40) ASSIGN_OP -> DIVASSIGN .
 
@@ -793,14 +844,14 @@ state 27
     EYE             reduce using rule 40 (ASSIGN_OP -> DIVASSIGN .)
     ZEROS           reduce using rule 40 (ASSIGN_OP -> DIVASSIGN .)
     ONES            reduce using rule 40 (ASSIGN_OP -> DIVASSIGN .)
-    ID              reduce using rule 40 (ASSIGN_OP -> DIVASSIGN .)
     INTNUM          reduce using rule 40 (ASSIGN_OP -> DIVASSIGN .)
     FLOATNUM        reduce using rule 40 (ASSIGN_OP -> DIVASSIGN .)
+    ID              reduce using rule 40 (ASSIGN_OP -> DIVASSIGN .)
     STRING          reduce using rule 40 (ASSIGN_OP -> DIVASSIGN .)
     [               reduce using rule 40 (ASSIGN_OP -> DIVASSIGN .)
 
 
-state 28
+state 29
 
     (41) ASSIGN_OP -> = .
 
@@ -810,14 +861,14 @@ state 28
     EYE             reduce using rule 41 (ASSIGN_OP -> = .)
     ZEROS           reduce using rule 41 (ASSIGN_OP -> = .)
     ONES            reduce using rule 41 (ASSIGN_OP -> = .)
-    ID              reduce using rule 41 (ASSIGN_OP -> = .)
     INTNUM          reduce using rule 41 (ASSIGN_OP -> = .)
     FLOATNUM        reduce using rule 41 (ASSIGN_OP -> = .)
+    ID              reduce using rule 41 (ASSIGN_OP -> = .)
     STRING          reduce using rule 41 (ASSIGN_OP -> = .)
     [               reduce using rule 41 (ASSIGN_OP -> = .)
 
 
-state 29
+state 30
 
     (58) IF_INSTRUCTION -> IF ( . RELATION_EXP ) INSTRUCTION
     (59) IF_INSTRUCTION -> IF ( . RELATION_EXP ) INSTRUCTION ELSE INSTRUCTION
@@ -837,7 +888,7 @@ state 29
     (22) VALUE -> . ZEROS ( ARITHMETIC_EXP )
     (23) VALUE -> . ONES ( ARITHMETIC_EXP )
     (24) VALUE -> . VECTOR
-    (25) VALUE -> . ID VECTOR
+    (25) VALUE -> . ID_GR VECTOR
     (26) VALUE -> . VALUE '
     (14) INT_GR -> . INTNUM
     (15) FLOAT_GR -> . FLOATNUM
@@ -846,28 +897,28 @@ state 29
     (12) VECTOR -> . [ LIST_VALUE ]
 
     (               shift and go to state 56
-    +               shift and go to state 37
-    -               shift and go to state 38
-    EYE             shift and go to state 43
-    ZEROS           shift and go to state 44
-    ONES            shift and go to state 45
-    ID              shift and go to state 47
+    +               shift and go to state 38
+    -               shift and go to state 39
+    EYE             shift and go to state 44
+    ZEROS           shift and go to state 45
+    ONES            shift and go to state 46
     INTNUM          shift and go to state 48
     FLOATNUM        shift and go to state 49
+    ID              shift and go to state 18
     STRING          shift and go to state 50
     [               shift and go to state 51
 
     RELATION_EXP                   shift and go to state 57
     ARITHMETIC_EXP                 shift and go to state 58
-    ARITHMETIC_OP_UNARY            shift and go to state 35
-    VALUE                          shift and go to state 36
-    INT_GR                         shift and go to state 39
-    FLOAT_GR                       shift and go to state 40
-    ID_GR                          shift and go to state 41
-    STRING_GR                      shift and go to state 42
-    VECTOR                         shift and go to state 46
+    ARITHMETIC_OP_UNARY            shift and go to state 36
+    VALUE                          shift and go to state 37
+    INT_GR                         shift and go to state 40
+    FLOAT_GR                       shift and go to state 41
+    ID_GR                          shift and go to state 42
+    STRING_GR                      shift and go to state 43
+    VECTOR                         shift and go to state 47
 
-state 30
+state 31
 
     (60) WHILE_INSTRUCTION -> WHILE ( . RELATION_EXP ) INSTRUCTION
     (54) RELATION_EXP -> . ARITHMETIC_EXP RELATION_OP ARITHMETIC_EXP
@@ -886,7 +937,7 @@ state 30
     (22) VALUE -> . ZEROS ( ARITHMETIC_EXP )
     (23) VALUE -> . ONES ( ARITHMETIC_EXP )
     (24) VALUE -> . VECTOR
-    (25) VALUE -> . ID VECTOR
+    (25) VALUE -> . ID_GR VECTOR
     (26) VALUE -> . VALUE '
     (14) INT_GR -> . INTNUM
     (15) FLOAT_GR -> . FLOATNUM
@@ -895,42 +946,42 @@ state 30
     (12) VECTOR -> . [ LIST_VALUE ]
 
     (               shift and go to state 56
-    +               shift and go to state 37
-    -               shift and go to state 38
-    EYE             shift and go to state 43
-    ZEROS           shift and go to state 44
-    ONES            shift and go to state 45
-    ID              shift and go to state 47
+    +               shift and go to state 38
+    -               shift and go to state 39
+    EYE             shift and go to state 44
+    ZEROS           shift and go to state 45
+    ONES            shift and go to state 46
     INTNUM          shift and go to state 48
     FLOATNUM        shift and go to state 49
+    ID              shift and go to state 18
     STRING          shift and go to state 50
     [               shift and go to state 51
 
     RELATION_EXP                   shift and go to state 59
     ARITHMETIC_EXP                 shift and go to state 58
-    ARITHMETIC_OP_UNARY            shift and go to state 35
-    VALUE                          shift and go to state 36
-    INT_GR                         shift and go to state 39
-    FLOAT_GR                       shift and go to state 40
-    ID_GR                          shift and go to state 41
-    STRING_GR                      shift and go to state 42
-    VECTOR                         shift and go to state 46
+    ARITHMETIC_OP_UNARY            shift and go to state 36
+    VALUE                          shift and go to state 37
+    INT_GR                         shift and go to state 40
+    FLOAT_GR                       shift and go to state 41
+    ID_GR                          shift and go to state 42
+    STRING_GR                      shift and go to state 43
+    VECTOR                         shift and go to state 47
 
-state 31
+state 32
 
-    (61) FOR_INSTRUCTION -> FOR ID . = ARITHMETIC_EXP : ARITHMETIC_EXP INSTRUCTION
+    (61) FOR_INSTRUCTION -> FOR ID_GR . = ARITHMETIC_EXP : ARITHMETIC_EXP INSTRUCTION
 
     =               shift and go to state 60
 
 
-state 32
+state 33
 
     (62) PRINT_FUN -> PRINT LIST_VALUE . ;
 
     ;               shift and go to state 61
 
 
-state 33
+state 34
 
     (27) LIST_VALUE -> ARITHMETIC_EXP .
     (28) LIST_VALUE -> ARITHMETIC_EXP . , LIST_VALUE
@@ -958,7 +1009,7 @@ state 33
 
     ARITHMETIC_OP                  shift and go to state 63
 
-state 34
+state 35
 
     (51) ARITHMETIC_EXP -> ( . ARITHMETIC_EXP )
     (50) ARITHMETIC_EXP -> . ARITHMETIC_EXP ARITHMETIC_OP ARITHMETIC_EXP
@@ -975,7 +1026,7 @@ state 34
     (22) VALUE -> . ZEROS ( ARITHMETIC_EXP )
     (23) VALUE -> . ONES ( ARITHMETIC_EXP )
     (24) VALUE -> . VECTOR
-    (25) VALUE -> . ID VECTOR
+    (25) VALUE -> . ID_GR VECTOR
     (26) VALUE -> . VALUE '
     (14) INT_GR -> . INTNUM
     (15) FLOAT_GR -> . FLOATNUM
@@ -983,28 +1034,28 @@ state 34
     (13) STRING_GR -> . STRING
     (12) VECTOR -> . [ LIST_VALUE ]
 
-    (               shift and go to state 34
-    +               shift and go to state 37
-    -               shift and go to state 38
-    EYE             shift and go to state 43
-    ZEROS           shift and go to state 44
-    ONES            shift and go to state 45
-    ID              shift and go to state 47
+    (               shift and go to state 35
+    +               shift and go to state 38
+    -               shift and go to state 39
+    EYE             shift and go to state 44
+    ZEROS           shift and go to state 45
+    ONES            shift and go to state 46
     INTNUM          shift and go to state 48
     FLOATNUM        shift and go to state 49
+    ID              shift and go to state 18
     STRING          shift and go to state 50
     [               shift and go to state 51
 
     ARITHMETIC_EXP                 shift and go to state 72
-    ARITHMETIC_OP_UNARY            shift and go to state 35
-    VALUE                          shift and go to state 36
-    INT_GR                         shift and go to state 39
-    FLOAT_GR                       shift and go to state 40
-    ID_GR                          shift and go to state 41
-    STRING_GR                      shift and go to state 42
-    VECTOR                         shift and go to state 46
+    ARITHMETIC_OP_UNARY            shift and go to state 36
+    VALUE                          shift and go to state 37
+    INT_GR                         shift and go to state 40
+    FLOAT_GR                       shift and go to state 41
+    ID_GR                          shift and go to state 42
+    STRING_GR                      shift and go to state 43
+    VECTOR                         shift and go to state 47
 
-state 35
+state 36
 
     (52) ARITHMETIC_EXP -> ARITHMETIC_OP_UNARY . ARITHMETIC_EXP
     (50) ARITHMETIC_EXP -> . ARITHMETIC_EXP ARITHMETIC_OP ARITHMETIC_EXP
@@ -1021,7 +1072,7 @@ state 35
     (22) VALUE -> . ZEROS ( ARITHMETIC_EXP )
     (23) VALUE -> . ONES ( ARITHMETIC_EXP )
     (24) VALUE -> . VECTOR
-    (25) VALUE -> . ID VECTOR
+    (25) VALUE -> . ID_GR VECTOR
     (26) VALUE -> . VALUE '
     (14) INT_GR -> . INTNUM
     (15) FLOAT_GR -> . FLOATNUM
@@ -1029,28 +1080,28 @@ state 35
     (13) STRING_GR -> . STRING
     (12) VECTOR -> . [ LIST_VALUE ]
 
-    (               shift and go to state 34
-    +               shift and go to state 37
-    -               shift and go to state 38
-    EYE             shift and go to state 43
-    ZEROS           shift and go to state 44
-    ONES            shift and go to state 45
-    ID              shift and go to state 47
+    (               shift and go to state 35
+    +               shift and go to state 38
+    -               shift and go to state 39
+    EYE             shift and go to state 44
+    ZEROS           shift and go to state 45
+    ONES            shift and go to state 46
     INTNUM          shift and go to state 48
     FLOATNUM        shift and go to state 49
+    ID              shift and go to state 18
     STRING          shift and go to state 50
     [               shift and go to state 51
 
-    ARITHMETIC_OP_UNARY            shift and go to state 35
+    ARITHMETIC_OP_UNARY            shift and go to state 36
     ARITHMETIC_EXP                 shift and go to state 73
-    VALUE                          shift and go to state 36
-    INT_GR                         shift and go to state 39
-    FLOAT_GR                       shift and go to state 40
-    ID_GR                          shift and go to state 41
-    STRING_GR                      shift and go to state 42
-    VECTOR                         shift and go to state 46
+    VALUE                          shift and go to state 37
+    INT_GR                         shift and go to state 40
+    FLOAT_GR                       shift and go to state 41
+    ID_GR                          shift and go to state 42
+    STRING_GR                      shift and go to state 43
+    VECTOR                         shift and go to state 47
 
-state 36
+state 37
 
     (53) ARITHMETIC_EXP -> VALUE .
     (26) VALUE -> VALUE . '
@@ -1077,16 +1128,16 @@ state 36
     {               reduce using rule 53 (ARITHMETIC_EXP -> VALUE .)
     BREAK           reduce using rule 53 (ARITHMETIC_EXP -> VALUE .)
     CONTINUE        reduce using rule 53 (ARITHMETIC_EXP -> VALUE .)
-    ID              reduce using rule 53 (ARITHMETIC_EXP -> VALUE .)
     IF              reduce using rule 53 (ARITHMETIC_EXP -> VALUE .)
     WHILE           reduce using rule 53 (ARITHMETIC_EXP -> VALUE .)
     FOR             reduce using rule 53 (ARITHMETIC_EXP -> VALUE .)
     PRINT           reduce using rule 53 (ARITHMETIC_EXP -> VALUE .)
     RETURN          reduce using rule 53 (ARITHMETIC_EXP -> VALUE .)
+    ID              reduce using rule 53 (ARITHMETIC_EXP -> VALUE .)
     '               shift and go to state 74
 
 
-state 37
+state 38
 
     (48) ARITHMETIC_OP_UNARY -> + .
 
@@ -1096,14 +1147,14 @@ state 37
     EYE             reduce using rule 48 (ARITHMETIC_OP_UNARY -> + .)
     ZEROS           reduce using rule 48 (ARITHMETIC_OP_UNARY -> + .)
     ONES            reduce using rule 48 (ARITHMETIC_OP_UNARY -> + .)
-    ID              reduce using rule 48 (ARITHMETIC_OP_UNARY -> + .)
     INTNUM          reduce using rule 48 (ARITHMETIC_OP_UNARY -> + .)
     FLOATNUM        reduce using rule 48 (ARITHMETIC_OP_UNARY -> + .)
+    ID              reduce using rule 48 (ARITHMETIC_OP_UNARY -> + .)
     STRING          reduce using rule 48 (ARITHMETIC_OP_UNARY -> + .)
     [               reduce using rule 48 (ARITHMETIC_OP_UNARY -> + .)
 
 
-state 38
+state 39
 
     (49) ARITHMETIC_OP_UNARY -> - .
 
@@ -1113,14 +1164,14 @@ state 38
     EYE             reduce using rule 49 (ARITHMETIC_OP_UNARY -> - .)
     ZEROS           reduce using rule 49 (ARITHMETIC_OP_UNARY -> - .)
     ONES            reduce using rule 49 (ARITHMETIC_OP_UNARY -> - .)
-    ID              reduce using rule 49 (ARITHMETIC_OP_UNARY -> - .)
     INTNUM          reduce using rule 49 (ARITHMETIC_OP_UNARY -> - .)
     FLOATNUM        reduce using rule 49 (ARITHMETIC_OP_UNARY -> - .)
+    ID              reduce using rule 49 (ARITHMETIC_OP_UNARY -> - .)
     STRING          reduce using rule 49 (ARITHMETIC_OP_UNARY -> - .)
     [               reduce using rule 49 (ARITHMETIC_OP_UNARY -> - .)
 
 
-state 39
+state 40
 
     (17) VALUE -> INT_GR .
 
@@ -1147,15 +1198,15 @@ state 39
     {               reduce using rule 17 (VALUE -> INT_GR .)
     BREAK           reduce using rule 17 (VALUE -> INT_GR .)
     CONTINUE        reduce using rule 17 (VALUE -> INT_GR .)
-    ID              reduce using rule 17 (VALUE -> INT_GR .)
     IF              reduce using rule 17 (VALUE -> INT_GR .)
     WHILE           reduce using rule 17 (VALUE -> INT_GR .)
     FOR             reduce using rule 17 (VALUE -> INT_GR .)
     PRINT           reduce using rule 17 (VALUE -> INT_GR .)
     RETURN          reduce using rule 17 (VALUE -> INT_GR .)
+    ID              reduce using rule 17 (VALUE -> INT_GR .)
 
 
-state 40
+state 41
 
     (18) VALUE -> FLOAT_GR .
 
@@ -1182,17 +1233,19 @@ state 40
     {               reduce using rule 18 (VALUE -> FLOAT_GR .)
     BREAK           reduce using rule 18 (VALUE -> FLOAT_GR .)
     CONTINUE        reduce using rule 18 (VALUE -> FLOAT_GR .)
-    ID              reduce using rule 18 (VALUE -> FLOAT_GR .)
     IF              reduce using rule 18 (VALUE -> FLOAT_GR .)
     WHILE           reduce using rule 18 (VALUE -> FLOAT_GR .)
     FOR             reduce using rule 18 (VALUE -> FLOAT_GR .)
     PRINT           reduce using rule 18 (VALUE -> FLOAT_GR .)
     RETURN          reduce using rule 18 (VALUE -> FLOAT_GR .)
+    ID              reduce using rule 18 (VALUE -> FLOAT_GR .)
 
 
-state 41
+state 42
 
     (19) VALUE -> ID_GR .
+    (25) VALUE -> ID_GR . VECTOR
+    (12) VECTOR -> . [ LIST_VALUE ]
 
     '               reduce using rule 19 (VALUE -> ID_GR .)
     ,               reduce using rule 19 (VALUE -> ID_GR .)
@@ -1217,15 +1270,17 @@ state 41
     {               reduce using rule 19 (VALUE -> ID_GR .)
     BREAK           reduce using rule 19 (VALUE -> ID_GR .)
     CONTINUE        reduce using rule 19 (VALUE -> ID_GR .)
-    ID              reduce using rule 19 (VALUE -> ID_GR .)
     IF              reduce using rule 19 (VALUE -> ID_GR .)
     WHILE           reduce using rule 19 (VALUE -> ID_GR .)
     FOR             reduce using rule 19 (VALUE -> ID_GR .)
     PRINT           reduce using rule 19 (VALUE -> ID_GR .)
     RETURN          reduce using rule 19 (VALUE -> ID_GR .)
+    ID              reduce using rule 19 (VALUE -> ID_GR .)
+    [               shift and go to state 51
 
+    VECTOR                         shift and go to state 75
 
-state 42
+state 43
 
     (20) VALUE -> STRING_GR .
 
@@ -1252,36 +1307,36 @@ state 42
     {               reduce using rule 20 (VALUE -> STRING_GR .)
     BREAK           reduce using rule 20 (VALUE -> STRING_GR .)
     CONTINUE        reduce using rule 20 (VALUE -> STRING_GR .)
-    ID              reduce using rule 20 (VALUE -> STRING_GR .)
     IF              reduce using rule 20 (VALUE -> STRING_GR .)
     WHILE           reduce using rule 20 (VALUE -> STRING_GR .)
     FOR             reduce using rule 20 (VALUE -> STRING_GR .)
     PRINT           reduce using rule 20 (VALUE -> STRING_GR .)
     RETURN          reduce using rule 20 (VALUE -> STRING_GR .)
-
-
-state 43
-
-    (21) VALUE -> EYE . ( ARITHMETIC_EXP )
-
-    (               shift and go to state 75
+    ID              reduce using rule 20 (VALUE -> STRING_GR .)
 
 
 state 44
 
-    (22) VALUE -> ZEROS . ( ARITHMETIC_EXP )
+    (21) VALUE -> EYE . ( ARITHMETIC_EXP )
 
     (               shift and go to state 76
 
 
 state 45
 
-    (23) VALUE -> ONES . ( ARITHMETIC_EXP )
+    (22) VALUE -> ZEROS . ( ARITHMETIC_EXP )
 
     (               shift and go to state 77
 
 
 state 46
+
+    (23) VALUE -> ONES . ( ARITHMETIC_EXP )
+
+    (               shift and go to state 78
+
+
+state 47
 
     (24) VALUE -> VECTOR .
 
@@ -1308,52 +1363,13 @@ state 46
     {               reduce using rule 24 (VALUE -> VECTOR .)
     BREAK           reduce using rule 24 (VALUE -> VECTOR .)
     CONTINUE        reduce using rule 24 (VALUE -> VECTOR .)
-    ID              reduce using rule 24 (VALUE -> VECTOR .)
     IF              reduce using rule 24 (VALUE -> VECTOR .)
     WHILE           reduce using rule 24 (VALUE -> VECTOR .)
     FOR             reduce using rule 24 (VALUE -> VECTOR .)
     PRINT           reduce using rule 24 (VALUE -> VECTOR .)
     RETURN          reduce using rule 24 (VALUE -> VECTOR .)
+    ID              reduce using rule 24 (VALUE -> VECTOR .)
 
-
-state 47
-
-    (25) VALUE -> ID . VECTOR
-    (16) ID_GR -> ID .
-    (12) VECTOR -> . [ LIST_VALUE ]
-
-    '               reduce using rule 16 (ID_GR -> ID .)
-    ,               reduce using rule 16 (ID_GR -> ID .)
-    +               reduce using rule 16 (ID_GR -> ID .)
-    -               reduce using rule 16 (ID_GR -> ID .)
-    *               reduce using rule 16 (ID_GR -> ID .)
-    /               reduce using rule 16 (ID_GR -> ID .)
-    DOTADD          reduce using rule 16 (ID_GR -> ID .)
-    DOTSUB          reduce using rule 16 (ID_GR -> ID .)
-    DOTMUL          reduce using rule 16 (ID_GR -> ID .)
-    DOTDIV          reduce using rule 16 (ID_GR -> ID .)
-    ;               reduce using rule 16 (ID_GR -> ID .)
-    ]               reduce using rule 16 (ID_GR -> ID .)
-    GT              reduce using rule 16 (ID_GR -> ID .)
-    LT              reduce using rule 16 (ID_GR -> ID .)
-    LE              reduce using rule 16 (ID_GR -> ID .)
-    GE              reduce using rule 16 (ID_GR -> ID .)
-    NE              reduce using rule 16 (ID_GR -> ID .)
-    EQ              reduce using rule 16 (ID_GR -> ID .)
-    )               reduce using rule 16 (ID_GR -> ID .)
-    :               reduce using rule 16 (ID_GR -> ID .)
-    {               reduce using rule 16 (ID_GR -> ID .)
-    BREAK           reduce using rule 16 (ID_GR -> ID .)
-    CONTINUE        reduce using rule 16 (ID_GR -> ID .)
-    ID              reduce using rule 16 (ID_GR -> ID .)
-    IF              reduce using rule 16 (ID_GR -> ID .)
-    WHILE           reduce using rule 16 (ID_GR -> ID .)
-    FOR             reduce using rule 16 (ID_GR -> ID .)
-    PRINT           reduce using rule 16 (ID_GR -> ID .)
-    RETURN          reduce using rule 16 (ID_GR -> ID .)
-    [               shift and go to state 51
-
-    VECTOR                         shift and go to state 78
 
 state 48
 
@@ -1382,12 +1398,12 @@ state 48
     {               reduce using rule 14 (INT_GR -> INTNUM .)
     BREAK           reduce using rule 14 (INT_GR -> INTNUM .)
     CONTINUE        reduce using rule 14 (INT_GR -> INTNUM .)
-    ID              reduce using rule 14 (INT_GR -> INTNUM .)
     IF              reduce using rule 14 (INT_GR -> INTNUM .)
     WHILE           reduce using rule 14 (INT_GR -> INTNUM .)
     FOR             reduce using rule 14 (INT_GR -> INTNUM .)
     PRINT           reduce using rule 14 (INT_GR -> INTNUM .)
     RETURN          reduce using rule 14 (INT_GR -> INTNUM .)
+    ID              reduce using rule 14 (INT_GR -> INTNUM .)
 
 
 state 49
@@ -1417,12 +1433,12 @@ state 49
     {               reduce using rule 15 (FLOAT_GR -> FLOATNUM .)
     BREAK           reduce using rule 15 (FLOAT_GR -> FLOATNUM .)
     CONTINUE        reduce using rule 15 (FLOAT_GR -> FLOATNUM .)
-    ID              reduce using rule 15 (FLOAT_GR -> FLOATNUM .)
     IF              reduce using rule 15 (FLOAT_GR -> FLOATNUM .)
     WHILE           reduce using rule 15 (FLOAT_GR -> FLOATNUM .)
     FOR             reduce using rule 15 (FLOAT_GR -> FLOATNUM .)
     PRINT           reduce using rule 15 (FLOAT_GR -> FLOATNUM .)
     RETURN          reduce using rule 15 (FLOAT_GR -> FLOATNUM .)
+    ID              reduce using rule 15 (FLOAT_GR -> FLOATNUM .)
 
 
 state 50
@@ -1452,12 +1468,12 @@ state 50
     {               reduce using rule 13 (STRING_GR -> STRING .)
     BREAK           reduce using rule 13 (STRING_GR -> STRING .)
     CONTINUE        reduce using rule 13 (STRING_GR -> STRING .)
-    ID              reduce using rule 13 (STRING_GR -> STRING .)
     IF              reduce using rule 13 (STRING_GR -> STRING .)
     WHILE           reduce using rule 13 (STRING_GR -> STRING .)
     FOR             reduce using rule 13 (STRING_GR -> STRING .)
     PRINT           reduce using rule 13 (STRING_GR -> STRING .)
     RETURN          reduce using rule 13 (STRING_GR -> STRING .)
+    ID              reduce using rule 13 (STRING_GR -> STRING .)
 
 
 state 51
@@ -1479,7 +1495,7 @@ state 51
     (22) VALUE -> . ZEROS ( ARITHMETIC_EXP )
     (23) VALUE -> . ONES ( ARITHMETIC_EXP )
     (24) VALUE -> . VECTOR
-    (25) VALUE -> . ID VECTOR
+    (25) VALUE -> . ID_GR VECTOR
     (26) VALUE -> . VALUE '
     (14) INT_GR -> . INTNUM
     (15) FLOAT_GR -> . FLOATNUM
@@ -1487,27 +1503,27 @@ state 51
     (13) STRING_GR -> . STRING
     (12) VECTOR -> . [ LIST_VALUE ]
 
-    (               shift and go to state 34
-    +               shift and go to state 37
-    -               shift and go to state 38
-    EYE             shift and go to state 43
-    ZEROS           shift and go to state 44
-    ONES            shift and go to state 45
-    ID              shift and go to state 47
+    (               shift and go to state 35
+    +               shift and go to state 38
+    -               shift and go to state 39
+    EYE             shift and go to state 44
+    ZEROS           shift and go to state 45
+    ONES            shift and go to state 46
     INTNUM          shift and go to state 48
     FLOATNUM        shift and go to state 49
+    ID              shift and go to state 18
     STRING          shift and go to state 50
     [               shift and go to state 51
 
     LIST_VALUE                     shift and go to state 79
-    ARITHMETIC_EXP                 shift and go to state 33
-    ARITHMETIC_OP_UNARY            shift and go to state 35
-    VALUE                          shift and go to state 36
-    INT_GR                         shift and go to state 39
-    FLOAT_GR                       shift and go to state 40
-    ID_GR                          shift and go to state 41
-    STRING_GR                      shift and go to state 42
-    VECTOR                         shift and go to state 46
+    ARITHMETIC_EXP                 shift and go to state 34
+    ARITHMETIC_OP_UNARY            shift and go to state 36
+    VALUE                          shift and go to state 37
+    INT_GR                         shift and go to state 40
+    FLOAT_GR                       shift and go to state 41
+    ID_GR                          shift and go to state 42
+    STRING_GR                      shift and go to state 43
+    VECTOR                         shift and go to state 47
 
 state 52
 
@@ -1523,12 +1539,12 @@ state 53
     {               reduce using rule 3 (INSTRUCTION -> { START } .)
     BREAK           reduce using rule 3 (INSTRUCTION -> { START } .)
     CONTINUE        reduce using rule 3 (INSTRUCTION -> { START } .)
-    ID              reduce using rule 3 (INSTRUCTION -> { START } .)
     IF              reduce using rule 3 (INSTRUCTION -> { START } .)
     WHILE           reduce using rule 3 (INSTRUCTION -> { START } .)
     FOR             reduce using rule 3 (INSTRUCTION -> { START } .)
     PRINT           reduce using rule 3 (INSTRUCTION -> { START } .)
     RETURN          reduce using rule 3 (INSTRUCTION -> { START } .)
+    ID              reduce using rule 3 (INSTRUCTION -> { START } .)
     $end            reduce using rule 3 (INSTRUCTION -> { START } .)
     }               reduce using rule 3 (INSTRUCTION -> { START } .)
     ELSE            reduce using rule 3 (INSTRUCTION -> { START } .)
@@ -1536,7 +1552,7 @@ state 53
 
 state 54
 
-    (56) ASSIGN_EXP -> ID ASSIGN_OP ARITHMETIC_EXP . ;
+    (56) ASSIGN_EXP -> ID_GR ASSIGN_OP ARITHMETIC_EXP . ;
     (50) ARITHMETIC_EXP -> ARITHMETIC_EXP . ARITHMETIC_OP ARITHMETIC_EXP
     (29) ARITHMETIC_OP -> . +
     (30) ARITHMETIC_OP -> . -
@@ -1561,7 +1577,7 @@ state 54
 
 state 55
 
-    (57) ASSIGN_EXP -> ID [ LIST_VALUE . ] ASSIGN_OP ARITHMETIC_EXP ;
+    (57) ASSIGN_EXP -> ID_GR [ LIST_VALUE . ] ASSIGN_OP ARITHMETIC_EXP ;
 
     ]               shift and go to state 82
 
@@ -1586,7 +1602,7 @@ state 56
     (22) VALUE -> . ZEROS ( ARITHMETIC_EXP )
     (23) VALUE -> . ONES ( ARITHMETIC_EXP )
     (24) VALUE -> . VECTOR
-    (25) VALUE -> . ID VECTOR
+    (25) VALUE -> . ID_GR VECTOR
     (26) VALUE -> . VALUE '
     (14) INT_GR -> . INTNUM
     (15) FLOAT_GR -> . FLOATNUM
@@ -1595,26 +1611,26 @@ state 56
     (12) VECTOR -> . [ LIST_VALUE ]
 
     (               shift and go to state 56
-    +               shift and go to state 37
-    -               shift and go to state 38
-    EYE             shift and go to state 43
-    ZEROS           shift and go to state 44
-    ONES            shift and go to state 45
-    ID              shift and go to state 47
+    +               shift and go to state 38
+    -               shift and go to state 39
+    EYE             shift and go to state 44
+    ZEROS           shift and go to state 45
+    ONES            shift and go to state 46
     INTNUM          shift and go to state 48
     FLOATNUM        shift and go to state 49
+    ID              shift and go to state 18
     STRING          shift and go to state 50
     [               shift and go to state 51
 
     RELATION_EXP                   shift and go to state 83
     ARITHMETIC_EXP                 shift and go to state 84
-    ARITHMETIC_OP_UNARY            shift and go to state 35
-    VALUE                          shift and go to state 36
-    INT_GR                         shift and go to state 39
-    FLOAT_GR                       shift and go to state 40
-    ID_GR                          shift and go to state 41
-    STRING_GR                      shift and go to state 42
-    VECTOR                         shift and go to state 46
+    ARITHMETIC_OP_UNARY            shift and go to state 36
+    VALUE                          shift and go to state 37
+    INT_GR                         shift and go to state 40
+    FLOAT_GR                       shift and go to state 41
+    ID_GR                          shift and go to state 42
+    STRING_GR                      shift and go to state 43
+    VECTOR                         shift and go to state 47
 
 state 57
 
@@ -1670,7 +1686,7 @@ state 59
 
 state 60
 
-    (61) FOR_INSTRUCTION -> FOR ID = . ARITHMETIC_EXP : ARITHMETIC_EXP INSTRUCTION
+    (61) FOR_INSTRUCTION -> FOR ID_GR = . ARITHMETIC_EXP : ARITHMETIC_EXP INSTRUCTION
     (50) ARITHMETIC_EXP -> . ARITHMETIC_EXP ARITHMETIC_OP ARITHMETIC_EXP
     (51) ARITHMETIC_EXP -> . ( ARITHMETIC_EXP )
     (52) ARITHMETIC_EXP -> . ARITHMETIC_OP_UNARY ARITHMETIC_EXP
@@ -1685,7 +1701,7 @@ state 60
     (22) VALUE -> . ZEROS ( ARITHMETIC_EXP )
     (23) VALUE -> . ONES ( ARITHMETIC_EXP )
     (24) VALUE -> . VECTOR
-    (25) VALUE -> . ID VECTOR
+    (25) VALUE -> . ID_GR VECTOR
     (26) VALUE -> . VALUE '
     (14) INT_GR -> . INTNUM
     (15) FLOAT_GR -> . FLOATNUM
@@ -1693,26 +1709,26 @@ state 60
     (13) STRING_GR -> . STRING
     (12) VECTOR -> . [ LIST_VALUE ]
 
-    (               shift and go to state 34
-    +               shift and go to state 37
-    -               shift and go to state 38
-    EYE             shift and go to state 43
-    ZEROS           shift and go to state 44
-    ONES            shift and go to state 45
-    ID              shift and go to state 47
+    (               shift and go to state 35
+    +               shift and go to state 38
+    -               shift and go to state 39
+    EYE             shift and go to state 44
+    ZEROS           shift and go to state 45
+    ONES            shift and go to state 46
     INTNUM          shift and go to state 48
     FLOATNUM        shift and go to state 49
+    ID              shift and go to state 18
     STRING          shift and go to state 50
     [               shift and go to state 51
 
+    ID_GR                          shift and go to state 42
     ARITHMETIC_EXP                 shift and go to state 94
-    ARITHMETIC_OP_UNARY            shift and go to state 35
-    VALUE                          shift and go to state 36
-    INT_GR                         shift and go to state 39
-    FLOAT_GR                       shift and go to state 40
-    ID_GR                          shift and go to state 41
-    STRING_GR                      shift and go to state 42
-    VECTOR                         shift and go to state 46
+    ARITHMETIC_OP_UNARY            shift and go to state 36
+    VALUE                          shift and go to state 37
+    INT_GR                         shift and go to state 40
+    FLOAT_GR                       shift and go to state 41
+    STRING_GR                      shift and go to state 43
+    VECTOR                         shift and go to state 47
 
 state 61
 
@@ -1721,12 +1737,12 @@ state 61
     {               reduce using rule 62 (PRINT_FUN -> PRINT LIST_VALUE ; .)
     BREAK           reduce using rule 62 (PRINT_FUN -> PRINT LIST_VALUE ; .)
     CONTINUE        reduce using rule 62 (PRINT_FUN -> PRINT LIST_VALUE ; .)
-    ID              reduce using rule 62 (PRINT_FUN -> PRINT LIST_VALUE ; .)
     IF              reduce using rule 62 (PRINT_FUN -> PRINT LIST_VALUE ; .)
     WHILE           reduce using rule 62 (PRINT_FUN -> PRINT LIST_VALUE ; .)
     FOR             reduce using rule 62 (PRINT_FUN -> PRINT LIST_VALUE ; .)
     PRINT           reduce using rule 62 (PRINT_FUN -> PRINT LIST_VALUE ; .)
     RETURN          reduce using rule 62 (PRINT_FUN -> PRINT LIST_VALUE ; .)
+    ID              reduce using rule 62 (PRINT_FUN -> PRINT LIST_VALUE ; .)
     $end            reduce using rule 62 (PRINT_FUN -> PRINT LIST_VALUE ; .)
     }               reduce using rule 62 (PRINT_FUN -> PRINT LIST_VALUE ; .)
     ELSE            reduce using rule 62 (PRINT_FUN -> PRINT LIST_VALUE ; .)
@@ -1751,7 +1767,7 @@ state 62
     (22) VALUE -> . ZEROS ( ARITHMETIC_EXP )
     (23) VALUE -> . ONES ( ARITHMETIC_EXP )
     (24) VALUE -> . VECTOR
-    (25) VALUE -> . ID VECTOR
+    (25) VALUE -> . ID_GR VECTOR
     (26) VALUE -> . VALUE '
     (14) INT_GR -> . INTNUM
     (15) FLOAT_GR -> . FLOATNUM
@@ -1759,27 +1775,27 @@ state 62
     (13) STRING_GR -> . STRING
     (12) VECTOR -> . [ LIST_VALUE ]
 
-    (               shift and go to state 34
-    +               shift and go to state 37
-    -               shift and go to state 38
-    EYE             shift and go to state 43
-    ZEROS           shift and go to state 44
-    ONES            shift and go to state 45
-    ID              shift and go to state 47
+    (               shift and go to state 35
+    +               shift and go to state 38
+    -               shift and go to state 39
+    EYE             shift and go to state 44
+    ZEROS           shift and go to state 45
+    ONES            shift and go to state 46
     INTNUM          shift and go to state 48
     FLOATNUM        shift and go to state 49
+    ID              shift and go to state 18
     STRING          shift and go to state 50
     [               shift and go to state 51
 
-    ARITHMETIC_EXP                 shift and go to state 33
+    ARITHMETIC_EXP                 shift and go to state 34
     LIST_VALUE                     shift and go to state 95
-    ARITHMETIC_OP_UNARY            shift and go to state 35
-    VALUE                          shift and go to state 36
-    INT_GR                         shift and go to state 39
-    FLOAT_GR                       shift and go to state 40
-    ID_GR                          shift and go to state 41
-    STRING_GR                      shift and go to state 42
-    VECTOR                         shift and go to state 46
+    ARITHMETIC_OP_UNARY            shift and go to state 36
+    VALUE                          shift and go to state 37
+    INT_GR                         shift and go to state 40
+    FLOAT_GR                       shift and go to state 41
+    ID_GR                          shift and go to state 42
+    STRING_GR                      shift and go to state 43
+    VECTOR                         shift and go to state 47
 
 state 63
 
@@ -1798,7 +1814,7 @@ state 63
     (22) VALUE -> . ZEROS ( ARITHMETIC_EXP )
     (23) VALUE -> . ONES ( ARITHMETIC_EXP )
     (24) VALUE -> . VECTOR
-    (25) VALUE -> . ID VECTOR
+    (25) VALUE -> . ID_GR VECTOR
     (26) VALUE -> . VALUE '
     (14) INT_GR -> . INTNUM
     (15) FLOAT_GR -> . FLOATNUM
@@ -1806,26 +1822,26 @@ state 63
     (13) STRING_GR -> . STRING
     (12) VECTOR -> . [ LIST_VALUE ]
 
-    (               shift and go to state 34
-    +               shift and go to state 37
-    -               shift and go to state 38
-    EYE             shift and go to state 43
-    ZEROS           shift and go to state 44
-    ONES            shift and go to state 45
-    ID              shift and go to state 47
+    (               shift and go to state 35
+    +               shift and go to state 38
+    -               shift and go to state 39
+    EYE             shift and go to state 44
+    ZEROS           shift and go to state 45
+    ONES            shift and go to state 46
     INTNUM          shift and go to state 48
     FLOATNUM        shift and go to state 49
+    ID              shift and go to state 18
     STRING          shift and go to state 50
     [               shift and go to state 51
 
     ARITHMETIC_EXP                 shift and go to state 96
-    ARITHMETIC_OP_UNARY            shift and go to state 35
-    VALUE                          shift and go to state 36
-    INT_GR                         shift and go to state 39
-    FLOAT_GR                       shift and go to state 40
-    ID_GR                          shift and go to state 41
-    STRING_GR                      shift and go to state 42
-    VECTOR                         shift and go to state 46
+    ARITHMETIC_OP_UNARY            shift and go to state 36
+    VALUE                          shift and go to state 37
+    INT_GR                         shift and go to state 40
+    FLOAT_GR                       shift and go to state 41
+    ID_GR                          shift and go to state 42
+    STRING_GR                      shift and go to state 43
+    VECTOR                         shift and go to state 47
 
 state 64
 
@@ -1837,9 +1853,9 @@ state 64
     EYE             reduce using rule 29 (ARITHMETIC_OP -> + .)
     ZEROS           reduce using rule 29 (ARITHMETIC_OP -> + .)
     ONES            reduce using rule 29 (ARITHMETIC_OP -> + .)
-    ID              reduce using rule 29 (ARITHMETIC_OP -> + .)
     INTNUM          reduce using rule 29 (ARITHMETIC_OP -> + .)
     FLOATNUM        reduce using rule 29 (ARITHMETIC_OP -> + .)
+    ID              reduce using rule 29 (ARITHMETIC_OP -> + .)
     STRING          reduce using rule 29 (ARITHMETIC_OP -> + .)
     [               reduce using rule 29 (ARITHMETIC_OP -> + .)
 
@@ -1854,9 +1870,9 @@ state 65
     EYE             reduce using rule 30 (ARITHMETIC_OP -> - .)
     ZEROS           reduce using rule 30 (ARITHMETIC_OP -> - .)
     ONES            reduce using rule 30 (ARITHMETIC_OP -> - .)
-    ID              reduce using rule 30 (ARITHMETIC_OP -> - .)
     INTNUM          reduce using rule 30 (ARITHMETIC_OP -> - .)
     FLOATNUM        reduce using rule 30 (ARITHMETIC_OP -> - .)
+    ID              reduce using rule 30 (ARITHMETIC_OP -> - .)
     STRING          reduce using rule 30 (ARITHMETIC_OP -> - .)
     [               reduce using rule 30 (ARITHMETIC_OP -> - .)
 
@@ -1871,9 +1887,9 @@ state 66
     EYE             reduce using rule 31 (ARITHMETIC_OP -> * .)
     ZEROS           reduce using rule 31 (ARITHMETIC_OP -> * .)
     ONES            reduce using rule 31 (ARITHMETIC_OP -> * .)
-    ID              reduce using rule 31 (ARITHMETIC_OP -> * .)
     INTNUM          reduce using rule 31 (ARITHMETIC_OP -> * .)
     FLOATNUM        reduce using rule 31 (ARITHMETIC_OP -> * .)
+    ID              reduce using rule 31 (ARITHMETIC_OP -> * .)
     STRING          reduce using rule 31 (ARITHMETIC_OP -> * .)
     [               reduce using rule 31 (ARITHMETIC_OP -> * .)
 
@@ -1888,9 +1904,9 @@ state 67
     EYE             reduce using rule 32 (ARITHMETIC_OP -> / .)
     ZEROS           reduce using rule 32 (ARITHMETIC_OP -> / .)
     ONES            reduce using rule 32 (ARITHMETIC_OP -> / .)
-    ID              reduce using rule 32 (ARITHMETIC_OP -> / .)
     INTNUM          reduce using rule 32 (ARITHMETIC_OP -> / .)
     FLOATNUM        reduce using rule 32 (ARITHMETIC_OP -> / .)
+    ID              reduce using rule 32 (ARITHMETIC_OP -> / .)
     STRING          reduce using rule 32 (ARITHMETIC_OP -> / .)
     [               reduce using rule 32 (ARITHMETIC_OP -> / .)
 
@@ -1905,9 +1921,9 @@ state 68
     EYE             reduce using rule 33 (ARITHMETIC_OP -> DOTADD .)
     ZEROS           reduce using rule 33 (ARITHMETIC_OP -> DOTADD .)
     ONES            reduce using rule 33 (ARITHMETIC_OP -> DOTADD .)
-    ID              reduce using rule 33 (ARITHMETIC_OP -> DOTADD .)
     INTNUM          reduce using rule 33 (ARITHMETIC_OP -> DOTADD .)
     FLOATNUM        reduce using rule 33 (ARITHMETIC_OP -> DOTADD .)
+    ID              reduce using rule 33 (ARITHMETIC_OP -> DOTADD .)
     STRING          reduce using rule 33 (ARITHMETIC_OP -> DOTADD .)
     [               reduce using rule 33 (ARITHMETIC_OP -> DOTADD .)
 
@@ -1922,9 +1938,9 @@ state 69
     EYE             reduce using rule 34 (ARITHMETIC_OP -> DOTSUB .)
     ZEROS           reduce using rule 34 (ARITHMETIC_OP -> DOTSUB .)
     ONES            reduce using rule 34 (ARITHMETIC_OP -> DOTSUB .)
-    ID              reduce using rule 34 (ARITHMETIC_OP -> DOTSUB .)
     INTNUM          reduce using rule 34 (ARITHMETIC_OP -> DOTSUB .)
     FLOATNUM        reduce using rule 34 (ARITHMETIC_OP -> DOTSUB .)
+    ID              reduce using rule 34 (ARITHMETIC_OP -> DOTSUB .)
     STRING          reduce using rule 34 (ARITHMETIC_OP -> DOTSUB .)
     [               reduce using rule 34 (ARITHMETIC_OP -> DOTSUB .)
 
@@ -1939,9 +1955,9 @@ state 70
     EYE             reduce using rule 35 (ARITHMETIC_OP -> DOTMUL .)
     ZEROS           reduce using rule 35 (ARITHMETIC_OP -> DOTMUL .)
     ONES            reduce using rule 35 (ARITHMETIC_OP -> DOTMUL .)
-    ID              reduce using rule 35 (ARITHMETIC_OP -> DOTMUL .)
     INTNUM          reduce using rule 35 (ARITHMETIC_OP -> DOTMUL .)
     FLOATNUM        reduce using rule 35 (ARITHMETIC_OP -> DOTMUL .)
+    ID              reduce using rule 35 (ARITHMETIC_OP -> DOTMUL .)
     STRING          reduce using rule 35 (ARITHMETIC_OP -> DOTMUL .)
     [               reduce using rule 35 (ARITHMETIC_OP -> DOTMUL .)
 
@@ -1956,9 +1972,9 @@ state 71
     EYE             reduce using rule 36 (ARITHMETIC_OP -> DOTDIV .)
     ZEROS           reduce using rule 36 (ARITHMETIC_OP -> DOTDIV .)
     ONES            reduce using rule 36 (ARITHMETIC_OP -> DOTDIV .)
-    ID              reduce using rule 36 (ARITHMETIC_OP -> DOTDIV .)
     INTNUM          reduce using rule 36 (ARITHMETIC_OP -> DOTDIV .)
     FLOATNUM        reduce using rule 36 (ARITHMETIC_OP -> DOTDIV .)
+    ID              reduce using rule 36 (ARITHMETIC_OP -> DOTDIV .)
     STRING          reduce using rule 36 (ARITHMETIC_OP -> DOTDIV .)
     [               reduce using rule 36 (ARITHMETIC_OP -> DOTDIV .)
 
@@ -2023,12 +2039,12 @@ state 73
     {               reduce using rule 52 (ARITHMETIC_EXP -> ARITHMETIC_OP_UNARY ARITHMETIC_EXP .)
     BREAK           reduce using rule 52 (ARITHMETIC_EXP -> ARITHMETIC_OP_UNARY ARITHMETIC_EXP .)
     CONTINUE        reduce using rule 52 (ARITHMETIC_EXP -> ARITHMETIC_OP_UNARY ARITHMETIC_EXP .)
-    ID              reduce using rule 52 (ARITHMETIC_EXP -> ARITHMETIC_OP_UNARY ARITHMETIC_EXP .)
     IF              reduce using rule 52 (ARITHMETIC_EXP -> ARITHMETIC_OP_UNARY ARITHMETIC_EXP .)
     WHILE           reduce using rule 52 (ARITHMETIC_EXP -> ARITHMETIC_OP_UNARY ARITHMETIC_EXP .)
     FOR             reduce using rule 52 (ARITHMETIC_EXP -> ARITHMETIC_OP_UNARY ARITHMETIC_EXP .)
     PRINT           reduce using rule 52 (ARITHMETIC_EXP -> ARITHMETIC_OP_UNARY ARITHMETIC_EXP .)
     RETURN          reduce using rule 52 (ARITHMETIC_EXP -> ARITHMETIC_OP_UNARY ARITHMETIC_EXP .)
+    ID              reduce using rule 52 (ARITHMETIC_EXP -> ARITHMETIC_OP_UNARY ARITHMETIC_EXP .)
 
   ! +               [ shift and go to state 64 ]
   ! -               [ shift and go to state 65 ]
@@ -2068,15 +2084,50 @@ state 74
     {               reduce using rule 26 (VALUE -> VALUE ' .)
     BREAK           reduce using rule 26 (VALUE -> VALUE ' .)
     CONTINUE        reduce using rule 26 (VALUE -> VALUE ' .)
-    ID              reduce using rule 26 (VALUE -> VALUE ' .)
     IF              reduce using rule 26 (VALUE -> VALUE ' .)
     WHILE           reduce using rule 26 (VALUE -> VALUE ' .)
     FOR             reduce using rule 26 (VALUE -> VALUE ' .)
     PRINT           reduce using rule 26 (VALUE -> VALUE ' .)
     RETURN          reduce using rule 26 (VALUE -> VALUE ' .)
+    ID              reduce using rule 26 (VALUE -> VALUE ' .)
 
 
 state 75
+
+    (25) VALUE -> ID_GR VECTOR .
+
+    '               reduce using rule 25 (VALUE -> ID_GR VECTOR .)
+    ,               reduce using rule 25 (VALUE -> ID_GR VECTOR .)
+    +               reduce using rule 25 (VALUE -> ID_GR VECTOR .)
+    -               reduce using rule 25 (VALUE -> ID_GR VECTOR .)
+    *               reduce using rule 25 (VALUE -> ID_GR VECTOR .)
+    /               reduce using rule 25 (VALUE -> ID_GR VECTOR .)
+    DOTADD          reduce using rule 25 (VALUE -> ID_GR VECTOR .)
+    DOTSUB          reduce using rule 25 (VALUE -> ID_GR VECTOR .)
+    DOTMUL          reduce using rule 25 (VALUE -> ID_GR VECTOR .)
+    DOTDIV          reduce using rule 25 (VALUE -> ID_GR VECTOR .)
+    ;               reduce using rule 25 (VALUE -> ID_GR VECTOR .)
+    ]               reduce using rule 25 (VALUE -> ID_GR VECTOR .)
+    GT              reduce using rule 25 (VALUE -> ID_GR VECTOR .)
+    LT              reduce using rule 25 (VALUE -> ID_GR VECTOR .)
+    LE              reduce using rule 25 (VALUE -> ID_GR VECTOR .)
+    GE              reduce using rule 25 (VALUE -> ID_GR VECTOR .)
+    NE              reduce using rule 25 (VALUE -> ID_GR VECTOR .)
+    EQ              reduce using rule 25 (VALUE -> ID_GR VECTOR .)
+    )               reduce using rule 25 (VALUE -> ID_GR VECTOR .)
+    :               reduce using rule 25 (VALUE -> ID_GR VECTOR .)
+    {               reduce using rule 25 (VALUE -> ID_GR VECTOR .)
+    BREAK           reduce using rule 25 (VALUE -> ID_GR VECTOR .)
+    CONTINUE        reduce using rule 25 (VALUE -> ID_GR VECTOR .)
+    IF              reduce using rule 25 (VALUE -> ID_GR VECTOR .)
+    WHILE           reduce using rule 25 (VALUE -> ID_GR VECTOR .)
+    FOR             reduce using rule 25 (VALUE -> ID_GR VECTOR .)
+    PRINT           reduce using rule 25 (VALUE -> ID_GR VECTOR .)
+    RETURN          reduce using rule 25 (VALUE -> ID_GR VECTOR .)
+    ID              reduce using rule 25 (VALUE -> ID_GR VECTOR .)
+
+
+state 76
 
     (21) VALUE -> EYE ( . ARITHMETIC_EXP )
     (50) ARITHMETIC_EXP -> . ARITHMETIC_EXP ARITHMETIC_OP ARITHMETIC_EXP
@@ -2093,7 +2144,7 @@ state 75
     (22) VALUE -> . ZEROS ( ARITHMETIC_EXP )
     (23) VALUE -> . ONES ( ARITHMETIC_EXP )
     (24) VALUE -> . VECTOR
-    (25) VALUE -> . ID VECTOR
+    (25) VALUE -> . ID_GR VECTOR
     (26) VALUE -> . VALUE '
     (14) INT_GR -> . INTNUM
     (15) FLOAT_GR -> . FLOATNUM
@@ -2101,28 +2152,28 @@ state 75
     (13) STRING_GR -> . STRING
     (12) VECTOR -> . [ LIST_VALUE ]
 
-    (               shift and go to state 34
-    +               shift and go to state 37
-    -               shift and go to state 38
-    EYE             shift and go to state 43
-    ZEROS           shift and go to state 44
-    ONES            shift and go to state 45
-    ID              shift and go to state 47
+    (               shift and go to state 35
+    +               shift and go to state 38
+    -               shift and go to state 39
+    EYE             shift and go to state 44
+    ZEROS           shift and go to state 45
+    ONES            shift and go to state 46
     INTNUM          shift and go to state 48
     FLOATNUM        shift and go to state 49
+    ID              shift and go to state 18
     STRING          shift and go to state 50
     [               shift and go to state 51
 
     ARITHMETIC_EXP                 shift and go to state 98
-    ARITHMETIC_OP_UNARY            shift and go to state 35
-    VALUE                          shift and go to state 36
-    INT_GR                         shift and go to state 39
-    FLOAT_GR                       shift and go to state 40
-    ID_GR                          shift and go to state 41
-    STRING_GR                      shift and go to state 42
-    VECTOR                         shift and go to state 46
+    ARITHMETIC_OP_UNARY            shift and go to state 36
+    VALUE                          shift and go to state 37
+    INT_GR                         shift and go to state 40
+    FLOAT_GR                       shift and go to state 41
+    ID_GR                          shift and go to state 42
+    STRING_GR                      shift and go to state 43
+    VECTOR                         shift and go to state 47
 
-state 76
+state 77
 
     (22) VALUE -> ZEROS ( . ARITHMETIC_EXP )
     (50) ARITHMETIC_EXP -> . ARITHMETIC_EXP ARITHMETIC_OP ARITHMETIC_EXP
@@ -2139,7 +2190,7 @@ state 76
     (22) VALUE -> . ZEROS ( ARITHMETIC_EXP )
     (23) VALUE -> . ONES ( ARITHMETIC_EXP )
     (24) VALUE -> . VECTOR
-    (25) VALUE -> . ID VECTOR
+    (25) VALUE -> . ID_GR VECTOR
     (26) VALUE -> . VALUE '
     (14) INT_GR -> . INTNUM
     (15) FLOAT_GR -> . FLOATNUM
@@ -2147,28 +2198,28 @@ state 76
     (13) STRING_GR -> . STRING
     (12) VECTOR -> . [ LIST_VALUE ]
 
-    (               shift and go to state 34
-    +               shift and go to state 37
-    -               shift and go to state 38
-    EYE             shift and go to state 43
-    ZEROS           shift and go to state 44
-    ONES            shift and go to state 45
-    ID              shift and go to state 47
+    (               shift and go to state 35
+    +               shift and go to state 38
+    -               shift and go to state 39
+    EYE             shift and go to state 44
+    ZEROS           shift and go to state 45
+    ONES            shift and go to state 46
     INTNUM          shift and go to state 48
     FLOATNUM        shift and go to state 49
+    ID              shift and go to state 18
     STRING          shift and go to state 50
     [               shift and go to state 51
 
     ARITHMETIC_EXP                 shift and go to state 99
-    ARITHMETIC_OP_UNARY            shift and go to state 35
-    VALUE                          shift and go to state 36
-    INT_GR                         shift and go to state 39
-    FLOAT_GR                       shift and go to state 40
-    ID_GR                          shift and go to state 41
-    STRING_GR                      shift and go to state 42
-    VECTOR                         shift and go to state 46
+    ARITHMETIC_OP_UNARY            shift and go to state 36
+    VALUE                          shift and go to state 37
+    INT_GR                         shift and go to state 40
+    FLOAT_GR                       shift and go to state 41
+    ID_GR                          shift and go to state 42
+    STRING_GR                      shift and go to state 43
+    VECTOR                         shift and go to state 47
 
-state 77
+state 78
 
     (23) VALUE -> ONES ( . ARITHMETIC_EXP )
     (50) ARITHMETIC_EXP -> . ARITHMETIC_EXP ARITHMETIC_OP ARITHMETIC_EXP
@@ -2185,7 +2236,7 @@ state 77
     (22) VALUE -> . ZEROS ( ARITHMETIC_EXP )
     (23) VALUE -> . ONES ( ARITHMETIC_EXP )
     (24) VALUE -> . VECTOR
-    (25) VALUE -> . ID VECTOR
+    (25) VALUE -> . ID_GR VECTOR
     (26) VALUE -> . VALUE '
     (14) INT_GR -> . INTNUM
     (15) FLOAT_GR -> . FLOATNUM
@@ -2193,61 +2244,26 @@ state 77
     (13) STRING_GR -> . STRING
     (12) VECTOR -> . [ LIST_VALUE ]
 
-    (               shift and go to state 34
-    +               shift and go to state 37
-    -               shift and go to state 38
-    EYE             shift and go to state 43
-    ZEROS           shift and go to state 44
-    ONES            shift and go to state 45
-    ID              shift and go to state 47
+    (               shift and go to state 35
+    +               shift and go to state 38
+    -               shift and go to state 39
+    EYE             shift and go to state 44
+    ZEROS           shift and go to state 45
+    ONES            shift and go to state 46
     INTNUM          shift and go to state 48
     FLOATNUM        shift and go to state 49
+    ID              shift and go to state 18
     STRING          shift and go to state 50
     [               shift and go to state 51
 
     ARITHMETIC_EXP                 shift and go to state 100
-    ARITHMETIC_OP_UNARY            shift and go to state 35
-    VALUE                          shift and go to state 36
-    INT_GR                         shift and go to state 39
-    FLOAT_GR                       shift and go to state 40
-    ID_GR                          shift and go to state 41
-    STRING_GR                      shift and go to state 42
-    VECTOR                         shift and go to state 46
-
-state 78
-
-    (25) VALUE -> ID VECTOR .
-
-    '               reduce using rule 25 (VALUE -> ID VECTOR .)
-    ,               reduce using rule 25 (VALUE -> ID VECTOR .)
-    +               reduce using rule 25 (VALUE -> ID VECTOR .)
-    -               reduce using rule 25 (VALUE -> ID VECTOR .)
-    *               reduce using rule 25 (VALUE -> ID VECTOR .)
-    /               reduce using rule 25 (VALUE -> ID VECTOR .)
-    DOTADD          reduce using rule 25 (VALUE -> ID VECTOR .)
-    DOTSUB          reduce using rule 25 (VALUE -> ID VECTOR .)
-    DOTMUL          reduce using rule 25 (VALUE -> ID VECTOR .)
-    DOTDIV          reduce using rule 25 (VALUE -> ID VECTOR .)
-    ;               reduce using rule 25 (VALUE -> ID VECTOR .)
-    ]               reduce using rule 25 (VALUE -> ID VECTOR .)
-    GT              reduce using rule 25 (VALUE -> ID VECTOR .)
-    LT              reduce using rule 25 (VALUE -> ID VECTOR .)
-    LE              reduce using rule 25 (VALUE -> ID VECTOR .)
-    GE              reduce using rule 25 (VALUE -> ID VECTOR .)
-    NE              reduce using rule 25 (VALUE -> ID VECTOR .)
-    EQ              reduce using rule 25 (VALUE -> ID VECTOR .)
-    )               reduce using rule 25 (VALUE -> ID VECTOR .)
-    :               reduce using rule 25 (VALUE -> ID VECTOR .)
-    {               reduce using rule 25 (VALUE -> ID VECTOR .)
-    BREAK           reduce using rule 25 (VALUE -> ID VECTOR .)
-    CONTINUE        reduce using rule 25 (VALUE -> ID VECTOR .)
-    ID              reduce using rule 25 (VALUE -> ID VECTOR .)
-    IF              reduce using rule 25 (VALUE -> ID VECTOR .)
-    WHILE           reduce using rule 25 (VALUE -> ID VECTOR .)
-    FOR             reduce using rule 25 (VALUE -> ID VECTOR .)
-    PRINT           reduce using rule 25 (VALUE -> ID VECTOR .)
-    RETURN          reduce using rule 25 (VALUE -> ID VECTOR .)
-
+    ARITHMETIC_OP_UNARY            shift and go to state 36
+    VALUE                          shift and go to state 37
+    INT_GR                         shift and go to state 40
+    FLOAT_GR                       shift and go to state 41
+    ID_GR                          shift and go to state 42
+    STRING_GR                      shift and go to state 43
+    VECTOR                         shift and go to state 47
 
 state 79
 
@@ -2263,12 +2279,12 @@ state 80
     {               reduce using rule 63 (RETURN_FUN -> RETURN LIST_VALUE ; .)
     BREAK           reduce using rule 63 (RETURN_FUN -> RETURN LIST_VALUE ; .)
     CONTINUE        reduce using rule 63 (RETURN_FUN -> RETURN LIST_VALUE ; .)
-    ID              reduce using rule 63 (RETURN_FUN -> RETURN LIST_VALUE ; .)
     IF              reduce using rule 63 (RETURN_FUN -> RETURN LIST_VALUE ; .)
     WHILE           reduce using rule 63 (RETURN_FUN -> RETURN LIST_VALUE ; .)
     FOR             reduce using rule 63 (RETURN_FUN -> RETURN LIST_VALUE ; .)
     PRINT           reduce using rule 63 (RETURN_FUN -> RETURN LIST_VALUE ; .)
     RETURN          reduce using rule 63 (RETURN_FUN -> RETURN LIST_VALUE ; .)
+    ID              reduce using rule 63 (RETURN_FUN -> RETURN LIST_VALUE ; .)
     $end            reduce using rule 63 (RETURN_FUN -> RETURN LIST_VALUE ; .)
     }               reduce using rule 63 (RETURN_FUN -> RETURN LIST_VALUE ; .)
     ELSE            reduce using rule 63 (RETURN_FUN -> RETURN LIST_VALUE ; .)
@@ -2276,36 +2292,36 @@ state 80
 
 state 81
 
-    (56) ASSIGN_EXP -> ID ASSIGN_OP ARITHMETIC_EXP ; .
+    (56) ASSIGN_EXP -> ID_GR ASSIGN_OP ARITHMETIC_EXP ; .
 
-    {               reduce using rule 56 (ASSIGN_EXP -> ID ASSIGN_OP ARITHMETIC_EXP ; .)
-    BREAK           reduce using rule 56 (ASSIGN_EXP -> ID ASSIGN_OP ARITHMETIC_EXP ; .)
-    CONTINUE        reduce using rule 56 (ASSIGN_EXP -> ID ASSIGN_OP ARITHMETIC_EXP ; .)
-    ID              reduce using rule 56 (ASSIGN_EXP -> ID ASSIGN_OP ARITHMETIC_EXP ; .)
-    IF              reduce using rule 56 (ASSIGN_EXP -> ID ASSIGN_OP ARITHMETIC_EXP ; .)
-    WHILE           reduce using rule 56 (ASSIGN_EXP -> ID ASSIGN_OP ARITHMETIC_EXP ; .)
-    FOR             reduce using rule 56 (ASSIGN_EXP -> ID ASSIGN_OP ARITHMETIC_EXP ; .)
-    PRINT           reduce using rule 56 (ASSIGN_EXP -> ID ASSIGN_OP ARITHMETIC_EXP ; .)
-    RETURN          reduce using rule 56 (ASSIGN_EXP -> ID ASSIGN_OP ARITHMETIC_EXP ; .)
-    $end            reduce using rule 56 (ASSIGN_EXP -> ID ASSIGN_OP ARITHMETIC_EXP ; .)
-    }               reduce using rule 56 (ASSIGN_EXP -> ID ASSIGN_OP ARITHMETIC_EXP ; .)
-    ELSE            reduce using rule 56 (ASSIGN_EXP -> ID ASSIGN_OP ARITHMETIC_EXP ; .)
+    {               reduce using rule 56 (ASSIGN_EXP -> ID_GR ASSIGN_OP ARITHMETIC_EXP ; .)
+    BREAK           reduce using rule 56 (ASSIGN_EXP -> ID_GR ASSIGN_OP ARITHMETIC_EXP ; .)
+    CONTINUE        reduce using rule 56 (ASSIGN_EXP -> ID_GR ASSIGN_OP ARITHMETIC_EXP ; .)
+    IF              reduce using rule 56 (ASSIGN_EXP -> ID_GR ASSIGN_OP ARITHMETIC_EXP ; .)
+    WHILE           reduce using rule 56 (ASSIGN_EXP -> ID_GR ASSIGN_OP ARITHMETIC_EXP ; .)
+    FOR             reduce using rule 56 (ASSIGN_EXP -> ID_GR ASSIGN_OP ARITHMETIC_EXP ; .)
+    PRINT           reduce using rule 56 (ASSIGN_EXP -> ID_GR ASSIGN_OP ARITHMETIC_EXP ; .)
+    RETURN          reduce using rule 56 (ASSIGN_EXP -> ID_GR ASSIGN_OP ARITHMETIC_EXP ; .)
+    ID              reduce using rule 56 (ASSIGN_EXP -> ID_GR ASSIGN_OP ARITHMETIC_EXP ; .)
+    $end            reduce using rule 56 (ASSIGN_EXP -> ID_GR ASSIGN_OP ARITHMETIC_EXP ; .)
+    }               reduce using rule 56 (ASSIGN_EXP -> ID_GR ASSIGN_OP ARITHMETIC_EXP ; .)
+    ELSE            reduce using rule 56 (ASSIGN_EXP -> ID_GR ASSIGN_OP ARITHMETIC_EXP ; .)
 
 
 state 82
 
-    (57) ASSIGN_EXP -> ID [ LIST_VALUE ] . ASSIGN_OP ARITHMETIC_EXP ;
+    (57) ASSIGN_EXP -> ID_GR [ LIST_VALUE ] . ASSIGN_OP ARITHMETIC_EXP ;
     (37) ASSIGN_OP -> . ADDASSIGN
     (38) ASSIGN_OP -> . SUBASSIGN
     (39) ASSIGN_OP -> . MULASSIGN
     (40) ASSIGN_OP -> . DIVASSIGN
     (41) ASSIGN_OP -> . =
 
-    ADDASSIGN       shift and go to state 24
-    SUBASSIGN       shift and go to state 25
-    MULASSIGN       shift and go to state 26
-    DIVASSIGN       shift and go to state 27
-    =               shift and go to state 28
+    ADDASSIGN       shift and go to state 25
+    SUBASSIGN       shift and go to state 26
+    MULASSIGN       shift and go to state 27
+    DIVASSIGN       shift and go to state 28
+    =               shift and go to state 29
 
     ASSIGN_OP                      shift and go to state 102
 
@@ -2368,24 +2384,25 @@ state 85
     (9) INSTRUCTION -> . RETURN_FUN
     (10) INSTRUCTION -> . BREAK ;
     (11) INSTRUCTION -> . CONTINUE ;
-    (56) ASSIGN_EXP -> . ID ASSIGN_OP ARITHMETIC_EXP ;
-    (57) ASSIGN_EXP -> . ID [ LIST_VALUE ] ASSIGN_OP ARITHMETIC_EXP ;
+    (56) ASSIGN_EXP -> . ID_GR ASSIGN_OP ARITHMETIC_EXP ;
+    (57) ASSIGN_EXP -> . ID_GR [ LIST_VALUE ] ASSIGN_OP ARITHMETIC_EXP ;
     (58) IF_INSTRUCTION -> . IF ( RELATION_EXP ) INSTRUCTION
     (59) IF_INSTRUCTION -> . IF ( RELATION_EXP ) INSTRUCTION ELSE INSTRUCTION
     (60) WHILE_INSTRUCTION -> . WHILE ( RELATION_EXP ) INSTRUCTION
-    (61) FOR_INSTRUCTION -> . FOR ID = ARITHMETIC_EXP : ARITHMETIC_EXP INSTRUCTION
+    (61) FOR_INSTRUCTION -> . FOR ID_GR = ARITHMETIC_EXP : ARITHMETIC_EXP INSTRUCTION
     (62) PRINT_FUN -> . PRINT LIST_VALUE ;
     (63) RETURN_FUN -> . RETURN LIST_VALUE ;
+    (16) ID_GR -> . ID
 
     {               shift and go to state 3
     BREAK           shift and go to state 10
     CONTINUE        shift and go to state 11
-    ID              shift and go to state 12
     IF              shift and go to state 13
     WHILE           shift and go to state 14
     FOR             shift and go to state 15
     PRINT           shift and go to state 16
     RETURN          shift and go to state 17
+    ID              shift and go to state 18
 
     INSTRUCTION                    shift and go to state 104
     ASSIGN_EXP                     shift and go to state 4
@@ -2394,6 +2411,7 @@ state 85
     FOR_INSTRUCTION                shift and go to state 7
     PRINT_FUN                      shift and go to state 8
     RETURN_FUN                     shift and go to state 9
+    ID_GR                          shift and go to state 12
 
 state 86
 
@@ -2412,7 +2430,7 @@ state 86
     (22) VALUE -> . ZEROS ( ARITHMETIC_EXP )
     (23) VALUE -> . ONES ( ARITHMETIC_EXP )
     (24) VALUE -> . VECTOR
-    (25) VALUE -> . ID VECTOR
+    (25) VALUE -> . ID_GR VECTOR
     (26) VALUE -> . VALUE '
     (14) INT_GR -> . INTNUM
     (15) FLOAT_GR -> . FLOATNUM
@@ -2420,26 +2438,26 @@ state 86
     (13) STRING_GR -> . STRING
     (12) VECTOR -> . [ LIST_VALUE ]
 
-    (               shift and go to state 34
-    +               shift and go to state 37
-    -               shift and go to state 38
-    EYE             shift and go to state 43
-    ZEROS           shift and go to state 44
-    ONES            shift and go to state 45
-    ID              shift and go to state 47
+    (               shift and go to state 35
+    +               shift and go to state 38
+    -               shift and go to state 39
+    EYE             shift and go to state 44
+    ZEROS           shift and go to state 45
+    ONES            shift and go to state 46
     INTNUM          shift and go to state 48
     FLOATNUM        shift and go to state 49
+    ID              shift and go to state 18
     STRING          shift and go to state 50
     [               shift and go to state 51
 
     ARITHMETIC_EXP                 shift and go to state 105
-    ARITHMETIC_OP_UNARY            shift and go to state 35
-    VALUE                          shift and go to state 36
-    INT_GR                         shift and go to state 39
-    FLOAT_GR                       shift and go to state 40
-    ID_GR                          shift and go to state 41
-    STRING_GR                      shift and go to state 42
-    VECTOR                         shift and go to state 46
+    ARITHMETIC_OP_UNARY            shift and go to state 36
+    VALUE                          shift and go to state 37
+    INT_GR                         shift and go to state 40
+    FLOAT_GR                       shift and go to state 41
+    ID_GR                          shift and go to state 42
+    STRING_GR                      shift and go to state 43
+    VECTOR                         shift and go to state 47
 
 state 87
 
@@ -2451,9 +2469,9 @@ state 87
     EYE             reduce using rule 42 (RELATION_OP -> GT .)
     ZEROS           reduce using rule 42 (RELATION_OP -> GT .)
     ONES            reduce using rule 42 (RELATION_OP -> GT .)
-    ID              reduce using rule 42 (RELATION_OP -> GT .)
     INTNUM          reduce using rule 42 (RELATION_OP -> GT .)
     FLOATNUM        reduce using rule 42 (RELATION_OP -> GT .)
+    ID              reduce using rule 42 (RELATION_OP -> GT .)
     STRING          reduce using rule 42 (RELATION_OP -> GT .)
     [               reduce using rule 42 (RELATION_OP -> GT .)
 
@@ -2468,9 +2486,9 @@ state 88
     EYE             reduce using rule 43 (RELATION_OP -> LT .)
     ZEROS           reduce using rule 43 (RELATION_OP -> LT .)
     ONES            reduce using rule 43 (RELATION_OP -> LT .)
-    ID              reduce using rule 43 (RELATION_OP -> LT .)
     INTNUM          reduce using rule 43 (RELATION_OP -> LT .)
     FLOATNUM        reduce using rule 43 (RELATION_OP -> LT .)
+    ID              reduce using rule 43 (RELATION_OP -> LT .)
     STRING          reduce using rule 43 (RELATION_OP -> LT .)
     [               reduce using rule 43 (RELATION_OP -> LT .)
 
@@ -2485,9 +2503,9 @@ state 89
     EYE             reduce using rule 44 (RELATION_OP -> LE .)
     ZEROS           reduce using rule 44 (RELATION_OP -> LE .)
     ONES            reduce using rule 44 (RELATION_OP -> LE .)
-    ID              reduce using rule 44 (RELATION_OP -> LE .)
     INTNUM          reduce using rule 44 (RELATION_OP -> LE .)
     FLOATNUM        reduce using rule 44 (RELATION_OP -> LE .)
+    ID              reduce using rule 44 (RELATION_OP -> LE .)
     STRING          reduce using rule 44 (RELATION_OP -> LE .)
     [               reduce using rule 44 (RELATION_OP -> LE .)
 
@@ -2502,9 +2520,9 @@ state 90
     EYE             reduce using rule 45 (RELATION_OP -> GE .)
     ZEROS           reduce using rule 45 (RELATION_OP -> GE .)
     ONES            reduce using rule 45 (RELATION_OP -> GE .)
-    ID              reduce using rule 45 (RELATION_OP -> GE .)
     INTNUM          reduce using rule 45 (RELATION_OP -> GE .)
     FLOATNUM        reduce using rule 45 (RELATION_OP -> GE .)
+    ID              reduce using rule 45 (RELATION_OP -> GE .)
     STRING          reduce using rule 45 (RELATION_OP -> GE .)
     [               reduce using rule 45 (RELATION_OP -> GE .)
 
@@ -2519,9 +2537,9 @@ state 91
     EYE             reduce using rule 46 (RELATION_OP -> NE .)
     ZEROS           reduce using rule 46 (RELATION_OP -> NE .)
     ONES            reduce using rule 46 (RELATION_OP -> NE .)
-    ID              reduce using rule 46 (RELATION_OP -> NE .)
     INTNUM          reduce using rule 46 (RELATION_OP -> NE .)
     FLOATNUM        reduce using rule 46 (RELATION_OP -> NE .)
+    ID              reduce using rule 46 (RELATION_OP -> NE .)
     STRING          reduce using rule 46 (RELATION_OP -> NE .)
     [               reduce using rule 46 (RELATION_OP -> NE .)
 
@@ -2536,9 +2554,9 @@ state 92
     EYE             reduce using rule 47 (RELATION_OP -> EQ .)
     ZEROS           reduce using rule 47 (RELATION_OP -> EQ .)
     ONES            reduce using rule 47 (RELATION_OP -> EQ .)
-    ID              reduce using rule 47 (RELATION_OP -> EQ .)
     INTNUM          reduce using rule 47 (RELATION_OP -> EQ .)
     FLOATNUM        reduce using rule 47 (RELATION_OP -> EQ .)
+    ID              reduce using rule 47 (RELATION_OP -> EQ .)
     STRING          reduce using rule 47 (RELATION_OP -> EQ .)
     [               reduce using rule 47 (RELATION_OP -> EQ .)
 
@@ -2555,24 +2573,25 @@ state 93
     (9) INSTRUCTION -> . RETURN_FUN
     (10) INSTRUCTION -> . BREAK ;
     (11) INSTRUCTION -> . CONTINUE ;
-    (56) ASSIGN_EXP -> . ID ASSIGN_OP ARITHMETIC_EXP ;
-    (57) ASSIGN_EXP -> . ID [ LIST_VALUE ] ASSIGN_OP ARITHMETIC_EXP ;
+    (56) ASSIGN_EXP -> . ID_GR ASSIGN_OP ARITHMETIC_EXP ;
+    (57) ASSIGN_EXP -> . ID_GR [ LIST_VALUE ] ASSIGN_OP ARITHMETIC_EXP ;
     (58) IF_INSTRUCTION -> . IF ( RELATION_EXP ) INSTRUCTION
     (59) IF_INSTRUCTION -> . IF ( RELATION_EXP ) INSTRUCTION ELSE INSTRUCTION
     (60) WHILE_INSTRUCTION -> . WHILE ( RELATION_EXP ) INSTRUCTION
-    (61) FOR_INSTRUCTION -> . FOR ID = ARITHMETIC_EXP : ARITHMETIC_EXP INSTRUCTION
+    (61) FOR_INSTRUCTION -> . FOR ID_GR = ARITHMETIC_EXP : ARITHMETIC_EXP INSTRUCTION
     (62) PRINT_FUN -> . PRINT LIST_VALUE ;
     (63) RETURN_FUN -> . RETURN LIST_VALUE ;
+    (16) ID_GR -> . ID
 
     {               shift and go to state 3
     BREAK           shift and go to state 10
     CONTINUE        shift and go to state 11
-    ID              shift and go to state 12
     IF              shift and go to state 13
     WHILE           shift and go to state 14
     FOR             shift and go to state 15
     PRINT           shift and go to state 16
     RETURN          shift and go to state 17
+    ID              shift and go to state 18
 
     INSTRUCTION                    shift and go to state 106
     ASSIGN_EXP                     shift and go to state 4
@@ -2581,10 +2600,11 @@ state 93
     FOR_INSTRUCTION                shift and go to state 7
     PRINT_FUN                      shift and go to state 8
     RETURN_FUN                     shift and go to state 9
+    ID_GR                          shift and go to state 12
 
 state 94
 
-    (61) FOR_INSTRUCTION -> FOR ID = ARITHMETIC_EXP . : ARITHMETIC_EXP INSTRUCTION
+    (61) FOR_INSTRUCTION -> FOR ID_GR = ARITHMETIC_EXP . : ARITHMETIC_EXP INSTRUCTION
     (50) ARITHMETIC_EXP -> ARITHMETIC_EXP . ARITHMETIC_OP ARITHMETIC_EXP
     (29) ARITHMETIC_OP -> . +
     (30) ARITHMETIC_OP -> . -
@@ -2650,12 +2670,12 @@ state 96
     {               reduce using rule 50 (ARITHMETIC_EXP -> ARITHMETIC_EXP ARITHMETIC_OP ARITHMETIC_EXP .)
     BREAK           reduce using rule 50 (ARITHMETIC_EXP -> ARITHMETIC_EXP ARITHMETIC_OP ARITHMETIC_EXP .)
     CONTINUE        reduce using rule 50 (ARITHMETIC_EXP -> ARITHMETIC_EXP ARITHMETIC_OP ARITHMETIC_EXP .)
-    ID              reduce using rule 50 (ARITHMETIC_EXP -> ARITHMETIC_EXP ARITHMETIC_OP ARITHMETIC_EXP .)
     IF              reduce using rule 50 (ARITHMETIC_EXP -> ARITHMETIC_EXP ARITHMETIC_OP ARITHMETIC_EXP .)
     WHILE           reduce using rule 50 (ARITHMETIC_EXP -> ARITHMETIC_EXP ARITHMETIC_OP ARITHMETIC_EXP .)
     FOR             reduce using rule 50 (ARITHMETIC_EXP -> ARITHMETIC_EXP ARITHMETIC_OP ARITHMETIC_EXP .)
     PRINT           reduce using rule 50 (ARITHMETIC_EXP -> ARITHMETIC_EXP ARITHMETIC_OP ARITHMETIC_EXP .)
     RETURN          reduce using rule 50 (ARITHMETIC_EXP -> ARITHMETIC_EXP ARITHMETIC_OP ARITHMETIC_EXP .)
+    ID              reduce using rule 50 (ARITHMETIC_EXP -> ARITHMETIC_EXP ARITHMETIC_OP ARITHMETIC_EXP .)
 
   ! +               [ shift and go to state 64 ]
   ! -               [ shift and go to state 65 ]
@@ -2694,12 +2714,12 @@ state 97
     {               reduce using rule 51 (ARITHMETIC_EXP -> ( ARITHMETIC_EXP ) .)
     BREAK           reduce using rule 51 (ARITHMETIC_EXP -> ( ARITHMETIC_EXP ) .)
     CONTINUE        reduce using rule 51 (ARITHMETIC_EXP -> ( ARITHMETIC_EXP ) .)
-    ID              reduce using rule 51 (ARITHMETIC_EXP -> ( ARITHMETIC_EXP ) .)
     IF              reduce using rule 51 (ARITHMETIC_EXP -> ( ARITHMETIC_EXP ) .)
     WHILE           reduce using rule 51 (ARITHMETIC_EXP -> ( ARITHMETIC_EXP ) .)
     FOR             reduce using rule 51 (ARITHMETIC_EXP -> ( ARITHMETIC_EXP ) .)
     PRINT           reduce using rule 51 (ARITHMETIC_EXP -> ( ARITHMETIC_EXP ) .)
     RETURN          reduce using rule 51 (ARITHMETIC_EXP -> ( ARITHMETIC_EXP ) .)
+    ID              reduce using rule 51 (ARITHMETIC_EXP -> ( ARITHMETIC_EXP ) .)
 
 
 state 98
@@ -2804,17 +2824,17 @@ state 101
     {               reduce using rule 12 (VECTOR -> [ LIST_VALUE ] .)
     BREAK           reduce using rule 12 (VECTOR -> [ LIST_VALUE ] .)
     CONTINUE        reduce using rule 12 (VECTOR -> [ LIST_VALUE ] .)
-    ID              reduce using rule 12 (VECTOR -> [ LIST_VALUE ] .)
     IF              reduce using rule 12 (VECTOR -> [ LIST_VALUE ] .)
     WHILE           reduce using rule 12 (VECTOR -> [ LIST_VALUE ] .)
     FOR             reduce using rule 12 (VECTOR -> [ LIST_VALUE ] .)
     PRINT           reduce using rule 12 (VECTOR -> [ LIST_VALUE ] .)
     RETURN          reduce using rule 12 (VECTOR -> [ LIST_VALUE ] .)
+    ID              reduce using rule 12 (VECTOR -> [ LIST_VALUE ] .)
 
 
 state 102
 
-    (57) ASSIGN_EXP -> ID [ LIST_VALUE ] ASSIGN_OP . ARITHMETIC_EXP ;
+    (57) ASSIGN_EXP -> ID_GR [ LIST_VALUE ] ASSIGN_OP . ARITHMETIC_EXP ;
     (50) ARITHMETIC_EXP -> . ARITHMETIC_EXP ARITHMETIC_OP ARITHMETIC_EXP
     (51) ARITHMETIC_EXP -> . ( ARITHMETIC_EXP )
     (52) ARITHMETIC_EXP -> . ARITHMETIC_OP_UNARY ARITHMETIC_EXP
@@ -2829,7 +2849,7 @@ state 102
     (22) VALUE -> . ZEROS ( ARITHMETIC_EXP )
     (23) VALUE -> . ONES ( ARITHMETIC_EXP )
     (24) VALUE -> . VECTOR
-    (25) VALUE -> . ID VECTOR
+    (25) VALUE -> . ID_GR VECTOR
     (26) VALUE -> . VALUE '
     (14) INT_GR -> . INTNUM
     (15) FLOAT_GR -> . FLOATNUM
@@ -2837,26 +2857,26 @@ state 102
     (13) STRING_GR -> . STRING
     (12) VECTOR -> . [ LIST_VALUE ]
 
-    (               shift and go to state 34
-    +               shift and go to state 37
-    -               shift and go to state 38
-    EYE             shift and go to state 43
-    ZEROS           shift and go to state 44
-    ONES            shift and go to state 45
-    ID              shift and go to state 47
+    (               shift and go to state 35
+    +               shift and go to state 38
+    -               shift and go to state 39
+    EYE             shift and go to state 44
+    ZEROS           shift and go to state 45
+    ONES            shift and go to state 46
     INTNUM          shift and go to state 48
     FLOATNUM        shift and go to state 49
+    ID              shift and go to state 18
     STRING          shift and go to state 50
     [               shift and go to state 51
 
+    ID_GR                          shift and go to state 42
     ARITHMETIC_EXP                 shift and go to state 111
-    ARITHMETIC_OP_UNARY            shift and go to state 35
-    VALUE                          shift and go to state 36
-    INT_GR                         shift and go to state 39
-    FLOAT_GR                       shift and go to state 40
-    ID_GR                          shift and go to state 41
-    STRING_GR                      shift and go to state 42
-    VECTOR                         shift and go to state 46
+    ARITHMETIC_OP_UNARY            shift and go to state 36
+    VALUE                          shift and go to state 37
+    INT_GR                         shift and go to state 40
+    FLOAT_GR                       shift and go to state 41
+    STRING_GR                      shift and go to state 43
+    VECTOR                         shift and go to state 47
 
 state 103
 
@@ -2873,12 +2893,12 @@ state 104
     {               reduce using rule 58 (IF_INSTRUCTION -> IF ( RELATION_EXP ) INSTRUCTION .)
     BREAK           reduce using rule 58 (IF_INSTRUCTION -> IF ( RELATION_EXP ) INSTRUCTION .)
     CONTINUE        reduce using rule 58 (IF_INSTRUCTION -> IF ( RELATION_EXP ) INSTRUCTION .)
-    ID              reduce using rule 58 (IF_INSTRUCTION -> IF ( RELATION_EXP ) INSTRUCTION .)
     IF              reduce using rule 58 (IF_INSTRUCTION -> IF ( RELATION_EXP ) INSTRUCTION .)
     WHILE           reduce using rule 58 (IF_INSTRUCTION -> IF ( RELATION_EXP ) INSTRUCTION .)
     FOR             reduce using rule 58 (IF_INSTRUCTION -> IF ( RELATION_EXP ) INSTRUCTION .)
     PRINT           reduce using rule 58 (IF_INSTRUCTION -> IF ( RELATION_EXP ) INSTRUCTION .)
     RETURN          reduce using rule 58 (IF_INSTRUCTION -> IF ( RELATION_EXP ) INSTRUCTION .)
+    ID              reduce using rule 58 (IF_INSTRUCTION -> IF ( RELATION_EXP ) INSTRUCTION .)
     $end            reduce using rule 58 (IF_INSTRUCTION -> IF ( RELATION_EXP ) INSTRUCTION .)
     }               reduce using rule 58 (IF_INSTRUCTION -> IF ( RELATION_EXP ) INSTRUCTION .)
     ELSE            shift and go to state 112
@@ -2918,12 +2938,12 @@ state 106
     {               reduce using rule 60 (WHILE_INSTRUCTION -> WHILE ( RELATION_EXP ) INSTRUCTION .)
     BREAK           reduce using rule 60 (WHILE_INSTRUCTION -> WHILE ( RELATION_EXP ) INSTRUCTION .)
     CONTINUE        reduce using rule 60 (WHILE_INSTRUCTION -> WHILE ( RELATION_EXP ) INSTRUCTION .)
-    ID              reduce using rule 60 (WHILE_INSTRUCTION -> WHILE ( RELATION_EXP ) INSTRUCTION .)
     IF              reduce using rule 60 (WHILE_INSTRUCTION -> WHILE ( RELATION_EXP ) INSTRUCTION .)
     WHILE           reduce using rule 60 (WHILE_INSTRUCTION -> WHILE ( RELATION_EXP ) INSTRUCTION .)
     FOR             reduce using rule 60 (WHILE_INSTRUCTION -> WHILE ( RELATION_EXP ) INSTRUCTION .)
     PRINT           reduce using rule 60 (WHILE_INSTRUCTION -> WHILE ( RELATION_EXP ) INSTRUCTION .)
     RETURN          reduce using rule 60 (WHILE_INSTRUCTION -> WHILE ( RELATION_EXP ) INSTRUCTION .)
+    ID              reduce using rule 60 (WHILE_INSTRUCTION -> WHILE ( RELATION_EXP ) INSTRUCTION .)
     $end            reduce using rule 60 (WHILE_INSTRUCTION -> WHILE ( RELATION_EXP ) INSTRUCTION .)
     }               reduce using rule 60 (WHILE_INSTRUCTION -> WHILE ( RELATION_EXP ) INSTRUCTION .)
     ELSE            reduce using rule 60 (WHILE_INSTRUCTION -> WHILE ( RELATION_EXP ) INSTRUCTION .)
@@ -2931,7 +2951,7 @@ state 106
 
 state 107
 
-    (61) FOR_INSTRUCTION -> FOR ID = ARITHMETIC_EXP : . ARITHMETIC_EXP INSTRUCTION
+    (61) FOR_INSTRUCTION -> FOR ID_GR = ARITHMETIC_EXP : . ARITHMETIC_EXP INSTRUCTION
     (50) ARITHMETIC_EXP -> . ARITHMETIC_EXP ARITHMETIC_OP ARITHMETIC_EXP
     (51) ARITHMETIC_EXP -> . ( ARITHMETIC_EXP )
     (52) ARITHMETIC_EXP -> . ARITHMETIC_OP_UNARY ARITHMETIC_EXP
@@ -2946,7 +2966,7 @@ state 107
     (22) VALUE -> . ZEROS ( ARITHMETIC_EXP )
     (23) VALUE -> . ONES ( ARITHMETIC_EXP )
     (24) VALUE -> . VECTOR
-    (25) VALUE -> . ID VECTOR
+    (25) VALUE -> . ID_GR VECTOR
     (26) VALUE -> . VALUE '
     (14) INT_GR -> . INTNUM
     (15) FLOAT_GR -> . FLOATNUM
@@ -2954,26 +2974,26 @@ state 107
     (13) STRING_GR -> . STRING
     (12) VECTOR -> . [ LIST_VALUE ]
 
-    (               shift and go to state 34
-    +               shift and go to state 37
-    -               shift and go to state 38
-    EYE             shift and go to state 43
-    ZEROS           shift and go to state 44
-    ONES            shift and go to state 45
-    ID              shift and go to state 47
+    (               shift and go to state 35
+    +               shift and go to state 38
+    -               shift and go to state 39
+    EYE             shift and go to state 44
+    ZEROS           shift and go to state 45
+    ONES            shift and go to state 46
     INTNUM          shift and go to state 48
     FLOATNUM        shift and go to state 49
+    ID              shift and go to state 18
     STRING          shift and go to state 50
     [               shift and go to state 51
 
+    ID_GR                          shift and go to state 42
     ARITHMETIC_EXP                 shift and go to state 113
-    ARITHMETIC_OP_UNARY            shift and go to state 35
-    VALUE                          shift and go to state 36
-    INT_GR                         shift and go to state 39
-    FLOAT_GR                       shift and go to state 40
-    ID_GR                          shift and go to state 41
-    STRING_GR                      shift and go to state 42
-    VECTOR                         shift and go to state 46
+    ARITHMETIC_OP_UNARY            shift and go to state 36
+    VALUE                          shift and go to state 37
+    INT_GR                         shift and go to state 40
+    FLOAT_GR                       shift and go to state 41
+    STRING_GR                      shift and go to state 43
+    VECTOR                         shift and go to state 47
 
 state 108
 
@@ -3002,12 +3022,12 @@ state 108
     {               reduce using rule 21 (VALUE -> EYE ( ARITHMETIC_EXP ) .)
     BREAK           reduce using rule 21 (VALUE -> EYE ( ARITHMETIC_EXP ) .)
     CONTINUE        reduce using rule 21 (VALUE -> EYE ( ARITHMETIC_EXP ) .)
-    ID              reduce using rule 21 (VALUE -> EYE ( ARITHMETIC_EXP ) .)
     IF              reduce using rule 21 (VALUE -> EYE ( ARITHMETIC_EXP ) .)
     WHILE           reduce using rule 21 (VALUE -> EYE ( ARITHMETIC_EXP ) .)
     FOR             reduce using rule 21 (VALUE -> EYE ( ARITHMETIC_EXP ) .)
     PRINT           reduce using rule 21 (VALUE -> EYE ( ARITHMETIC_EXP ) .)
     RETURN          reduce using rule 21 (VALUE -> EYE ( ARITHMETIC_EXP ) .)
+    ID              reduce using rule 21 (VALUE -> EYE ( ARITHMETIC_EXP ) .)
 
 
 state 109
@@ -3037,12 +3057,12 @@ state 109
     {               reduce using rule 22 (VALUE -> ZEROS ( ARITHMETIC_EXP ) .)
     BREAK           reduce using rule 22 (VALUE -> ZEROS ( ARITHMETIC_EXP ) .)
     CONTINUE        reduce using rule 22 (VALUE -> ZEROS ( ARITHMETIC_EXP ) .)
-    ID              reduce using rule 22 (VALUE -> ZEROS ( ARITHMETIC_EXP ) .)
     IF              reduce using rule 22 (VALUE -> ZEROS ( ARITHMETIC_EXP ) .)
     WHILE           reduce using rule 22 (VALUE -> ZEROS ( ARITHMETIC_EXP ) .)
     FOR             reduce using rule 22 (VALUE -> ZEROS ( ARITHMETIC_EXP ) .)
     PRINT           reduce using rule 22 (VALUE -> ZEROS ( ARITHMETIC_EXP ) .)
     RETURN          reduce using rule 22 (VALUE -> ZEROS ( ARITHMETIC_EXP ) .)
+    ID              reduce using rule 22 (VALUE -> ZEROS ( ARITHMETIC_EXP ) .)
 
 
 state 110
@@ -3072,17 +3092,17 @@ state 110
     {               reduce using rule 23 (VALUE -> ONES ( ARITHMETIC_EXP ) .)
     BREAK           reduce using rule 23 (VALUE -> ONES ( ARITHMETIC_EXP ) .)
     CONTINUE        reduce using rule 23 (VALUE -> ONES ( ARITHMETIC_EXP ) .)
-    ID              reduce using rule 23 (VALUE -> ONES ( ARITHMETIC_EXP ) .)
     IF              reduce using rule 23 (VALUE -> ONES ( ARITHMETIC_EXP ) .)
     WHILE           reduce using rule 23 (VALUE -> ONES ( ARITHMETIC_EXP ) .)
     FOR             reduce using rule 23 (VALUE -> ONES ( ARITHMETIC_EXP ) .)
     PRINT           reduce using rule 23 (VALUE -> ONES ( ARITHMETIC_EXP ) .)
     RETURN          reduce using rule 23 (VALUE -> ONES ( ARITHMETIC_EXP ) .)
+    ID              reduce using rule 23 (VALUE -> ONES ( ARITHMETIC_EXP ) .)
 
 
 state 111
 
-    (57) ASSIGN_EXP -> ID [ LIST_VALUE ] ASSIGN_OP ARITHMETIC_EXP . ;
+    (57) ASSIGN_EXP -> ID_GR [ LIST_VALUE ] ASSIGN_OP ARITHMETIC_EXP . ;
     (50) ARITHMETIC_EXP -> ARITHMETIC_EXP . ARITHMETIC_OP ARITHMETIC_EXP
     (29) ARITHMETIC_OP -> . +
     (30) ARITHMETIC_OP -> . -
@@ -3117,24 +3137,25 @@ state 112
     (9) INSTRUCTION -> . RETURN_FUN
     (10) INSTRUCTION -> . BREAK ;
     (11) INSTRUCTION -> . CONTINUE ;
-    (56) ASSIGN_EXP -> . ID ASSIGN_OP ARITHMETIC_EXP ;
-    (57) ASSIGN_EXP -> . ID [ LIST_VALUE ] ASSIGN_OP ARITHMETIC_EXP ;
+    (56) ASSIGN_EXP -> . ID_GR ASSIGN_OP ARITHMETIC_EXP ;
+    (57) ASSIGN_EXP -> . ID_GR [ LIST_VALUE ] ASSIGN_OP ARITHMETIC_EXP ;
     (58) IF_INSTRUCTION -> . IF ( RELATION_EXP ) INSTRUCTION
     (59) IF_INSTRUCTION -> . IF ( RELATION_EXP ) INSTRUCTION ELSE INSTRUCTION
     (60) WHILE_INSTRUCTION -> . WHILE ( RELATION_EXP ) INSTRUCTION
-    (61) FOR_INSTRUCTION -> . FOR ID = ARITHMETIC_EXP : ARITHMETIC_EXP INSTRUCTION
+    (61) FOR_INSTRUCTION -> . FOR ID_GR = ARITHMETIC_EXP : ARITHMETIC_EXP INSTRUCTION
     (62) PRINT_FUN -> . PRINT LIST_VALUE ;
     (63) RETURN_FUN -> . RETURN LIST_VALUE ;
+    (16) ID_GR -> . ID
 
     {               shift and go to state 3
     BREAK           shift and go to state 10
     CONTINUE        shift and go to state 11
-    ID              shift and go to state 12
     IF              shift and go to state 13
     WHILE           shift and go to state 14
     FOR             shift and go to state 15
     PRINT           shift and go to state 16
     RETURN          shift and go to state 17
+    ID              shift and go to state 18
 
     INSTRUCTION                    shift and go to state 115
     ASSIGN_EXP                     shift and go to state 4
@@ -3143,10 +3164,11 @@ state 112
     FOR_INSTRUCTION                shift and go to state 7
     PRINT_FUN                      shift and go to state 8
     RETURN_FUN                     shift and go to state 9
+    ID_GR                          shift and go to state 12
 
 state 113
 
-    (61) FOR_INSTRUCTION -> FOR ID = ARITHMETIC_EXP : ARITHMETIC_EXP . INSTRUCTION
+    (61) FOR_INSTRUCTION -> FOR ID_GR = ARITHMETIC_EXP : ARITHMETIC_EXP . INSTRUCTION
     (50) ARITHMETIC_EXP -> ARITHMETIC_EXP . ARITHMETIC_OP ARITHMETIC_EXP
     (3) INSTRUCTION -> . { START }
     (4) INSTRUCTION -> . ASSIGN_EXP
@@ -3165,14 +3187,15 @@ state 113
     (34) ARITHMETIC_OP -> . DOTSUB
     (35) ARITHMETIC_OP -> . DOTMUL
     (36) ARITHMETIC_OP -> . DOTDIV
-    (56) ASSIGN_EXP -> . ID ASSIGN_OP ARITHMETIC_EXP ;
-    (57) ASSIGN_EXP -> . ID [ LIST_VALUE ] ASSIGN_OP ARITHMETIC_EXP ;
+    (56) ASSIGN_EXP -> . ID_GR ASSIGN_OP ARITHMETIC_EXP ;
+    (57) ASSIGN_EXP -> . ID_GR [ LIST_VALUE ] ASSIGN_OP ARITHMETIC_EXP ;
     (58) IF_INSTRUCTION -> . IF ( RELATION_EXP ) INSTRUCTION
     (59) IF_INSTRUCTION -> . IF ( RELATION_EXP ) INSTRUCTION ELSE INSTRUCTION
     (60) WHILE_INSTRUCTION -> . WHILE ( RELATION_EXP ) INSTRUCTION
-    (61) FOR_INSTRUCTION -> . FOR ID = ARITHMETIC_EXP : ARITHMETIC_EXP INSTRUCTION
+    (61) FOR_INSTRUCTION -> . FOR ID_GR = ARITHMETIC_EXP : ARITHMETIC_EXP INSTRUCTION
     (62) PRINT_FUN -> . PRINT LIST_VALUE ;
     (63) RETURN_FUN -> . RETURN LIST_VALUE ;
+    (16) ID_GR -> . ID
 
     {               shift and go to state 3
     BREAK           shift and go to state 10
@@ -3185,13 +3208,14 @@ state 113
     DOTSUB          shift and go to state 69
     DOTMUL          shift and go to state 70
     DOTDIV          shift and go to state 71
-    ID              shift and go to state 12
     IF              shift and go to state 13
     WHILE           shift and go to state 14
     FOR             shift and go to state 15
     PRINT           shift and go to state 16
     RETURN          shift and go to state 17
+    ID              shift and go to state 18
 
+    ID_GR                          shift and go to state 12
     INSTRUCTION                    shift and go to state 116
     ARITHMETIC_OP                  shift and go to state 63
     ASSIGN_EXP                     shift and go to state 4
@@ -3203,20 +3227,20 @@ state 113
 
 state 114
 
-    (57) ASSIGN_EXP -> ID [ LIST_VALUE ] ASSIGN_OP ARITHMETIC_EXP ; .
+    (57) ASSIGN_EXP -> ID_GR [ LIST_VALUE ] ASSIGN_OP ARITHMETIC_EXP ; .
 
-    {               reduce using rule 57 (ASSIGN_EXP -> ID [ LIST_VALUE ] ASSIGN_OP ARITHMETIC_EXP ; .)
-    BREAK           reduce using rule 57 (ASSIGN_EXP -> ID [ LIST_VALUE ] ASSIGN_OP ARITHMETIC_EXP ; .)
-    CONTINUE        reduce using rule 57 (ASSIGN_EXP -> ID [ LIST_VALUE ] ASSIGN_OP ARITHMETIC_EXP ; .)
-    ID              reduce using rule 57 (ASSIGN_EXP -> ID [ LIST_VALUE ] ASSIGN_OP ARITHMETIC_EXP ; .)
-    IF              reduce using rule 57 (ASSIGN_EXP -> ID [ LIST_VALUE ] ASSIGN_OP ARITHMETIC_EXP ; .)
-    WHILE           reduce using rule 57 (ASSIGN_EXP -> ID [ LIST_VALUE ] ASSIGN_OP ARITHMETIC_EXP ; .)
-    FOR             reduce using rule 57 (ASSIGN_EXP -> ID [ LIST_VALUE ] ASSIGN_OP ARITHMETIC_EXP ; .)
-    PRINT           reduce using rule 57 (ASSIGN_EXP -> ID [ LIST_VALUE ] ASSIGN_OP ARITHMETIC_EXP ; .)
-    RETURN          reduce using rule 57 (ASSIGN_EXP -> ID [ LIST_VALUE ] ASSIGN_OP ARITHMETIC_EXP ; .)
-    $end            reduce using rule 57 (ASSIGN_EXP -> ID [ LIST_VALUE ] ASSIGN_OP ARITHMETIC_EXP ; .)
-    }               reduce using rule 57 (ASSIGN_EXP -> ID [ LIST_VALUE ] ASSIGN_OP ARITHMETIC_EXP ; .)
-    ELSE            reduce using rule 57 (ASSIGN_EXP -> ID [ LIST_VALUE ] ASSIGN_OP ARITHMETIC_EXP ; .)
+    {               reduce using rule 57 (ASSIGN_EXP -> ID_GR [ LIST_VALUE ] ASSIGN_OP ARITHMETIC_EXP ; .)
+    BREAK           reduce using rule 57 (ASSIGN_EXP -> ID_GR [ LIST_VALUE ] ASSIGN_OP ARITHMETIC_EXP ; .)
+    CONTINUE        reduce using rule 57 (ASSIGN_EXP -> ID_GR [ LIST_VALUE ] ASSIGN_OP ARITHMETIC_EXP ; .)
+    IF              reduce using rule 57 (ASSIGN_EXP -> ID_GR [ LIST_VALUE ] ASSIGN_OP ARITHMETIC_EXP ; .)
+    WHILE           reduce using rule 57 (ASSIGN_EXP -> ID_GR [ LIST_VALUE ] ASSIGN_OP ARITHMETIC_EXP ; .)
+    FOR             reduce using rule 57 (ASSIGN_EXP -> ID_GR [ LIST_VALUE ] ASSIGN_OP ARITHMETIC_EXP ; .)
+    PRINT           reduce using rule 57 (ASSIGN_EXP -> ID_GR [ LIST_VALUE ] ASSIGN_OP ARITHMETIC_EXP ; .)
+    RETURN          reduce using rule 57 (ASSIGN_EXP -> ID_GR [ LIST_VALUE ] ASSIGN_OP ARITHMETIC_EXP ; .)
+    ID              reduce using rule 57 (ASSIGN_EXP -> ID_GR [ LIST_VALUE ] ASSIGN_OP ARITHMETIC_EXP ; .)
+    $end            reduce using rule 57 (ASSIGN_EXP -> ID_GR [ LIST_VALUE ] ASSIGN_OP ARITHMETIC_EXP ; .)
+    }               reduce using rule 57 (ASSIGN_EXP -> ID_GR [ LIST_VALUE ] ASSIGN_OP ARITHMETIC_EXP ; .)
+    ELSE            reduce using rule 57 (ASSIGN_EXP -> ID_GR [ LIST_VALUE ] ASSIGN_OP ARITHMETIC_EXP ; .)
 
 
 state 115
@@ -3226,12 +3250,12 @@ state 115
     {               reduce using rule 59 (IF_INSTRUCTION -> IF ( RELATION_EXP ) INSTRUCTION ELSE INSTRUCTION .)
     BREAK           reduce using rule 59 (IF_INSTRUCTION -> IF ( RELATION_EXP ) INSTRUCTION ELSE INSTRUCTION .)
     CONTINUE        reduce using rule 59 (IF_INSTRUCTION -> IF ( RELATION_EXP ) INSTRUCTION ELSE INSTRUCTION .)
-    ID              reduce using rule 59 (IF_INSTRUCTION -> IF ( RELATION_EXP ) INSTRUCTION ELSE INSTRUCTION .)
     IF              reduce using rule 59 (IF_INSTRUCTION -> IF ( RELATION_EXP ) INSTRUCTION ELSE INSTRUCTION .)
     WHILE           reduce using rule 59 (IF_INSTRUCTION -> IF ( RELATION_EXP ) INSTRUCTION ELSE INSTRUCTION .)
     FOR             reduce using rule 59 (IF_INSTRUCTION -> IF ( RELATION_EXP ) INSTRUCTION ELSE INSTRUCTION .)
     PRINT           reduce using rule 59 (IF_INSTRUCTION -> IF ( RELATION_EXP ) INSTRUCTION ELSE INSTRUCTION .)
     RETURN          reduce using rule 59 (IF_INSTRUCTION -> IF ( RELATION_EXP ) INSTRUCTION ELSE INSTRUCTION .)
+    ID              reduce using rule 59 (IF_INSTRUCTION -> IF ( RELATION_EXP ) INSTRUCTION ELSE INSTRUCTION .)
     $end            reduce using rule 59 (IF_INSTRUCTION -> IF ( RELATION_EXP ) INSTRUCTION ELSE INSTRUCTION .)
     }               reduce using rule 59 (IF_INSTRUCTION -> IF ( RELATION_EXP ) INSTRUCTION ELSE INSTRUCTION .)
     ELSE            reduce using rule 59 (IF_INSTRUCTION -> IF ( RELATION_EXP ) INSTRUCTION ELSE INSTRUCTION .)
@@ -3239,18 +3263,18 @@ state 115
 
 state 116
 
-    (61) FOR_INSTRUCTION -> FOR ID = ARITHMETIC_EXP : ARITHMETIC_EXP INSTRUCTION .
+    (61) FOR_INSTRUCTION -> FOR ID_GR = ARITHMETIC_EXP : ARITHMETIC_EXP INSTRUCTION .
 
-    {               reduce using rule 61 (FOR_INSTRUCTION -> FOR ID = ARITHMETIC_EXP : ARITHMETIC_EXP INSTRUCTION .)
-    BREAK           reduce using rule 61 (FOR_INSTRUCTION -> FOR ID = ARITHMETIC_EXP : ARITHMETIC_EXP INSTRUCTION .)
-    CONTINUE        reduce using rule 61 (FOR_INSTRUCTION -> FOR ID = ARITHMETIC_EXP : ARITHMETIC_EXP INSTRUCTION .)
-    ID              reduce using rule 61 (FOR_INSTRUCTION -> FOR ID = ARITHMETIC_EXP : ARITHMETIC_EXP INSTRUCTION .)
-    IF              reduce using rule 61 (FOR_INSTRUCTION -> FOR ID = ARITHMETIC_EXP : ARITHMETIC_EXP INSTRUCTION .)
-    WHILE           reduce using rule 61 (FOR_INSTRUCTION -> FOR ID = ARITHMETIC_EXP : ARITHMETIC_EXP INSTRUCTION .)
-    FOR             reduce using rule 61 (FOR_INSTRUCTION -> FOR ID = ARITHMETIC_EXP : ARITHMETIC_EXP INSTRUCTION .)
-    PRINT           reduce using rule 61 (FOR_INSTRUCTION -> FOR ID = ARITHMETIC_EXP : ARITHMETIC_EXP INSTRUCTION .)
-    RETURN          reduce using rule 61 (FOR_INSTRUCTION -> FOR ID = ARITHMETIC_EXP : ARITHMETIC_EXP INSTRUCTION .)
-    $end            reduce using rule 61 (FOR_INSTRUCTION -> FOR ID = ARITHMETIC_EXP : ARITHMETIC_EXP INSTRUCTION .)
-    }               reduce using rule 61 (FOR_INSTRUCTION -> FOR ID = ARITHMETIC_EXP : ARITHMETIC_EXP INSTRUCTION .)
-    ELSE            reduce using rule 61 (FOR_INSTRUCTION -> FOR ID = ARITHMETIC_EXP : ARITHMETIC_EXP INSTRUCTION .)
+    {               reduce using rule 61 (FOR_INSTRUCTION -> FOR ID_GR = ARITHMETIC_EXP : ARITHMETIC_EXP INSTRUCTION .)
+    BREAK           reduce using rule 61 (FOR_INSTRUCTION -> FOR ID_GR = ARITHMETIC_EXP : ARITHMETIC_EXP INSTRUCTION .)
+    CONTINUE        reduce using rule 61 (FOR_INSTRUCTION -> FOR ID_GR = ARITHMETIC_EXP : ARITHMETIC_EXP INSTRUCTION .)
+    IF              reduce using rule 61 (FOR_INSTRUCTION -> FOR ID_GR = ARITHMETIC_EXP : ARITHMETIC_EXP INSTRUCTION .)
+    WHILE           reduce using rule 61 (FOR_INSTRUCTION -> FOR ID_GR = ARITHMETIC_EXP : ARITHMETIC_EXP INSTRUCTION .)
+    FOR             reduce using rule 61 (FOR_INSTRUCTION -> FOR ID_GR = ARITHMETIC_EXP : ARITHMETIC_EXP INSTRUCTION .)
+    PRINT           reduce using rule 61 (FOR_INSTRUCTION -> FOR ID_GR = ARITHMETIC_EXP : ARITHMETIC_EXP INSTRUCTION .)
+    RETURN          reduce using rule 61 (FOR_INSTRUCTION -> FOR ID_GR = ARITHMETIC_EXP : ARITHMETIC_EXP INSTRUCTION .)
+    ID              reduce using rule 61 (FOR_INSTRUCTION -> FOR ID_GR = ARITHMETIC_EXP : ARITHMETIC_EXP INSTRUCTION .)
+    $end            reduce using rule 61 (FOR_INSTRUCTION -> FOR ID_GR = ARITHMETIC_EXP : ARITHMETIC_EXP INSTRUCTION .)
+    }               reduce using rule 61 (FOR_INSTRUCTION -> FOR ID_GR = ARITHMETIC_EXP : ARITHMETIC_EXP INSTRUCTION .)
+    ELSE            reduce using rule 61 (FOR_INSTRUCTION -> FOR ID_GR = ARITHMETIC_EXP : ARITHMETIC_EXP INSTRUCTION .)
 

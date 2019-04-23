@@ -6,7 +6,7 @@ class SymbolTable(object):
     put(var_name, var_value) -> dodaje zmienną do tej przestrzeni nazw
     leave_scope() -> zwraca przestrzeń nazw 1 poziom poniżej, tracą dane w tej prestrzeni 
     create_new_empty() -> """
-    def __init__(self, parent): # parent scope and symbol table name
+    def __init__(self, parent=None): # parent scope and symbol table name
         self.vars_dict = {}
         self.parent = parent
 
@@ -18,8 +18,9 @@ class SymbolTable(object):
         if(self.parent is None):    raise BaseException("Value not found")
         else:   return self.parent.get(name)
 
-    def create_new_empty(self):
-        return SymbolTable()
+    def create_new_scope(self):
+        newScope = SymbolTable(self)
+        return newScope
 
     def leave_scope(self):
         return self.parent

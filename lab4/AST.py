@@ -120,7 +120,7 @@ class While(Node):
 class For(Node):
     def __init__(self, itera, rangeStart, rangeEnd, body, poz):
         self.poz = poz
-        self.itera = itera  # token
+        self.itera = itera  # node
         self.rangeStart = rangeStart  # node
         self.rangeEnd = rangeEnd  # node
         self.body = body  # node

@@ -34,11 +34,11 @@ def p_start(p):
     """START : START INSTRUCTION
              | INSTRUCTION """
     if(len(p) == 2):
-        p[0]= AST.InstructionSet([])
-        p[0].append(AST.Instruction(p[1]))
+        p[0]= AST.InstructionSet([],  p.lineno(1))
+        p[0].append(AST.Instruction(p[1],  p.lineno(1)))
     else:
         p[0] = p[1]
-        p[0].append(AST.Instruction(p[2]))
+        p[0].append(AST.Instruction(p[2],  p.lineno(2)))
 
 def p_instruction(p):
     """INSTRUCTION : '{' START '}'
@@ -68,14 +68,13 @@ def p_basic_string(p):
     p[0] = AST.String(p[1], p.lineno(1))
 def p_basic_int(p):
     """INT_GR : INTNUM"""
-    print(p.lineno(1) )
     p[0] = AST.Int(p[1], p.lineno(1))
 def p_basic_float(p):
     """FLOAT_GR : FLOATNUM"""
-    p[0] = AST.Float(p[1])
+    p[0] = AST.Float(p[1], p.lineno(1))
 def p_basic_id(p):
     """ID_GR : ID"""
-    p[0] = AST.Id(p[1])
+    p[0] = AST.Id(p[1], p.lineno(1))
 
 def p_basic_value(p):
     """VALUE : INT_GR
@@ -86,7 +85,7 @@ def p_basic_value(p):
              | ZEROS '(' ARITHMETIC_EXP ')'
              | ONES '(' ARITHMETIC_EXP ')'
              | VECTOR
-             | ID VECTOR 
+             | ID_GR VECTOR 
              | VALUE "'" """
     if(len(p) == 2):
         p[0] = AST.Value(p[1], p.lineno(1))
@@ -94,14 +93,14 @@ def p_basic_value(p):
         if(p[-1] == "\'"):
             p[0] = AST.Value(AST.Transpose(AST.Value(p[1], p.lineno(1)), p.lineno(1)), p.lineno(1))
         else:
-            p[0] = AST.Value(AST.Ref(p[1], p[2]))
+            p[0] = AST.Value(AST.Ref(p[1], p[2], p.lineno(1)), p.lineno(1))
     else:
         if(p[1].upper() == "EYE"):
-            p[0] = AST.Value(AST.Eye(p[3]))
+            p[0] = AST.Value(AST.Eye(p[3], p.lineno(3)), p.lineno(3))
         elif(p[1].upper() == "ZEROS"):
-            p[0] = AST.Value(AST.Zeros(p[3]))
+            p[0] = AST.Value(AST.Zeros(p[3], p.lineno(3)), p.lineno(3))
         else:
-            p[0] = AST.Value(AST.Ones(p[3]))
+            p[0] = AST.Value(AST.Ones(p[3], p.lineno(3)), p.lineno(3) )
 
 def p_basic_list_values(p):
     """LIST_VALUE : ARITHMETIC_EXP
@@ -154,11 +153,11 @@ def p_exp_arithmetic(p):
     if(len(p) == 2):
         p[0] = p[1]
     elif(len(p) == 3):
-        p[0] = AST.UnarExpr(p[1], p[2])
+        p[0] = AST.UnarExpr(p[1], p[2], p.lineno(1))
     elif(p[1] == "("):
         p[0] = p[2] ## uwaga
     else:
-        p[0] = AST.BinExpr(p[2], p[1], p[3])
+        p[0] = AST.BinExpr(p[2], p[1], p[3], p.lineno(1))
 
 def p_exp_relation(p):
     """RELATION_EXP : ARITHMETIC_EXP RELATION_OP ARITHMETIC_EXP
@@ -166,38 +165,38 @@ def p_exp_relation(p):
     if(p[1] == "("):
         p[0] = p[2] ## uwaga
     else:
-        p[0] = AST.RelExpr(p[2], p[1], p[3])
+        p[0] = AST.RelExpr(p[2], p[1], p[3], p.lineno(1))
 
 def p_exp_assign(p):
-    """ASSIGN_EXP : ID ASSIGN_OP ARITHMETIC_EXP ';'
-                    | ID '[' LIST_VALUE ']' ASSIGN_OP ARITHMETIC_EXP ';' """
+    """ASSIGN_EXP : ID_GR ASSIGN_OP ARITHMETIC_EXP ';'
+                    | ID_GR '[' LIST_VALUE ']' ASSIGN_OP ARITHMETIC_EXP ';' """
     if(len(p) == 5):
-        p[0] = AST.Assign(AST.Value(p[1]), p[2], p[3])
+        p[0] = AST.Assign(AST.Value(p[1], p.lineno(1)), p[2], p[3], p.lineno(1))
     else:
-        p[0] = AST.Assign(AST.Ref(p[1], p[3]), p[5], p[6])
+        p[0] = AST.Assign(AST.Ref(p[1], p[3], p.lineno(1)), p[5], p[6], p.lineno(1))
     
 def p_instruction_if(p):
     """IF_INSTRUCTION : IF '(' RELATION_EXP  ')' INSTRUCTION %prec IF
                       | IF '(' RELATION_EXP  ')' INSTRUCTION  ELSE INSTRUCTION """
     if(len(p) == 8): 
-        p[0] = AST.IfExp(p[3], p[5], p[7]) #uwaga
+        p[0] = AST.IfExp(p[3], p[5], p[7], p.lineno(3)) #uwaga
     else:
-        p[0] = AST.IfExp(p[3], p[5]) #uwaga
+        p[0] = AST.IfExp(p[3], p[5], p.lineno(3)) #uwaga
 
 def p_instruction_while(p):
     """WHILE_INSTRUCTION : WHILE '(' RELATION_EXP  ')' INSTRUCTION """
-    p[0] = AST.While(p[3], p[5])
+    p[0] = AST.While(p[3], p[5], p.lineno(3))
 
 def p_instruction_for(p):
-    """FOR_INSTRUCTION : FOR ID '=' ARITHMETIC_EXP ':' ARITHMETIC_EXP INSTRUCTION """
-    p[0] = AST.For(p[2], p[4], p[6], p[7])
+    """FOR_INSTRUCTION : FOR ID_GR '=' ARITHMETIC_EXP ':' ARITHMETIC_EXP INSTRUCTION """
+    p[0] = AST.For(p[2], p[4], p[6], p[7], p.lineno(2))
     
 def p_fun_print(p):
     """PRINT_FUN : PRINT LIST_VALUE ';'"""
-    p[0] = AST.Print(p[2])
+    p[0] = AST.Print(p[2], p.lineno(2))
 def p_fun_return(p):
     """RETURN_FUN : RETURN LIST_VALUE ';'"""
-    p[0] = AST.Return(p[2])
+    p[0] = AST.Return(p[2], p.lineno(2))
 
 
 parser = yacc.yacc()

@@ -6,6 +6,7 @@ import Mparser
 
 import ply.yacc as yacc
 from TreePrinter import TreePrinter
+from TypeChecker import TypeChecker
 
 if __name__ == '__main__':
 
@@ -29,7 +30,7 @@ if __name__ == '__main__':
         print("(%d,%d): %s(%s)" %(tok.lineno, column, tok.type, tok.value))
     print("===========================")
     parser = Mparser.parser
-    ast = parser.parse(text, lexer=scanner.lexer)
+    ast = parser.parse(text, lexer=scanner.lexer, tracking=True)
     ast.printTree()
 
     # Below code shows how to use visitor

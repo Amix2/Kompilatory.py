@@ -1,5 +1,6 @@
 #!/usr/bin/python
 import AST
+from SymbolTable import SymbolTable
 
 good_operations_and_types = {
     ("int", "int", "+") : "int",
@@ -10,43 +11,85 @@ good_operations_and_types = {
     ("int", "float", "*") : "float",
     ("int", "float", "-") : "float",
     ("int", "float", "/") : "float",
+
+    ("float", "int", "+") : "float",
+    ("float", "int", "*") : "float",
+    ("float", "int", "-") : "float",
+    ("float", "int", "/") : "float",
+
     ("float", "float", "+") : "float",
     ("float", "float", "*") : "float",
     ("float", "float", "-") : "float",
     ("float", "float", "/") : "float",
-    ("string", "string", "+") : "int",
-    ("vector", "vector", ".+") : "vector",
-    ("vector", "vector", ".-") : "vector",
-    ("vector", "vector", ".*") : "vector",
-    ("vector", "vector", "./") : "vector"
+
+    ("string", "string", "+") : "string",
+
+    ("vector", "float", "+") : "vector",
+    ("vector", "float", "-") : "vector",
+    ("vector", "float", "*") : "vector",
+    ("vector", "float", "/") : "vector",
+    
+    ("float", "vector", "+") : "vector",
+    ("float", "vector", "*") : "vector",
+
+    ("vector", "int", "+") : "vector",
+    ("vector", "int", "-") : "vector",
+    ("vector", "int", "*") : "vector",
+    ("vector", "int", "/") : "vector",
+    
+    ("int", "vector", "+") : "vector",
+    ("int", "vector", "*") : "vector",
+
+    ("vector", "vector", "DOTADD") : "vector",
+    ("vector", "vector", "DOTSUB") : "vector",
+    ("vector", "vector", "DOTMUL") : "vector",
+    ("vector", "vector", "DOTDIV") : "vector",
+
+    ("int", "int", "CMP") : "int",
+    ("float", "float", "CMP") : "int",
+    ("int", "float", "CMP") : "int",
+    ("float", "int", "CMP") : "int",
+
+    ("vector", "vector", "EQ") : "int",
+    ("string", "string", "EQ") : "int",
+    ("vector", "vector", "NE") : "int",
+    ("string", "string", "NE") : "int"
 }
 
+symbols = SymbolTable()
+
 class ValueType():
-    def __init__(self, node):
+    def __init__(self, node, value=None):
+        #("vector", size)
         if(isinstance(node, AST.Int)):
             self.type = "int"
         elif(isinstance(node, AST.Float)):
             self.type = "float"
         elif(isinstance(node, AST.String)):
             self.type = "string"
-        elif(isinstance(node, AST.Vector)):
+        elif(isinstance(node, AST.Id)):
+            self.type = symbols.get(node.value)
+            #self.type = "id"
+            self.target = node.value
+        elif(isinstance(node, AST.Vector)): # vector
             self.type = "vector"
-            if(isinstance(node.nodes[0], list)):
+            if(isinstance(node.nodes[0], AST.Vector)): # [[1,2], [3+5,4]]
                 self.shape = (len(node.nodes), len(node.nodes[0]))
-            else:
+            else:   # [1,2]
                 self.shape = (1, len(node.nodes))
-                
+        elif(isinstance(node, str)):
+            self.type = node
+            if(node == "vector"):
+                self.shape = value
+        else:
+            raise BaseException("ValueType Init error")
 
-def is_good_operation(operation, node1, node2=None): # binExpr, Transpose, RelExpr, UnarExpr, Eye itp
-    if(operation[0] == "."):    oper_type = "matrix"
-    else:   oper_type = "simple"
-    
 
 class NodeVisitor(object):
 
     def visit(self, node):
         method = 'visit_' + node.__class__.__name__
-        visitor = getattr(self, method, self.generic_visit)
+        visitor = getattr(self, method)
         return visitor(node)
 
     def generic_visit(self, node):        # Called if no explicit visitor function exists for a node.
@@ -79,11 +122,34 @@ class TypeChecker(NodeVisitor):
     def visit_Float(self, node):
         return ValueType(node)
 
-    def visit_Vector(self, node):
-        return ValueType(node)
+    def visit_Vector(self, node): # [[1,2], [3+5,4], 34]
+        # różna długości wektorów
+        # różne typy
+        val_inside_type = self.visit(node.nodes[0])
+        if(val_inside_type.type == "vector"):
+            # matrix
+            good_shape = self.visit(node.nodes[0]).shape
 
-    def visit_Id(self, node): ##        TO DO
-        pass
+            for vector in node.nodes:
+                vector_type = self.visit(vector)
+                if(vector_type.type != "vector"):
+                    raise BaseException("Wrong matrix types")
+                if(vector_type.shape[0] != 1
+                    or (good_shape != vector_type.shape)):
+                    raise BaseException("Wrong dimentions")
+            return ValueType("vector", (len(node.nodes), good_shape[1]))
+
+        else:
+            # vector
+            for val in node.nodes:  # all elements are int of float
+                val_type = self.visit(val)
+                if(val_type.type not in ("int", "float")):
+                    raise BaseException("wrong value type")
+            return ValueType(node) # vector (1,x)
+            
+
+    def visit_Id(self, node):
+        return ValueType(node)
 
     def visit_Value(self, node):
         return self.visit(node.value) 
@@ -91,87 +157,113 @@ class TypeChecker(NodeVisitor):
     def visit_Transpose(self, node):
         valueType = self.visit(node.value)
         if(valueType.type != "vector"):
-            
+            raise BaseException("Transpose not a vector")
+        valueType.shape = valueType.shape[::-1]
+        return valueType
 
-    def visit_(self, node):
-        pass
+    def visit_Eye(self, node):
+        valueType = self.visit(node.value)
+        if(valueType.type != "int"):
+            raise BaseException("Eye with not int")
+        return ValueType("vector", (self.value, self.value))
 
-    def visit_(self, node):
-        pass
+    def visit_Zeros(self, node):
+        valueType = self.visit(node.value)
+        if(valueType.type != "int"):
+            raise BaseException("Zeros with not int")
+        return ValueType("vector", (self.value, self.value))
 
-    def visit_(self, node):
-        pass
+    def visit_Ones(self, node):
+        valueType = self.visit(node.value)
+        if(valueType.type != "int"):
+            raise BaseException("Ones with not int")
+        return ValueType("vector", (self.value, self.value))
 
-    def visit_(self, node):
-        pass
-
-    def visit_(self, node):
-        pass
-
-    def visit_(self, node):
-        pass
-
-    def visit_(self, node):
-        pass
-
-    def visit_(self, node):
-        pass
-
-    def visit_(self, node):
-        pass
-
-    def visit_(self, node):
-        pass
-
-    def visit_(self, node):
-        pass
-
-    def visit_(self, node):
-        pass
-
-    def visit_(self, node):
-        pass
-
-    def visit_(self, node):
-        pass
-
-    def visit_(self, node):
-        pass
-
-    def visit_(self, node):
-        pass
-
-    def visit_(self, node):
-        pass
-
-    def visit_(self, node):
-        pass
-
-    def visit_(self, node):
-        pass
-
-    def visit_(self, node):
-        pass
-
-    def visit_(self, node):
-        pass
-
-    
-
-    def visitor_Assign(self, node):
-            pass
     def visit_BinExpr(self, node):
-                                          # alternative usage,
-                                          # requires definition of accept method in class Node
         type1 = self.visit(node.left)     # type1 = node.left.accept(self) 
         type2 = self.visit(node.right)    # type2 = node.right.accept(self)
         op    = node.op
-        
-        # ... 
-        #
- 
+        if( not (type1.type, type2.type, op) in good_operations_and_types):
+            raise BaseException("Wrong operators")
+        return ValueType(good_operations_and_types[(type1.type, type2.type, op)])
 
-    def visit_Variable(self, node):
+    def visit_UnarExpr(self, node):
+        return self.visit(node.left) 
+
+    def visit_RelExpr(self, node): 
+        type1 = self.visit(node.left)   
+        type2 = self.visit(node.right)
+        op    = node.op
+        if( not (type1.type, type2.type, op) in good_operations_and_types 
+            or not (type1.type, type2.type, "CMP") in good_operations_and_types):
+            raise BaseException("Wrong compare operators")
+        return ValueType("int")
+
+    def visit_Assign(self, node):   ##      wsadzanie do tablicy ID
+        type_target = self.visit(node.target) 
+
+        type_value = self.visit(node.value)
+        op    = node.op
+        if(op == "="): 
+            return type_value
+        op = op[:-1]
+        if( not (type_target.type, type_value.type, op) in good_operations_and_types):
+            if(not (type_target.type, type_value.type, "."+op) in good_operations_and_types):
+                raise BaseException("Wrong assign operator")
+            else:
+                op = "." + op
+        out_valueType = ValueType(good_operations_and_types[(type_target.type, type_value.type, op)]) 
+        symbols.put(type_target.target, out_valueType.type)
+        return out_valueType
+
+    def visit_Ref(self, node): # A[1,2,3] = 1
+        type_target = self.visit(node.target)  
+        if(type_target.type != "vector"):
+            raise BaseException("Reference to not vector")
+        for node in self.nodes:
+            type_node = self.visit(node)   
+            if(type_node.type != "int"):
+                raise BaseException("Wrong access operator value")
+        return ValueType("float")
+        
+
+    def visit_IfExp(self, node):
+        self.visit(node.cond)  
+        self.visit(node.body)  
+        if(node.orelse): self.visit(node.orelse)  
+
+    def visit_While(self, node):
+        self.visit(node.test)  
+        self.visit(node.body)  
+
+    def visit_For(self, node):  # dodaje do przestrzeni nazw
+        iter_type = self.visit(node.itera)
+        rangeStart = self.visit(node.rangeStart)
+        if(rangeStart.type != "int"):   raise BaseException("rangeStart not int")
+        rangeEnd = self.visit(node.rangeEnd)
+        if(rangeEnd.type != "int"):   raise BaseException("rangeEnd not int")
+        self.visit(node.body)
+
+    def visit_Print(self, node):
+        for val in node.nodes:
+            self.visit(val)
+
+    def visit_Return(self, node):
+        for val in node.nodes:
+            self.visit(val)
+
+    def visit_Break(self, node):
         pass
-        
 
+    def visit_Continue(self, node):     # sprawdzanie scopa
+        pass
+
+    def visit_InstructionSet(self, node):
+        for val in node.nodes:
+            self.visit(val)
+    
+    def visit_Instruction(self, node):
+        try:
+            self.visit(node.node)
+        except BaseException as e:
+            print("ERROR: [" + str(node.poz) + "] " + str(e))
