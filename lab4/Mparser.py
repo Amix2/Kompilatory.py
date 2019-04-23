@@ -63,35 +63,51 @@ def p_basic_vector(p):
     """VECTOR : '[' LIST_VALUE ']'"""
     p[0] = AST.Vector(p[2])
 
+def p_basic_string(p):
+    """STRING_GR : STRING"""
+    p[0] = AST.String(p[1])
+def p_basic_int(p):
+    """INT_GR : INTNUM"""
+    p[0] = AST.Int(p[1])
+def p_basic_float(p):
+    """FLOAT_GR : FLOATNUM"""
+    p[0] = AST.Float(p[1])
+def p_basic_id(p):
+    """ID_GR : ID"""
+    p[0] = AST.Id(p[1])
+
 def p_basic_value(p):
-    """VALUE : INTNUM
-             | FLOATNUM
-             | ID
-             | STRING
+    """VALUE : INT_GR
+             | FLOAT_GR
+             | ID_GR
+             | STRING_GR
              | EYE '(' ARITHMETIC_EXP ')'
              | ZEROS '(' ARITHMETIC_EXP ')'
              | ONES '(' ARITHMETIC_EXP ')'
              | VECTOR
-             | ID VECTOR
+             | ID VECTOR 
              | VALUE "'" """
     if(len(p) == 2):
         p[0] = AST.Value(p[1])
     elif(len(p) == 3):
-        p[0] = AST.Value(AST.Transpose(AST.Value(p[1])))
-    else:
-        if(p[1] == "EYE"):
-            p[0] = AST.Value(AST.Eye(AST.Value(p[3])))
-        elif(p[1] == "ZEROS"):
-            p[0] = AST.Value(AST.Zeros(AST.Value(p[3])))
+        if(p[-1] == "\'"):
+            p[0] = AST.Value(AST.Transpose(AST.Value(p[1])))
         else:
-            p[0] = AST.Value(AST.Ones(AST.Value(p[3])))
+            p[0] = AST.Value(AST.Ref(p[1], p[2]))
+    else:
+        if(p[1].upper() == "EYE"):
+            p[0] = AST.Value(AST.Eye(p[3]))
+        elif(p[1].upper() == "ZEROS"):
+            p[0] = AST.Value(AST.Zeros(p[3]))
+        else:
+            p[0] = AST.Value(AST.Ones(p[3]))
 
 def p_basic_list_values(p):
-    """LIST_VALUE : VALUE
-                  | VALUE ',' LIST_VALUE"""
+    """LIST_VALUE : ARITHMETIC_EXP
+                  | ARITHMETIC_EXP ',' LIST_VALUE"""
     if(len(p) == 2):
         p[0] = []
-        p[0].append(AST.Value(p[1]))
+        p[0].append(p[1])
     else:
         p[0] = p[3]
         p[0].insert(0, p[1])
@@ -162,11 +178,14 @@ def p_exp_assign(p):
 def p_instruction_if(p):
     """IF_INSTRUCTION : IF '(' RELATION_EXP  ')' INSTRUCTION %prec IF
                       | IF '(' RELATION_EXP  ')' INSTRUCTION  ELSE INSTRUCTION """
-    p[0] = AST.IfExp(p[3], p[5], p[7]) #uwaga
+    if(len(p) == 8): 
+        p[0] = AST.IfExp(p[3], p[5], p[7]) #uwaga
+    else:
+        p[0] = AST.IfExp(p[3], p[5]) #uwaga
 
 def p_instruction_while(p):
     """WHILE_INSTRUCTION : WHILE '(' RELATION_EXP  ')' INSTRUCTION """
-    p[0] = AST.IfExp(p[3], p[5])
+    p[0] = AST.While(p[3], p[5])
 
 def p_instruction_for(p):
     """FOR_INSTRUCTION : FOR ID '=' ARITHMETIC_EXP ':' ARITHMETIC_EXP INSTRUCTION """

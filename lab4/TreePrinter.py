@@ -14,11 +14,25 @@ class TreePrinter:
     def printTree(self, indent=0):
         raise Exception("printTree not defined in class " + self.__class__.__name__)
 
+    @addToClass(AST.String)
+    def printTree(self, indent=0):
+        print("| "*indent + "\"" + str(self.value) + "\"")
+    @addToClass(AST.Int)
+    def printTree(self, indent=0):
+        print("| "*indent +str(self.value))
+    @addToClass(AST.Float)
+    def printTree(self, indent=0):
+        print("| "*indent + str(self.value))
+    @addToClass(AST.Id)
+    def printTree(self, indent=0):
+        print("| "*indent + str(self.value))
+    
+
     @addToClass(AST.Value)
     def printTree(self, indent=0):
         ## to do
         if(isinstance(self.value, AST.Node)):
-            self.value.printTree(indent) ## indent ++
+            self.value.printTree(indent+1) ## indent ++
         else:
             print("| "*indent + str(self.value))
 

@@ -3,10 +3,22 @@
 class Node(object):
     pass
 
+class String(Node):
+    def __init__(self, value):
+        self.value = value # Token
+class Int(Node):
+    def __init__(self, value):
+        self.value = value # Token
+class Float(Node):
+    def __init__(self, value):
+        self.value = value # Token
+class Id(Node):
+    def __init__(self, value):
+        self.value = value # token
 
 class Value(Node):
     def __init__(self, value):
-        self.value = value #node or not
+        self.value = value # node or not
 
 class Transpose(Node):
     def __init__(self, value):
@@ -52,7 +64,7 @@ class Ref(Node):
 
 class Vector(Node):
     def __init__(self, nodes):
-        self.nodes = nodes #node list
+        self.nodes = nodes # node list
 
 class IfExp(Node):
     def __init__(self, cond, body, orelse=None):

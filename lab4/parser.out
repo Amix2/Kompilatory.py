@@ -2,2876 +2,437 @@ Created by PLY version 3.11 (http://www.dabeaz.com/ply)
 
 Grammar
 
-Rule 0     S' -> START
-Rule 1     START -> START INSTRUCTION
-Rule 2     START -> INSTRUCTION
-Rule 3     INSTRUCTION -> { START }
-Rule 4     INSTRUCTION -> ASSIGN_EXP
-Rule 5     INSTRUCTION -> IF_INSTRUCTION
-Rule 6     INSTRUCTION -> WHILE_INSTRUCTION
-Rule 7     INSTRUCTION -> FOR_INSTRUCTION
-Rule 8     INSTRUCTION -> PRINT_FUN
-Rule 9     INSTRUCTION -> RETURN_FUN
-Rule 10    INSTRUCTION -> BREAK ;
-Rule 11    INSTRUCTION -> CONTINUE ;
-Rule 12    VECTOR -> [ LIST_VALUE ]
-Rule 13    VALUE -> INTNUM
-Rule 14    VALUE -> FLOATNUM
-Rule 15    VALUE -> ID
-Rule 16    VALUE -> STRING
-Rule 17    VALUE -> EYE ( ARITHMETIC_EXP )
-Rule 18    VALUE -> ZEROS ( ARITHMETIC_EXP )
-Rule 19    VALUE -> ONES ( ARITHMETIC_EXP )
-Rule 20    VALUE -> VECTOR
-Rule 21    VALUE -> ID VECTOR
-Rule 22    VALUE -> VALUE '
-Rule 23    LIST_VALUE -> VALUE
-Rule 24    LIST_VALUE -> VALUE , LIST_VALUE
-Rule 25    ARITHMETIC_OP -> +
-Rule 26    ARITHMETIC_OP -> -
-Rule 27    ARITHMETIC_OP -> *
-Rule 28    ARITHMETIC_OP -> /
-Rule 29    ARITHMETIC_OP -> DOTADD
-Rule 30    ARITHMETIC_OP -> DOTSUB
-Rule 31    ARITHMETIC_OP -> DOTMUL
-Rule 32    ARITHMETIC_OP -> DOTDIV
-Rule 33    ASSIGN_OP -> ADDASSIGN
-Rule 34    ASSIGN_OP -> SUBASSIGN
-Rule 35    ASSIGN_OP -> MULASSIGN
-Rule 36    ASSIGN_OP -> DIVASSIGN
-Rule 37    ASSIGN_OP -> =
-Rule 38    RELATION_OP -> GT
-Rule 39    RELATION_OP -> LT
-Rule 40    RELATION_OP -> LE
-Rule 41    RELATION_OP -> GE
-Rule 42    RELATION_OP -> NE
-Rule 43    RELATION_OP -> EQ
-Rule 44    ARITHMETIC_OP_UNARY -> +
-Rule 45    ARITHMETIC_OP_UNARY -> -
-Rule 46    ARITHMETIC_EXP -> ARITHMETIC_EXP ARITHMETIC_OP ARITHMETIC_EXP
-Rule 47    ARITHMETIC_EXP -> ( ARITHMETIC_EXP )
-Rule 48    ARITHMETIC_EXP -> ARITHMETIC_OP_UNARY ARITHMETIC_EXP
-Rule 49    ARITHMETIC_EXP -> VALUE
-Rule 50    RELATION_EXP -> ARITHMETIC_EXP RELATION_OP ARITHMETIC_EXP
-Rule 51    RELATION_EXP -> ( RELATION_EXP )
-Rule 52    ASSIGN_EXP -> ID ASSIGN_OP ARITHMETIC_EXP ;
-Rule 53    ASSIGN_EXP -> ID [ LIST_VALUE ] ASSIGN_OP ARITHMETIC_EXP ;
-Rule 54    IF_INSTRUCTION -> IF ( RELATION_EXP ) INSTRUCTION
-Rule 55    IF_INSTRUCTION -> IF ( RELATION_EXP ) INSTRUCTION ELSE INSTRUCTION
-Rule 56    WHILE_INSTRUCTION -> WHILE ( RELATION_EXP ) INSTRUCTION
-Rule 57    FOR_INSTRUCTION -> FOR ID = ARITHMETIC_EXP : ARITHMETIC_EXP INSTRUCTION
-Rule 58    PRINT_FUN -> PRINT LIST_VALUE ;
-Rule 59    RETURN_FUN -> RETURN LIST_VALUE ;
+Rule 0     S' -> start
+Rule 1     start -> EXPRESSION
+Rule 2     EXPRESSION -> NUMBER
+Rule 3     EXPRESSION -> VAR
+Rule 4     EXPRESSION -> EXPRESSION + EXPRESSION
+Rule 5     EXPRESSION -> EXPRESSION - EXPRESSION
+Rule 6     EXPRESSION -> EXPRESSION * EXPRESSION
+Rule 7     EXPRESSION -> EXPRESSION / EXPRESSION
+Rule 8     EXPRESSION -> EXPRESSION MUL EXPRESSION
+Rule 9     EXPRESSION -> EXPRESSION DOTDIV EXPRESSION
+Rule 10    EXPRESSION -> ( EXPRESSION ]
 
 Terminals, with rules where they appear
 
-'                    : 22
-(                    : 17 18 19 47 51 54 55 56
-)                    : 17 18 19 47 51 54 55 56
-*                    : 27
-+                    : 25 44
-,                    : 24
--                    : 26 45
-/                    : 28
-:                    : 57
-;                    : 10 11 52 53 58 59
-=                    : 37 57
-ADDASSIGN            : 33
-BREAK                : 10
-CONTINUE             : 11
-DIVASSIGN            : 36
-DOTADD               : 29
-DOTDIV               : 32
-DOTMUL               : 31
-DOTSUB               : 30
-ELSE                 : 55
-EQ                   : 43
-EYE                  : 17
-FLOATNUM             : 14
-FOR                  : 57
-GE                   : 41
-GT                   : 38
-ID                   : 15 21 52 53 57
-IF                   : 54 55
-INTNUM               : 13
-LE                   : 40
-LT                   : 39
-MULASSIGN            : 35
-NE                   : 42
-ONES                 : 19
-PRINT                : 58
-RETURN               : 59
-STRING               : 16
-SUBASSIGN            : 34
-WHILE                : 56
-ZEROS                : 18
-[                    : 12 53
-]                    : 12 53
+(                    : 10
+*                    : 6
++                    : 4
+-                    : 5
+/                    : 7
+DOTDIV               : 9
+MUL                  : 8
+NUMBER               : 2
+VAR                  : 3
+]                    : 10
 error                : 
-{                    : 3
-}                    : 3
 
 Nonterminals, with rules where they appear
 
-ARITHMETIC_EXP       : 17 18 19 46 46 47 48 50 50 52 53 57 57
-ARITHMETIC_OP        : 46
-ARITHMETIC_OP_UNARY  : 48
-ASSIGN_EXP           : 4
-ASSIGN_OP            : 52 53
-FOR_INSTRUCTION      : 7
-IF_INSTRUCTION       : 5
-INSTRUCTION          : 1 2 54 55 55 56 57
-LIST_VALUE           : 12 24 53 58 59
-PRINT_FUN            : 8
-RELATION_EXP         : 51 54 55 56
-RELATION_OP          : 50
-RETURN_FUN           : 9
-START                : 1 3 0
-VALUE                : 22 23 24 49
-VECTOR               : 20 21
-WHILE_INSTRUCTION    : 6
+EXPRESSION           : 1 4 4 5 5 6 6 7 7 8 8 9 9 10
+start                : 0
 
 Parsing method: LALR
 
 state 0
 
-    (0) S' -> . START
-    (1) START -> . START INSTRUCTION
-    (2) START -> . INSTRUCTION
-    (3) INSTRUCTION -> . { START }
-    (4) INSTRUCTION -> . ASSIGN_EXP
-    (5) INSTRUCTION -> . IF_INSTRUCTION
-    (6) INSTRUCTION -> . WHILE_INSTRUCTION
-    (7) INSTRUCTION -> . FOR_INSTRUCTION
-    (8) INSTRUCTION -> . PRINT_FUN
-    (9) INSTRUCTION -> . RETURN_FUN
-    (10) INSTRUCTION -> . BREAK ;
-    (11) INSTRUCTION -> . CONTINUE ;
-    (52) ASSIGN_EXP -> . ID ASSIGN_OP ARITHMETIC_EXP ;
-    (53) ASSIGN_EXP -> . ID [ LIST_VALUE ] ASSIGN_OP ARITHMETIC_EXP ;
-    (54) IF_INSTRUCTION -> . IF ( RELATION_EXP ) INSTRUCTION
-    (55) IF_INSTRUCTION -> . IF ( RELATION_EXP ) INSTRUCTION ELSE INSTRUCTION
-    (56) WHILE_INSTRUCTION -> . WHILE ( RELATION_EXP ) INSTRUCTION
-    (57) FOR_INSTRUCTION -> . FOR ID = ARITHMETIC_EXP : ARITHMETIC_EXP INSTRUCTION
-    (58) PRINT_FUN -> . PRINT LIST_VALUE ;
-    (59) RETURN_FUN -> . RETURN LIST_VALUE ;
+    (0) S' -> . start
+    (1) start -> . EXPRESSION
+    (2) EXPRESSION -> . NUMBER
+    (3) EXPRESSION -> . VAR
+    (4) EXPRESSION -> . EXPRESSION + EXPRESSION
+    (5) EXPRESSION -> . EXPRESSION - EXPRESSION
+    (6) EXPRESSION -> . EXPRESSION * EXPRESSION
+    (7) EXPRESSION -> . EXPRESSION / EXPRESSION
+    (8) EXPRESSION -> . EXPRESSION MUL EXPRESSION
+    (9) EXPRESSION -> . EXPRESSION DOTDIV EXPRESSION
+    (10) EXPRESSION -> . ( EXPRESSION ]
 
-    {               shift and go to state 3
-    BREAK           shift and go to state 10
-    CONTINUE        shift and go to state 11
-    ID              shift and go to state 12
-    IF              shift and go to state 13
-    WHILE           shift and go to state 14
-    FOR             shift and go to state 15
-    PRINT           shift and go to state 16
-    RETURN          shift and go to state 17
+    NUMBER          shift and go to state 3
+    VAR             shift and go to state 4
+    (               shift and go to state 5
 
-    START                          shift and go to state 1
-    INSTRUCTION                    shift and go to state 2
-    ASSIGN_EXP                     shift and go to state 4
-    IF_INSTRUCTION                 shift and go to state 5
-    WHILE_INSTRUCTION              shift and go to state 6
-    FOR_INSTRUCTION                shift and go to state 7
-    PRINT_FUN                      shift and go to state 8
-    RETURN_FUN                     shift and go to state 9
+    start                          shift and go to state 1
+    EXPRESSION                     shift and go to state 2
 
 state 1
 
-    (0) S' -> START .
-    (1) START -> START . INSTRUCTION
-    (3) INSTRUCTION -> . { START }
-    (4) INSTRUCTION -> . ASSIGN_EXP
-    (5) INSTRUCTION -> . IF_INSTRUCTION
-    (6) INSTRUCTION -> . WHILE_INSTRUCTION
-    (7) INSTRUCTION -> . FOR_INSTRUCTION
-    (8) INSTRUCTION -> . PRINT_FUN
-    (9) INSTRUCTION -> . RETURN_FUN
-    (10) INSTRUCTION -> . BREAK ;
-    (11) INSTRUCTION -> . CONTINUE ;
-    (52) ASSIGN_EXP -> . ID ASSIGN_OP ARITHMETIC_EXP ;
-    (53) ASSIGN_EXP -> . ID [ LIST_VALUE ] ASSIGN_OP ARITHMETIC_EXP ;
-    (54) IF_INSTRUCTION -> . IF ( RELATION_EXP ) INSTRUCTION
-    (55) IF_INSTRUCTION -> . IF ( RELATION_EXP ) INSTRUCTION ELSE INSTRUCTION
-    (56) WHILE_INSTRUCTION -> . WHILE ( RELATION_EXP ) INSTRUCTION
-    (57) FOR_INSTRUCTION -> . FOR ID = ARITHMETIC_EXP : ARITHMETIC_EXP INSTRUCTION
-    (58) PRINT_FUN -> . PRINT LIST_VALUE ;
-    (59) RETURN_FUN -> . RETURN LIST_VALUE ;
+    (0) S' -> start .
 
-    {               shift and go to state 3
-    BREAK           shift and go to state 10
-    CONTINUE        shift and go to state 11
-    ID              shift and go to state 12
-    IF              shift and go to state 13
-    WHILE           shift and go to state 14
-    FOR             shift and go to state 15
-    PRINT           shift and go to state 16
-    RETURN          shift and go to state 17
 
-    INSTRUCTION                    shift and go to state 18
-    ASSIGN_EXP                     shift and go to state 4
-    IF_INSTRUCTION                 shift and go to state 5
-    WHILE_INSTRUCTION              shift and go to state 6
-    FOR_INSTRUCTION                shift and go to state 7
-    PRINT_FUN                      shift and go to state 8
-    RETURN_FUN                     shift and go to state 9
 
 state 2
 
-    (2) START -> INSTRUCTION .
+    (1) start -> EXPRESSION .
+    (4) EXPRESSION -> EXPRESSION . + EXPRESSION
+    (5) EXPRESSION -> EXPRESSION . - EXPRESSION
+    (6) EXPRESSION -> EXPRESSION . * EXPRESSION
+    (7) EXPRESSION -> EXPRESSION . / EXPRESSION
+    (8) EXPRESSION -> EXPRESSION . MUL EXPRESSION
+    (9) EXPRESSION -> EXPRESSION . DOTDIV EXPRESSION
 
-    {               reduce using rule 2 (START -> INSTRUCTION .)
-    BREAK           reduce using rule 2 (START -> INSTRUCTION .)
-    CONTINUE        reduce using rule 2 (START -> INSTRUCTION .)
-    ID              reduce using rule 2 (START -> INSTRUCTION .)
-    IF              reduce using rule 2 (START -> INSTRUCTION .)
-    WHILE           reduce using rule 2 (START -> INSTRUCTION .)
-    FOR             reduce using rule 2 (START -> INSTRUCTION .)
-    PRINT           reduce using rule 2 (START -> INSTRUCTION .)
-    RETURN          reduce using rule 2 (START -> INSTRUCTION .)
-    $end            reduce using rule 2 (START -> INSTRUCTION .)
-    }               reduce using rule 2 (START -> INSTRUCTION .)
+    $end            reduce using rule 1 (start -> EXPRESSION .)
+    +               shift and go to state 6
+    -               shift and go to state 7
+    *               shift and go to state 8
+    /               shift and go to state 9
+    MUL             shift and go to state 10
+    DOTDIV          shift and go to state 11
 
 
 state 3
 
-    (3) INSTRUCTION -> { . START }
-    (1) START -> . START INSTRUCTION
-    (2) START -> . INSTRUCTION
-    (3) INSTRUCTION -> . { START }
-    (4) INSTRUCTION -> . ASSIGN_EXP
-    (5) INSTRUCTION -> . IF_INSTRUCTION
-    (6) INSTRUCTION -> . WHILE_INSTRUCTION
-    (7) INSTRUCTION -> . FOR_INSTRUCTION
-    (8) INSTRUCTION -> . PRINT_FUN
-    (9) INSTRUCTION -> . RETURN_FUN
-    (10) INSTRUCTION -> . BREAK ;
-    (11) INSTRUCTION -> . CONTINUE ;
-    (52) ASSIGN_EXP -> . ID ASSIGN_OP ARITHMETIC_EXP ;
-    (53) ASSIGN_EXP -> . ID [ LIST_VALUE ] ASSIGN_OP ARITHMETIC_EXP ;
-    (54) IF_INSTRUCTION -> . IF ( RELATION_EXP ) INSTRUCTION
-    (55) IF_INSTRUCTION -> . IF ( RELATION_EXP ) INSTRUCTION ELSE INSTRUCTION
-    (56) WHILE_INSTRUCTION -> . WHILE ( RELATION_EXP ) INSTRUCTION
-    (57) FOR_INSTRUCTION -> . FOR ID = ARITHMETIC_EXP : ARITHMETIC_EXP INSTRUCTION
-    (58) PRINT_FUN -> . PRINT LIST_VALUE ;
-    (59) RETURN_FUN -> . RETURN LIST_VALUE ;
+    (2) EXPRESSION -> NUMBER .
 
-    {               shift and go to state 3
-    BREAK           shift and go to state 10
-    CONTINUE        shift and go to state 11
-    ID              shift and go to state 12
-    IF              shift and go to state 13
-    WHILE           shift and go to state 14
-    FOR             shift and go to state 15
-    PRINT           shift and go to state 16
-    RETURN          shift and go to state 17
+    +               reduce using rule 2 (EXPRESSION -> NUMBER .)
+    -               reduce using rule 2 (EXPRESSION -> NUMBER .)
+    *               reduce using rule 2 (EXPRESSION -> NUMBER .)
+    /               reduce using rule 2 (EXPRESSION -> NUMBER .)
+    MUL             reduce using rule 2 (EXPRESSION -> NUMBER .)
+    DOTDIV          reduce using rule 2 (EXPRESSION -> NUMBER .)
+    $end            reduce using rule 2 (EXPRESSION -> NUMBER .)
+    ]               reduce using rule 2 (EXPRESSION -> NUMBER .)
 
-    START                          shift and go to state 19
-    INSTRUCTION                    shift and go to state 2
-    ASSIGN_EXP                     shift and go to state 4
-    IF_INSTRUCTION                 shift and go to state 5
-    WHILE_INSTRUCTION              shift and go to state 6
-    FOR_INSTRUCTION                shift and go to state 7
-    PRINT_FUN                      shift and go to state 8
-    RETURN_FUN                     shift and go to state 9
 
 state 4
 
-    (4) INSTRUCTION -> ASSIGN_EXP .
+    (3) EXPRESSION -> VAR .
 
-    {               reduce using rule 4 (INSTRUCTION -> ASSIGN_EXP .)
-    BREAK           reduce using rule 4 (INSTRUCTION -> ASSIGN_EXP .)
-    CONTINUE        reduce using rule 4 (INSTRUCTION -> ASSIGN_EXP .)
-    ID              reduce using rule 4 (INSTRUCTION -> ASSIGN_EXP .)
-    IF              reduce using rule 4 (INSTRUCTION -> ASSIGN_EXP .)
-    WHILE           reduce using rule 4 (INSTRUCTION -> ASSIGN_EXP .)
-    FOR             reduce using rule 4 (INSTRUCTION -> ASSIGN_EXP .)
-    PRINT           reduce using rule 4 (INSTRUCTION -> ASSIGN_EXP .)
-    RETURN          reduce using rule 4 (INSTRUCTION -> ASSIGN_EXP .)
-    $end            reduce using rule 4 (INSTRUCTION -> ASSIGN_EXP .)
-    }               reduce using rule 4 (INSTRUCTION -> ASSIGN_EXP .)
-    ELSE            reduce using rule 4 (INSTRUCTION -> ASSIGN_EXP .)
+    +               reduce using rule 3 (EXPRESSION -> VAR .)
+    -               reduce using rule 3 (EXPRESSION -> VAR .)
+    *               reduce using rule 3 (EXPRESSION -> VAR .)
+    /               reduce using rule 3 (EXPRESSION -> VAR .)
+    MUL             reduce using rule 3 (EXPRESSION -> VAR .)
+    DOTDIV          reduce using rule 3 (EXPRESSION -> VAR .)
+    $end            reduce using rule 3 (EXPRESSION -> VAR .)
+    ]               reduce using rule 3 (EXPRESSION -> VAR .)
 
 
 state 5
 
-    (5) INSTRUCTION -> IF_INSTRUCTION .
+    (10) EXPRESSION -> ( . EXPRESSION ]
+    (2) EXPRESSION -> . NUMBER
+    (3) EXPRESSION -> . VAR
+    (4) EXPRESSION -> . EXPRESSION + EXPRESSION
+    (5) EXPRESSION -> . EXPRESSION - EXPRESSION
+    (6) EXPRESSION -> . EXPRESSION * EXPRESSION
+    (7) EXPRESSION -> . EXPRESSION / EXPRESSION
+    (8) EXPRESSION -> . EXPRESSION MUL EXPRESSION
+    (9) EXPRESSION -> . EXPRESSION DOTDIV EXPRESSION
+    (10) EXPRESSION -> . ( EXPRESSION ]
 
-    {               reduce using rule 5 (INSTRUCTION -> IF_INSTRUCTION .)
-    BREAK           reduce using rule 5 (INSTRUCTION -> IF_INSTRUCTION .)
-    CONTINUE        reduce using rule 5 (INSTRUCTION -> IF_INSTRUCTION .)
-    ID              reduce using rule 5 (INSTRUCTION -> IF_INSTRUCTION .)
-    IF              reduce using rule 5 (INSTRUCTION -> IF_INSTRUCTION .)
-    WHILE           reduce using rule 5 (INSTRUCTION -> IF_INSTRUCTION .)
-    FOR             reduce using rule 5 (INSTRUCTION -> IF_INSTRUCTION .)
-    PRINT           reduce using rule 5 (INSTRUCTION -> IF_INSTRUCTION .)
-    RETURN          reduce using rule 5 (INSTRUCTION -> IF_INSTRUCTION .)
-    $end            reduce using rule 5 (INSTRUCTION -> IF_INSTRUCTION .)
-    }               reduce using rule 5 (INSTRUCTION -> IF_INSTRUCTION .)
-    ELSE            reduce using rule 5 (INSTRUCTION -> IF_INSTRUCTION .)
+    NUMBER          shift and go to state 3
+    VAR             shift and go to state 4
+    (               shift and go to state 5
 
+    EXPRESSION                     shift and go to state 12
 
 state 6
 
-    (6) INSTRUCTION -> WHILE_INSTRUCTION .
+    (4) EXPRESSION -> EXPRESSION + . EXPRESSION
+    (2) EXPRESSION -> . NUMBER
+    (3) EXPRESSION -> . VAR
+    (4) EXPRESSION -> . EXPRESSION + EXPRESSION
+    (5) EXPRESSION -> . EXPRESSION - EXPRESSION
+    (6) EXPRESSION -> . EXPRESSION * EXPRESSION
+    (7) EXPRESSION -> . EXPRESSION / EXPRESSION
+    (8) EXPRESSION -> . EXPRESSION MUL EXPRESSION
+    (9) EXPRESSION -> . EXPRESSION DOTDIV EXPRESSION
+    (10) EXPRESSION -> . ( EXPRESSION ]
 
-    {               reduce using rule 6 (INSTRUCTION -> WHILE_INSTRUCTION .)
-    BREAK           reduce using rule 6 (INSTRUCTION -> WHILE_INSTRUCTION .)
-    CONTINUE        reduce using rule 6 (INSTRUCTION -> WHILE_INSTRUCTION .)
-    ID              reduce using rule 6 (INSTRUCTION -> WHILE_INSTRUCTION .)
-    IF              reduce using rule 6 (INSTRUCTION -> WHILE_INSTRUCTION .)
-    WHILE           reduce using rule 6 (INSTRUCTION -> WHILE_INSTRUCTION .)
-    FOR             reduce using rule 6 (INSTRUCTION -> WHILE_INSTRUCTION .)
-    PRINT           reduce using rule 6 (INSTRUCTION -> WHILE_INSTRUCTION .)
-    RETURN          reduce using rule 6 (INSTRUCTION -> WHILE_INSTRUCTION .)
-    $end            reduce using rule 6 (INSTRUCTION -> WHILE_INSTRUCTION .)
-    }               reduce using rule 6 (INSTRUCTION -> WHILE_INSTRUCTION .)
-    ELSE            reduce using rule 6 (INSTRUCTION -> WHILE_INSTRUCTION .)
+    NUMBER          shift and go to state 3
+    VAR             shift and go to state 4
+    (               shift and go to state 5
 
+    EXPRESSION                     shift and go to state 13
 
 state 7
 
-    (7) INSTRUCTION -> FOR_INSTRUCTION .
+    (5) EXPRESSION -> EXPRESSION - . EXPRESSION
+    (2) EXPRESSION -> . NUMBER
+    (3) EXPRESSION -> . VAR
+    (4) EXPRESSION -> . EXPRESSION + EXPRESSION
+    (5) EXPRESSION -> . EXPRESSION - EXPRESSION
+    (6) EXPRESSION -> . EXPRESSION * EXPRESSION
+    (7) EXPRESSION -> . EXPRESSION / EXPRESSION
+    (8) EXPRESSION -> . EXPRESSION MUL EXPRESSION
+    (9) EXPRESSION -> . EXPRESSION DOTDIV EXPRESSION
+    (10) EXPRESSION -> . ( EXPRESSION ]
 
-    {               reduce using rule 7 (INSTRUCTION -> FOR_INSTRUCTION .)
-    BREAK           reduce using rule 7 (INSTRUCTION -> FOR_INSTRUCTION .)
-    CONTINUE        reduce using rule 7 (INSTRUCTION -> FOR_INSTRUCTION .)
-    ID              reduce using rule 7 (INSTRUCTION -> FOR_INSTRUCTION .)
-    IF              reduce using rule 7 (INSTRUCTION -> FOR_INSTRUCTION .)
-    WHILE           reduce using rule 7 (INSTRUCTION -> FOR_INSTRUCTION .)
-    FOR             reduce using rule 7 (INSTRUCTION -> FOR_INSTRUCTION .)
-    PRINT           reduce using rule 7 (INSTRUCTION -> FOR_INSTRUCTION .)
-    RETURN          reduce using rule 7 (INSTRUCTION -> FOR_INSTRUCTION .)
-    $end            reduce using rule 7 (INSTRUCTION -> FOR_INSTRUCTION .)
-    }               reduce using rule 7 (INSTRUCTION -> FOR_INSTRUCTION .)
-    ELSE            reduce using rule 7 (INSTRUCTION -> FOR_INSTRUCTION .)
+    NUMBER          shift and go to state 3
+    VAR             shift and go to state 4
+    (               shift and go to state 5
 
+    EXPRESSION                     shift and go to state 14
 
 state 8
 
-    (8) INSTRUCTION -> PRINT_FUN .
+    (6) EXPRESSION -> EXPRESSION * . EXPRESSION
+    (2) EXPRESSION -> . NUMBER
+    (3) EXPRESSION -> . VAR
+    (4) EXPRESSION -> . EXPRESSION + EXPRESSION
+    (5) EXPRESSION -> . EXPRESSION - EXPRESSION
+    (6) EXPRESSION -> . EXPRESSION * EXPRESSION
+    (7) EXPRESSION -> . EXPRESSION / EXPRESSION
+    (8) EXPRESSION -> . EXPRESSION MUL EXPRESSION
+    (9) EXPRESSION -> . EXPRESSION DOTDIV EXPRESSION
+    (10) EXPRESSION -> . ( EXPRESSION ]
 
-    {               reduce using rule 8 (INSTRUCTION -> PRINT_FUN .)
-    BREAK           reduce using rule 8 (INSTRUCTION -> PRINT_FUN .)
-    CONTINUE        reduce using rule 8 (INSTRUCTION -> PRINT_FUN .)
-    ID              reduce using rule 8 (INSTRUCTION -> PRINT_FUN .)
-    IF              reduce using rule 8 (INSTRUCTION -> PRINT_FUN .)
-    WHILE           reduce using rule 8 (INSTRUCTION -> PRINT_FUN .)
-    FOR             reduce using rule 8 (INSTRUCTION -> PRINT_FUN .)
-    PRINT           reduce using rule 8 (INSTRUCTION -> PRINT_FUN .)
-    RETURN          reduce using rule 8 (INSTRUCTION -> PRINT_FUN .)
-    $end            reduce using rule 8 (INSTRUCTION -> PRINT_FUN .)
-    }               reduce using rule 8 (INSTRUCTION -> PRINT_FUN .)
-    ELSE            reduce using rule 8 (INSTRUCTION -> PRINT_FUN .)
+    NUMBER          shift and go to state 3
+    VAR             shift and go to state 4
+    (               shift and go to state 5
 
+    EXPRESSION                     shift and go to state 15
 
 state 9
 
-    (9) INSTRUCTION -> RETURN_FUN .
+    (7) EXPRESSION -> EXPRESSION / . EXPRESSION
+    (2) EXPRESSION -> . NUMBER
+    (3) EXPRESSION -> . VAR
+    (4) EXPRESSION -> . EXPRESSION + EXPRESSION
+    (5) EXPRESSION -> . EXPRESSION - EXPRESSION
+    (6) EXPRESSION -> . EXPRESSION * EXPRESSION
+    (7) EXPRESSION -> . EXPRESSION / EXPRESSION
+    (8) EXPRESSION -> . EXPRESSION MUL EXPRESSION
+    (9) EXPRESSION -> . EXPRESSION DOTDIV EXPRESSION
+    (10) EXPRESSION -> . ( EXPRESSION ]
 
-    {               reduce using rule 9 (INSTRUCTION -> RETURN_FUN .)
-    BREAK           reduce using rule 9 (INSTRUCTION -> RETURN_FUN .)
-    CONTINUE        reduce using rule 9 (INSTRUCTION -> RETURN_FUN .)
-    ID              reduce using rule 9 (INSTRUCTION -> RETURN_FUN .)
-    IF              reduce using rule 9 (INSTRUCTION -> RETURN_FUN .)
-    WHILE           reduce using rule 9 (INSTRUCTION -> RETURN_FUN .)
-    FOR             reduce using rule 9 (INSTRUCTION -> RETURN_FUN .)
-    PRINT           reduce using rule 9 (INSTRUCTION -> RETURN_FUN .)
-    RETURN          reduce using rule 9 (INSTRUCTION -> RETURN_FUN .)
-    $end            reduce using rule 9 (INSTRUCTION -> RETURN_FUN .)
-    }               reduce using rule 9 (INSTRUCTION -> RETURN_FUN .)
-    ELSE            reduce using rule 9 (INSTRUCTION -> RETURN_FUN .)
+    NUMBER          shift and go to state 3
+    VAR             shift and go to state 4
+    (               shift and go to state 5
 
+    EXPRESSION                     shift and go to state 16
 
 state 10
 
-    (10) INSTRUCTION -> BREAK . ;
+    (8) EXPRESSION -> EXPRESSION MUL . EXPRESSION
+    (2) EXPRESSION -> . NUMBER
+    (3) EXPRESSION -> . VAR
+    (4) EXPRESSION -> . EXPRESSION + EXPRESSION
+    (5) EXPRESSION -> . EXPRESSION - EXPRESSION
+    (6) EXPRESSION -> . EXPRESSION * EXPRESSION
+    (7) EXPRESSION -> . EXPRESSION / EXPRESSION
+    (8) EXPRESSION -> . EXPRESSION MUL EXPRESSION
+    (9) EXPRESSION -> . EXPRESSION DOTDIV EXPRESSION
+    (10) EXPRESSION -> . ( EXPRESSION ]
 
-    ;               shift and go to state 20
+    NUMBER          shift and go to state 3
+    VAR             shift and go to state 4
+    (               shift and go to state 5
 
+    EXPRESSION                     shift and go to state 17
 
 state 11
 
-    (11) INSTRUCTION -> CONTINUE . ;
+    (9) EXPRESSION -> EXPRESSION DOTDIV . EXPRESSION
+    (2) EXPRESSION -> . NUMBER
+    (3) EXPRESSION -> . VAR
+    (4) EXPRESSION -> . EXPRESSION + EXPRESSION
+    (5) EXPRESSION -> . EXPRESSION - EXPRESSION
+    (6) EXPRESSION -> . EXPRESSION * EXPRESSION
+    (7) EXPRESSION -> . EXPRESSION / EXPRESSION
+    (8) EXPRESSION -> . EXPRESSION MUL EXPRESSION
+    (9) EXPRESSION -> . EXPRESSION DOTDIV EXPRESSION
+    (10) EXPRESSION -> . ( EXPRESSION ]
 
-    ;               shift and go to state 21
+    NUMBER          shift and go to state 3
+    VAR             shift and go to state 4
+    (               shift and go to state 5
 
+    EXPRESSION                     shift and go to state 18
 
 state 12
 
-    (52) ASSIGN_EXP -> ID . ASSIGN_OP ARITHMETIC_EXP ;
-    (53) ASSIGN_EXP -> ID . [ LIST_VALUE ] ASSIGN_OP ARITHMETIC_EXP ;
-    (33) ASSIGN_OP -> . ADDASSIGN
-    (34) ASSIGN_OP -> . SUBASSIGN
-    (35) ASSIGN_OP -> . MULASSIGN
-    (36) ASSIGN_OP -> . DIVASSIGN
-    (37) ASSIGN_OP -> . =
+    (10) EXPRESSION -> ( EXPRESSION . ]
+    (4) EXPRESSION -> EXPRESSION . + EXPRESSION
+    (5) EXPRESSION -> EXPRESSION . - EXPRESSION
+    (6) EXPRESSION -> EXPRESSION . * EXPRESSION
+    (7) EXPRESSION -> EXPRESSION . / EXPRESSION
+    (8) EXPRESSION -> EXPRESSION . MUL EXPRESSION
+    (9) EXPRESSION -> EXPRESSION . DOTDIV EXPRESSION
 
-    [               shift and go to state 23
-    ADDASSIGN       shift and go to state 24
-    SUBASSIGN       shift and go to state 25
-    MULASSIGN       shift and go to state 26
-    DIVASSIGN       shift and go to state 27
-    =               shift and go to state 28
+    ]               shift and go to state 19
+    +               shift and go to state 6
+    -               shift and go to state 7
+    *               shift and go to state 8
+    /               shift and go to state 9
+    MUL             shift and go to state 10
+    DOTDIV          shift and go to state 11
 
-    ASSIGN_OP                      shift and go to state 22
 
 state 13
 
-    (54) IF_INSTRUCTION -> IF . ( RELATION_EXP ) INSTRUCTION
-    (55) IF_INSTRUCTION -> IF . ( RELATION_EXP ) INSTRUCTION ELSE INSTRUCTION
+    (4) EXPRESSION -> EXPRESSION + EXPRESSION .
+    (4) EXPRESSION -> EXPRESSION . + EXPRESSION
+    (5) EXPRESSION -> EXPRESSION . - EXPRESSION
+    (6) EXPRESSION -> EXPRESSION . * EXPRESSION
+    (7) EXPRESSION -> EXPRESSION . / EXPRESSION
+    (8) EXPRESSION -> EXPRESSION . MUL EXPRESSION
+    (9) EXPRESSION -> EXPRESSION . DOTDIV EXPRESSION
 
-    (               shift and go to state 29
+    +               reduce using rule 4 (EXPRESSION -> EXPRESSION + EXPRESSION .)
+    -               reduce using rule 4 (EXPRESSION -> EXPRESSION + EXPRESSION .)
+    $end            reduce using rule 4 (EXPRESSION -> EXPRESSION + EXPRESSION .)
+    ]               reduce using rule 4 (EXPRESSION -> EXPRESSION + EXPRESSION .)
+    *               shift and go to state 8
+    /               shift and go to state 9
+    MUL             shift and go to state 10
+    DOTDIV          shift and go to state 11
+
+  ! *               [ reduce using rule 4 (EXPRESSION -> EXPRESSION + EXPRESSION .) ]
+  ! /               [ reduce using rule 4 (EXPRESSION -> EXPRESSION + EXPRESSION .) ]
+  ! MUL             [ reduce using rule 4 (EXPRESSION -> EXPRESSION + EXPRESSION .) ]
+  ! DOTDIV          [ reduce using rule 4 (EXPRESSION -> EXPRESSION + EXPRESSION .) ]
+  ! +               [ shift and go to state 6 ]
+  ! -               [ shift and go to state 7 ]
 
 
 state 14
 
-    (56) WHILE_INSTRUCTION -> WHILE . ( RELATION_EXP ) INSTRUCTION
+    (5) EXPRESSION -> EXPRESSION - EXPRESSION .
+    (4) EXPRESSION -> EXPRESSION . + EXPRESSION
+    (5) EXPRESSION -> EXPRESSION . - EXPRESSION
+    (6) EXPRESSION -> EXPRESSION . * EXPRESSION
+    (7) EXPRESSION -> EXPRESSION . / EXPRESSION
+    (8) EXPRESSION -> EXPRESSION . MUL EXPRESSION
+    (9) EXPRESSION -> EXPRESSION . DOTDIV EXPRESSION
 
-    (               shift and go to state 30
+    +               reduce using rule 5 (EXPRESSION -> EXPRESSION - EXPRESSION .)
+    -               reduce using rule 5 (EXPRESSION -> EXPRESSION - EXPRESSION .)
+    $end            reduce using rule 5 (EXPRESSION -> EXPRESSION - EXPRESSION .)
+    ]               reduce using rule 5 (EXPRESSION -> EXPRESSION - EXPRESSION .)
+    *               shift and go to state 8
+    /               shift and go to state 9
+    MUL             shift and go to state 10
+    DOTDIV          shift and go to state 11
+
+  ! *               [ reduce using rule 5 (EXPRESSION -> EXPRESSION - EXPRESSION .) ]
+  ! /               [ reduce using rule 5 (EXPRESSION -> EXPRESSION - EXPRESSION .) ]
+  ! MUL             [ reduce using rule 5 (EXPRESSION -> EXPRESSION - EXPRESSION .) ]
+  ! DOTDIV          [ reduce using rule 5 (EXPRESSION -> EXPRESSION - EXPRESSION .) ]
+  ! +               [ shift and go to state 6 ]
+  ! -               [ shift and go to state 7 ]
 
 
 state 15
 
-    (57) FOR_INSTRUCTION -> FOR . ID = ARITHMETIC_EXP : ARITHMETIC_EXP INSTRUCTION
+    (6) EXPRESSION -> EXPRESSION * EXPRESSION .
+    (4) EXPRESSION -> EXPRESSION . + EXPRESSION
+    (5) EXPRESSION -> EXPRESSION . - EXPRESSION
+    (6) EXPRESSION -> EXPRESSION . * EXPRESSION
+    (7) EXPRESSION -> EXPRESSION . / EXPRESSION
+    (8) EXPRESSION -> EXPRESSION . MUL EXPRESSION
+    (9) EXPRESSION -> EXPRESSION . DOTDIV EXPRESSION
 
-    ID              shift and go to state 31
+    +               reduce using rule 6 (EXPRESSION -> EXPRESSION * EXPRESSION .)
+    -               reduce using rule 6 (EXPRESSION -> EXPRESSION * EXPRESSION .)
+    *               reduce using rule 6 (EXPRESSION -> EXPRESSION * EXPRESSION .)
+    /               reduce using rule 6 (EXPRESSION -> EXPRESSION * EXPRESSION .)
+    $end            reduce using rule 6 (EXPRESSION -> EXPRESSION * EXPRESSION .)
+    ]               reduce using rule 6 (EXPRESSION -> EXPRESSION * EXPRESSION .)
+    MUL             shift and go to state 10
+    DOTDIV          shift and go to state 11
+
+  ! MUL             [ reduce using rule 6 (EXPRESSION -> EXPRESSION * EXPRESSION .) ]
+  ! DOTDIV          [ reduce using rule 6 (EXPRESSION -> EXPRESSION * EXPRESSION .) ]
+  ! +               [ shift and go to state 6 ]
+  ! -               [ shift and go to state 7 ]
+  ! *               [ shift and go to state 8 ]
+  ! /               [ shift and go to state 9 ]
 
 
 state 16
 
-    (58) PRINT_FUN -> PRINT . LIST_VALUE ;
-    (23) LIST_VALUE -> . VALUE
-    (24) LIST_VALUE -> . VALUE , LIST_VALUE
-    (13) VALUE -> . INTNUM
-    (14) VALUE -> . FLOATNUM
-    (15) VALUE -> . ID
-    (16) VALUE -> . STRING
-    (17) VALUE -> . EYE ( ARITHMETIC_EXP )
-    (18) VALUE -> . ZEROS ( ARITHMETIC_EXP )
-    (19) VALUE -> . ONES ( ARITHMETIC_EXP )
-    (20) VALUE -> . VECTOR
-    (21) VALUE -> . ID VECTOR
-    (22) VALUE -> . VALUE '
-    (12) VECTOR -> . [ LIST_VALUE ]
+    (7) EXPRESSION -> EXPRESSION / EXPRESSION .
+    (4) EXPRESSION -> EXPRESSION . + EXPRESSION
+    (5) EXPRESSION -> EXPRESSION . - EXPRESSION
+    (6) EXPRESSION -> EXPRESSION . * EXPRESSION
+    (7) EXPRESSION -> EXPRESSION . / EXPRESSION
+    (8) EXPRESSION -> EXPRESSION . MUL EXPRESSION
+    (9) EXPRESSION -> EXPRESSION . DOTDIV EXPRESSION
 
-    INTNUM          shift and go to state 34
-    FLOATNUM        shift and go to state 35
-    ID              shift and go to state 36
-    STRING          shift and go to state 37
-    EYE             shift and go to state 38
-    ZEROS           shift and go to state 39
-    ONES            shift and go to state 40
-    [               shift and go to state 42
+    +               reduce using rule 7 (EXPRESSION -> EXPRESSION / EXPRESSION .)
+    -               reduce using rule 7 (EXPRESSION -> EXPRESSION / EXPRESSION .)
+    *               reduce using rule 7 (EXPRESSION -> EXPRESSION / EXPRESSION .)
+    /               reduce using rule 7 (EXPRESSION -> EXPRESSION / EXPRESSION .)
+    $end            reduce using rule 7 (EXPRESSION -> EXPRESSION / EXPRESSION .)
+    ]               reduce using rule 7 (EXPRESSION -> EXPRESSION / EXPRESSION .)
+    MUL             shift and go to state 10
+    DOTDIV          shift and go to state 11
 
-    LIST_VALUE                     shift and go to state 32
-    VALUE                          shift and go to state 33
-    VECTOR                         shift and go to state 41
+  ! MUL             [ reduce using rule 7 (EXPRESSION -> EXPRESSION / EXPRESSION .) ]
+  ! DOTDIV          [ reduce using rule 7 (EXPRESSION -> EXPRESSION / EXPRESSION .) ]
+  ! +               [ shift and go to state 6 ]
+  ! -               [ shift and go to state 7 ]
+  ! *               [ shift and go to state 8 ]
+  ! /               [ shift and go to state 9 ]
+
 
 state 17
 
-    (59) RETURN_FUN -> RETURN . LIST_VALUE ;
-    (23) LIST_VALUE -> . VALUE
-    (24) LIST_VALUE -> . VALUE , LIST_VALUE
-    (13) VALUE -> . INTNUM
-    (14) VALUE -> . FLOATNUM
-    (15) VALUE -> . ID
-    (16) VALUE -> . STRING
-    (17) VALUE -> . EYE ( ARITHMETIC_EXP )
-    (18) VALUE -> . ZEROS ( ARITHMETIC_EXP )
-    (19) VALUE -> . ONES ( ARITHMETIC_EXP )
-    (20) VALUE -> . VECTOR
-    (21) VALUE -> . ID VECTOR
-    (22) VALUE -> . VALUE '
-    (12) VECTOR -> . [ LIST_VALUE ]
+    (8) EXPRESSION -> EXPRESSION MUL EXPRESSION .
+    (4) EXPRESSION -> EXPRESSION . + EXPRESSION
+    (5) EXPRESSION -> EXPRESSION . - EXPRESSION
+    (6) EXPRESSION -> EXPRESSION . * EXPRESSION
+    (7) EXPRESSION -> EXPRESSION . / EXPRESSION
+    (8) EXPRESSION -> EXPRESSION . MUL EXPRESSION
+    (9) EXPRESSION -> EXPRESSION . DOTDIV EXPRESSION
 
-    INTNUM          shift and go to state 34
-    FLOATNUM        shift and go to state 35
-    ID              shift and go to state 36
-    STRING          shift and go to state 37
-    EYE             shift and go to state 38
-    ZEROS           shift and go to state 39
-    ONES            shift and go to state 40
-    [               shift and go to state 42
+    +               reduce using rule 8 (EXPRESSION -> EXPRESSION MUL EXPRESSION .)
+    -               reduce using rule 8 (EXPRESSION -> EXPRESSION MUL EXPRESSION .)
+    *               reduce using rule 8 (EXPRESSION -> EXPRESSION MUL EXPRESSION .)
+    /               reduce using rule 8 (EXPRESSION -> EXPRESSION MUL EXPRESSION .)
+    MUL             reduce using rule 8 (EXPRESSION -> EXPRESSION MUL EXPRESSION .)
+    $end            reduce using rule 8 (EXPRESSION -> EXPRESSION MUL EXPRESSION .)
+    ]               reduce using rule 8 (EXPRESSION -> EXPRESSION MUL EXPRESSION .)
+    DOTDIV          shift and go to state 11
 
-    LIST_VALUE                     shift and go to state 43
-    VALUE                          shift and go to state 33
-    VECTOR                         shift and go to state 41
+  ! DOTDIV          [ reduce using rule 8 (EXPRESSION -> EXPRESSION MUL EXPRESSION .) ]
+  ! +               [ shift and go to state 6 ]
+  ! -               [ shift and go to state 7 ]
+  ! *               [ shift and go to state 8 ]
+  ! /               [ shift and go to state 9 ]
+  ! MUL             [ shift and go to state 10 ]
+
 
 state 18
 
-    (1) START -> START INSTRUCTION .
+    (9) EXPRESSION -> EXPRESSION DOTDIV EXPRESSION .
+    (4) EXPRESSION -> EXPRESSION . + EXPRESSION
+    (5) EXPRESSION -> EXPRESSION . - EXPRESSION
+    (6) EXPRESSION -> EXPRESSION . * EXPRESSION
+    (7) EXPRESSION -> EXPRESSION . / EXPRESSION
+    (8) EXPRESSION -> EXPRESSION . MUL EXPRESSION
+    (9) EXPRESSION -> EXPRESSION . DOTDIV EXPRESSION
 
-    {               reduce using rule 1 (START -> START INSTRUCTION .)
-    BREAK           reduce using rule 1 (START -> START INSTRUCTION .)
-    CONTINUE        reduce using rule 1 (START -> START INSTRUCTION .)
-    ID              reduce using rule 1 (START -> START INSTRUCTION .)
-    IF              reduce using rule 1 (START -> START INSTRUCTION .)
-    WHILE           reduce using rule 1 (START -> START INSTRUCTION .)
-    FOR             reduce using rule 1 (START -> START INSTRUCTION .)
-    PRINT           reduce using rule 1 (START -> START INSTRUCTION .)
-    RETURN          reduce using rule 1 (START -> START INSTRUCTION .)
-    $end            reduce using rule 1 (START -> START INSTRUCTION .)
-    }               reduce using rule 1 (START -> START INSTRUCTION .)
+    +               reduce using rule 9 (EXPRESSION -> EXPRESSION DOTDIV EXPRESSION .)
+    -               reduce using rule 9 (EXPRESSION -> EXPRESSION DOTDIV EXPRESSION .)
+    *               reduce using rule 9 (EXPRESSION -> EXPRESSION DOTDIV EXPRESSION .)
+    /               reduce using rule 9 (EXPRESSION -> EXPRESSION DOTDIV EXPRESSION .)
+    MUL             reduce using rule 9 (EXPRESSION -> EXPRESSION DOTDIV EXPRESSION .)
+    DOTDIV          reduce using rule 9 (EXPRESSION -> EXPRESSION DOTDIV EXPRESSION .)
+    $end            reduce using rule 9 (EXPRESSION -> EXPRESSION DOTDIV EXPRESSION .)
+    ]               reduce using rule 9 (EXPRESSION -> EXPRESSION DOTDIV EXPRESSION .)
+
+  ! +               [ shift and go to state 6 ]
+  ! -               [ shift and go to state 7 ]
+  ! *               [ shift and go to state 8 ]
+  ! /               [ shift and go to state 9 ]
+  ! MUL             [ shift and go to state 10 ]
+  ! DOTDIV          [ shift and go to state 11 ]
 
 
 state 19
 
-    (3) INSTRUCTION -> { START . }
-    (1) START -> START . INSTRUCTION
-    (3) INSTRUCTION -> . { START }
-    (4) INSTRUCTION -> . ASSIGN_EXP
-    (5) INSTRUCTION -> . IF_INSTRUCTION
-    (6) INSTRUCTION -> . WHILE_INSTRUCTION
-    (7) INSTRUCTION -> . FOR_INSTRUCTION
-    (8) INSTRUCTION -> . PRINT_FUN
-    (9) INSTRUCTION -> . RETURN_FUN
-    (10) INSTRUCTION -> . BREAK ;
-    (11) INSTRUCTION -> . CONTINUE ;
-    (52) ASSIGN_EXP -> . ID ASSIGN_OP ARITHMETIC_EXP ;
-    (53) ASSIGN_EXP -> . ID [ LIST_VALUE ] ASSIGN_OP ARITHMETIC_EXP ;
-    (54) IF_INSTRUCTION -> . IF ( RELATION_EXP ) INSTRUCTION
-    (55) IF_INSTRUCTION -> . IF ( RELATION_EXP ) INSTRUCTION ELSE INSTRUCTION
-    (56) WHILE_INSTRUCTION -> . WHILE ( RELATION_EXP ) INSTRUCTION
-    (57) FOR_INSTRUCTION -> . FOR ID = ARITHMETIC_EXP : ARITHMETIC_EXP INSTRUCTION
-    (58) PRINT_FUN -> . PRINT LIST_VALUE ;
-    (59) RETURN_FUN -> . RETURN LIST_VALUE ;
-
-    }               shift and go to state 44
-    {               shift and go to state 3
-    BREAK           shift and go to state 10
-    CONTINUE        shift and go to state 11
-    ID              shift and go to state 12
-    IF              shift and go to state 13
-    WHILE           shift and go to state 14
-    FOR             shift and go to state 15
-    PRINT           shift and go to state 16
-    RETURN          shift and go to state 17
-
-    INSTRUCTION                    shift and go to state 18
-    ASSIGN_EXP                     shift and go to state 4
-    IF_INSTRUCTION                 shift and go to state 5
-    WHILE_INSTRUCTION              shift and go to state 6
-    FOR_INSTRUCTION                shift and go to state 7
-    PRINT_FUN                      shift and go to state 8
-    RETURN_FUN                     shift and go to state 9
-
-state 20
-
-    (10) INSTRUCTION -> BREAK ; .
-
-    {               reduce using rule 10 (INSTRUCTION -> BREAK ; .)
-    BREAK           reduce using rule 10 (INSTRUCTION -> BREAK ; .)
-    CONTINUE        reduce using rule 10 (INSTRUCTION -> BREAK ; .)
-    ID              reduce using rule 10 (INSTRUCTION -> BREAK ; .)
-    IF              reduce using rule 10 (INSTRUCTION -> BREAK ; .)
-    WHILE           reduce using rule 10 (INSTRUCTION -> BREAK ; .)
-    FOR             reduce using rule 10 (INSTRUCTION -> BREAK ; .)
-    PRINT           reduce using rule 10 (INSTRUCTION -> BREAK ; .)
-    RETURN          reduce using rule 10 (INSTRUCTION -> BREAK ; .)
-    $end            reduce using rule 10 (INSTRUCTION -> BREAK ; .)
-    }               reduce using rule 10 (INSTRUCTION -> BREAK ; .)
-    ELSE            reduce using rule 10 (INSTRUCTION -> BREAK ; .)
-
-
-state 21
-
-    (11) INSTRUCTION -> CONTINUE ; .
-
-    {               reduce using rule 11 (INSTRUCTION -> CONTINUE ; .)
-    BREAK           reduce using rule 11 (INSTRUCTION -> CONTINUE ; .)
-    CONTINUE        reduce using rule 11 (INSTRUCTION -> CONTINUE ; .)
-    ID              reduce using rule 11 (INSTRUCTION -> CONTINUE ; .)
-    IF              reduce using rule 11 (INSTRUCTION -> CONTINUE ; .)
-    WHILE           reduce using rule 11 (INSTRUCTION -> CONTINUE ; .)
-    FOR             reduce using rule 11 (INSTRUCTION -> CONTINUE ; .)
-    PRINT           reduce using rule 11 (INSTRUCTION -> CONTINUE ; .)
-    RETURN          reduce using rule 11 (INSTRUCTION -> CONTINUE ; .)
-    $end            reduce using rule 11 (INSTRUCTION -> CONTINUE ; .)
-    }               reduce using rule 11 (INSTRUCTION -> CONTINUE ; .)
-    ELSE            reduce using rule 11 (INSTRUCTION -> CONTINUE ; .)
-
-
-state 22
-
-    (52) ASSIGN_EXP -> ID ASSIGN_OP . ARITHMETIC_EXP ;
-    (46) ARITHMETIC_EXP -> . ARITHMETIC_EXP ARITHMETIC_OP ARITHMETIC_EXP
-    (47) ARITHMETIC_EXP -> . ( ARITHMETIC_EXP )
-    (48) ARITHMETIC_EXP -> . ARITHMETIC_OP_UNARY ARITHMETIC_EXP
-    (49) ARITHMETIC_EXP -> . VALUE
-    (44) ARITHMETIC_OP_UNARY -> . +
-    (45) ARITHMETIC_OP_UNARY -> . -
-    (13) VALUE -> . INTNUM
-    (14) VALUE -> . FLOATNUM
-    (15) VALUE -> . ID
-    (16) VALUE -> . STRING
-    (17) VALUE -> . EYE ( ARITHMETIC_EXP )
-    (18) VALUE -> . ZEROS ( ARITHMETIC_EXP )
-    (19) VALUE -> . ONES ( ARITHMETIC_EXP )
-    (20) VALUE -> . VECTOR
-    (21) VALUE -> . ID VECTOR
-    (22) VALUE -> . VALUE '
-    (12) VECTOR -> . [ LIST_VALUE ]
-
-    (               shift and go to state 46
-    +               shift and go to state 49
-    -               shift and go to state 50
-    INTNUM          shift and go to state 34
-    FLOATNUM        shift and go to state 35
-    ID              shift and go to state 36
-    STRING          shift and go to state 37
-    EYE             shift and go to state 38
-    ZEROS           shift and go to state 39
-    ONES            shift and go to state 40
-    [               shift and go to state 42
-
-    ARITHMETIC_EXP                 shift and go to state 45
-    ARITHMETIC_OP_UNARY            shift and go to state 47
-    VALUE                          shift and go to state 48
-    VECTOR                         shift and go to state 41
-
-state 23
-
-    (53) ASSIGN_EXP -> ID [ . LIST_VALUE ] ASSIGN_OP ARITHMETIC_EXP ;
-    (23) LIST_VALUE -> . VALUE
-    (24) LIST_VALUE -> . VALUE , LIST_VALUE
-    (13) VALUE -> . INTNUM
-    (14) VALUE -> . FLOATNUM
-    (15) VALUE -> . ID
-    (16) VALUE -> . STRING
-    (17) VALUE -> . EYE ( ARITHMETIC_EXP )
-    (18) VALUE -> . ZEROS ( ARITHMETIC_EXP )
-    (19) VALUE -> . ONES ( ARITHMETIC_EXP )
-    (20) VALUE -> . VECTOR
-    (21) VALUE -> . ID VECTOR
-    (22) VALUE -> . VALUE '
-    (12) VECTOR -> . [ LIST_VALUE ]
-
-    INTNUM          shift and go to state 34
-    FLOATNUM        shift and go to state 35
-    ID              shift and go to state 36
-    STRING          shift and go to state 37
-    EYE             shift and go to state 38
-    ZEROS           shift and go to state 39
-    ONES            shift and go to state 40
-    [               shift and go to state 42
-
-    LIST_VALUE                     shift and go to state 51
-    VALUE                          shift and go to state 33
-    VECTOR                         shift and go to state 41
-
-state 24
-
-    (33) ASSIGN_OP -> ADDASSIGN .
-
-    (               reduce using rule 33 (ASSIGN_OP -> ADDASSIGN .)
-    +               reduce using rule 33 (ASSIGN_OP -> ADDASSIGN .)
-    -               reduce using rule 33 (ASSIGN_OP -> ADDASSIGN .)
-    INTNUM          reduce using rule 33 (ASSIGN_OP -> ADDASSIGN .)
-    FLOATNUM        reduce using rule 33 (ASSIGN_OP -> ADDASSIGN .)
-    ID              reduce using rule 33 (ASSIGN_OP -> ADDASSIGN .)
-    STRING          reduce using rule 33 (ASSIGN_OP -> ADDASSIGN .)
-    EYE             reduce using rule 33 (ASSIGN_OP -> ADDASSIGN .)
-    ZEROS           reduce using rule 33 (ASSIGN_OP -> ADDASSIGN .)
-    ONES            reduce using rule 33 (ASSIGN_OP -> ADDASSIGN .)
-    [               reduce using rule 33 (ASSIGN_OP -> ADDASSIGN .)
-
-
-state 25
-
-    (34) ASSIGN_OP -> SUBASSIGN .
-
-    (               reduce using rule 34 (ASSIGN_OP -> SUBASSIGN .)
-    +               reduce using rule 34 (ASSIGN_OP -> SUBASSIGN .)
-    -               reduce using rule 34 (ASSIGN_OP -> SUBASSIGN .)
-    INTNUM          reduce using rule 34 (ASSIGN_OP -> SUBASSIGN .)
-    FLOATNUM        reduce using rule 34 (ASSIGN_OP -> SUBASSIGN .)
-    ID              reduce using rule 34 (ASSIGN_OP -> SUBASSIGN .)
-    STRING          reduce using rule 34 (ASSIGN_OP -> SUBASSIGN .)
-    EYE             reduce using rule 34 (ASSIGN_OP -> SUBASSIGN .)
-    ZEROS           reduce using rule 34 (ASSIGN_OP -> SUBASSIGN .)
-    ONES            reduce using rule 34 (ASSIGN_OP -> SUBASSIGN .)
-    [               reduce using rule 34 (ASSIGN_OP -> SUBASSIGN .)
-
-
-state 26
-
-    (35) ASSIGN_OP -> MULASSIGN .
-
-    (               reduce using rule 35 (ASSIGN_OP -> MULASSIGN .)
-    +               reduce using rule 35 (ASSIGN_OP -> MULASSIGN .)
-    -               reduce using rule 35 (ASSIGN_OP -> MULASSIGN .)
-    INTNUM          reduce using rule 35 (ASSIGN_OP -> MULASSIGN .)
-    FLOATNUM        reduce using rule 35 (ASSIGN_OP -> MULASSIGN .)
-    ID              reduce using rule 35 (ASSIGN_OP -> MULASSIGN .)
-    STRING          reduce using rule 35 (ASSIGN_OP -> MULASSIGN .)
-    EYE             reduce using rule 35 (ASSIGN_OP -> MULASSIGN .)
-    ZEROS           reduce using rule 35 (ASSIGN_OP -> MULASSIGN .)
-    ONES            reduce using rule 35 (ASSIGN_OP -> MULASSIGN .)
-    [               reduce using rule 35 (ASSIGN_OP -> MULASSIGN .)
-
-
-state 27
-
-    (36) ASSIGN_OP -> DIVASSIGN .
-
-    (               reduce using rule 36 (ASSIGN_OP -> DIVASSIGN .)
-    +               reduce using rule 36 (ASSIGN_OP -> DIVASSIGN .)
-    -               reduce using rule 36 (ASSIGN_OP -> DIVASSIGN .)
-    INTNUM          reduce using rule 36 (ASSIGN_OP -> DIVASSIGN .)
-    FLOATNUM        reduce using rule 36 (ASSIGN_OP -> DIVASSIGN .)
-    ID              reduce using rule 36 (ASSIGN_OP -> DIVASSIGN .)
-    STRING          reduce using rule 36 (ASSIGN_OP -> DIVASSIGN .)
-    EYE             reduce using rule 36 (ASSIGN_OP -> DIVASSIGN .)
-    ZEROS           reduce using rule 36 (ASSIGN_OP -> DIVASSIGN .)
-    ONES            reduce using rule 36 (ASSIGN_OP -> DIVASSIGN .)
-    [               reduce using rule 36 (ASSIGN_OP -> DIVASSIGN .)
-
-
-state 28
-
-    (37) ASSIGN_OP -> = .
-
-    (               reduce using rule 37 (ASSIGN_OP -> = .)
-    +               reduce using rule 37 (ASSIGN_OP -> = .)
-    -               reduce using rule 37 (ASSIGN_OP -> = .)
-    INTNUM          reduce using rule 37 (ASSIGN_OP -> = .)
-    FLOATNUM        reduce using rule 37 (ASSIGN_OP -> = .)
-    ID              reduce using rule 37 (ASSIGN_OP -> = .)
-    STRING          reduce using rule 37 (ASSIGN_OP -> = .)
-    EYE             reduce using rule 37 (ASSIGN_OP -> = .)
-    ZEROS           reduce using rule 37 (ASSIGN_OP -> = .)
-    ONES            reduce using rule 37 (ASSIGN_OP -> = .)
-    [               reduce using rule 37 (ASSIGN_OP -> = .)
-
-
-state 29
-
-    (54) IF_INSTRUCTION -> IF ( . RELATION_EXP ) INSTRUCTION
-    (55) IF_INSTRUCTION -> IF ( . RELATION_EXP ) INSTRUCTION ELSE INSTRUCTION
-    (50) RELATION_EXP -> . ARITHMETIC_EXP RELATION_OP ARITHMETIC_EXP
-    (51) RELATION_EXP -> . ( RELATION_EXP )
-    (46) ARITHMETIC_EXP -> . ARITHMETIC_EXP ARITHMETIC_OP ARITHMETIC_EXP
-    (47) ARITHMETIC_EXP -> . ( ARITHMETIC_EXP )
-    (48) ARITHMETIC_EXP -> . ARITHMETIC_OP_UNARY ARITHMETIC_EXP
-    (49) ARITHMETIC_EXP -> . VALUE
-    (44) ARITHMETIC_OP_UNARY -> . +
-    (45) ARITHMETIC_OP_UNARY -> . -
-    (13) VALUE -> . INTNUM
-    (14) VALUE -> . FLOATNUM
-    (15) VALUE -> . ID
-    (16) VALUE -> . STRING
-    (17) VALUE -> . EYE ( ARITHMETIC_EXP )
-    (18) VALUE -> . ZEROS ( ARITHMETIC_EXP )
-    (19) VALUE -> . ONES ( ARITHMETIC_EXP )
-    (20) VALUE -> . VECTOR
-    (21) VALUE -> . ID VECTOR
-    (22) VALUE -> . VALUE '
-    (12) VECTOR -> . [ LIST_VALUE ]
-
-    (               shift and go to state 52
-    +               shift and go to state 49
-    -               shift and go to state 50
-    INTNUM          shift and go to state 34
-    FLOATNUM        shift and go to state 35
-    ID              shift and go to state 36
-    STRING          shift and go to state 37
-    EYE             shift and go to state 38
-    ZEROS           shift and go to state 39
-    ONES            shift and go to state 40
-    [               shift and go to state 42
-
-    RELATION_EXP                   shift and go to state 53
-    ARITHMETIC_EXP                 shift and go to state 54
-    ARITHMETIC_OP_UNARY            shift and go to state 47
-    VALUE                          shift and go to state 48
-    VECTOR                         shift and go to state 41
-
-state 30
-
-    (56) WHILE_INSTRUCTION -> WHILE ( . RELATION_EXP ) INSTRUCTION
-    (50) RELATION_EXP -> . ARITHMETIC_EXP RELATION_OP ARITHMETIC_EXP
-    (51) RELATION_EXP -> . ( RELATION_EXP )
-    (46) ARITHMETIC_EXP -> . ARITHMETIC_EXP ARITHMETIC_OP ARITHMETIC_EXP
-    (47) ARITHMETIC_EXP -> . ( ARITHMETIC_EXP )
-    (48) ARITHMETIC_EXP -> . ARITHMETIC_OP_UNARY ARITHMETIC_EXP
-    (49) ARITHMETIC_EXP -> . VALUE
-    (44) ARITHMETIC_OP_UNARY -> . +
-    (45) ARITHMETIC_OP_UNARY -> . -
-    (13) VALUE -> . INTNUM
-    (14) VALUE -> . FLOATNUM
-    (15) VALUE -> . ID
-    (16) VALUE -> . STRING
-    (17) VALUE -> . EYE ( ARITHMETIC_EXP )
-    (18) VALUE -> . ZEROS ( ARITHMETIC_EXP )
-    (19) VALUE -> . ONES ( ARITHMETIC_EXP )
-    (20) VALUE -> . VECTOR
-    (21) VALUE -> . ID VECTOR
-    (22) VALUE -> . VALUE '
-    (12) VECTOR -> . [ LIST_VALUE ]
-
-    (               shift and go to state 52
-    +               shift and go to state 49
-    -               shift and go to state 50
-    INTNUM          shift and go to state 34
-    FLOATNUM        shift and go to state 35
-    ID              shift and go to state 36
-    STRING          shift and go to state 37
-    EYE             shift and go to state 38
-    ZEROS           shift and go to state 39
-    ONES            shift and go to state 40
-    [               shift and go to state 42
-
-    RELATION_EXP                   shift and go to state 55
-    ARITHMETIC_EXP                 shift and go to state 54
-    ARITHMETIC_OP_UNARY            shift and go to state 47
-    VALUE                          shift and go to state 48
-    VECTOR                         shift and go to state 41
-
-state 31
-
-    (57) FOR_INSTRUCTION -> FOR ID . = ARITHMETIC_EXP : ARITHMETIC_EXP INSTRUCTION
-
-    =               shift and go to state 56
-
-
-state 32
-
-    (58) PRINT_FUN -> PRINT LIST_VALUE . ;
-
-    ;               shift and go to state 57
-
-
-state 33
-
-    (23) LIST_VALUE -> VALUE .
-    (24) LIST_VALUE -> VALUE . , LIST_VALUE
-    (22) VALUE -> VALUE . '
-
-    ;               reduce using rule 23 (LIST_VALUE -> VALUE .)
-    ]               reduce using rule 23 (LIST_VALUE -> VALUE .)
-    ,               shift and go to state 58
-    '               shift and go to state 59
-
-
-state 34
-
-    (13) VALUE -> INTNUM .
-
-    ,               reduce using rule 13 (VALUE -> INTNUM .)
-    '               reduce using rule 13 (VALUE -> INTNUM .)
-    ;               reduce using rule 13 (VALUE -> INTNUM .)
-    +               reduce using rule 13 (VALUE -> INTNUM .)
-    -               reduce using rule 13 (VALUE -> INTNUM .)
-    *               reduce using rule 13 (VALUE -> INTNUM .)
-    /               reduce using rule 13 (VALUE -> INTNUM .)
-    DOTADD          reduce using rule 13 (VALUE -> INTNUM .)
-    DOTSUB          reduce using rule 13 (VALUE -> INTNUM .)
-    DOTMUL          reduce using rule 13 (VALUE -> INTNUM .)
-    DOTDIV          reduce using rule 13 (VALUE -> INTNUM .)
-    ]               reduce using rule 13 (VALUE -> INTNUM .)
-    GT              reduce using rule 13 (VALUE -> INTNUM .)
-    LT              reduce using rule 13 (VALUE -> INTNUM .)
-    LE              reduce using rule 13 (VALUE -> INTNUM .)
-    GE              reduce using rule 13 (VALUE -> INTNUM .)
-    NE              reduce using rule 13 (VALUE -> INTNUM .)
-    EQ              reduce using rule 13 (VALUE -> INTNUM .)
-    )               reduce using rule 13 (VALUE -> INTNUM .)
-    :               reduce using rule 13 (VALUE -> INTNUM .)
-    {               reduce using rule 13 (VALUE -> INTNUM .)
-    BREAK           reduce using rule 13 (VALUE -> INTNUM .)
-    CONTINUE        reduce using rule 13 (VALUE -> INTNUM .)
-    ID              reduce using rule 13 (VALUE -> INTNUM .)
-    IF              reduce using rule 13 (VALUE -> INTNUM .)
-    WHILE           reduce using rule 13 (VALUE -> INTNUM .)
-    FOR             reduce using rule 13 (VALUE -> INTNUM .)
-    PRINT           reduce using rule 13 (VALUE -> INTNUM .)
-    RETURN          reduce using rule 13 (VALUE -> INTNUM .)
-
-
-state 35
-
-    (14) VALUE -> FLOATNUM .
-
-    ,               reduce using rule 14 (VALUE -> FLOATNUM .)
-    '               reduce using rule 14 (VALUE -> FLOATNUM .)
-    ;               reduce using rule 14 (VALUE -> FLOATNUM .)
-    +               reduce using rule 14 (VALUE -> FLOATNUM .)
-    -               reduce using rule 14 (VALUE -> FLOATNUM .)
-    *               reduce using rule 14 (VALUE -> FLOATNUM .)
-    /               reduce using rule 14 (VALUE -> FLOATNUM .)
-    DOTADD          reduce using rule 14 (VALUE -> FLOATNUM .)
-    DOTSUB          reduce using rule 14 (VALUE -> FLOATNUM .)
-    DOTMUL          reduce using rule 14 (VALUE -> FLOATNUM .)
-    DOTDIV          reduce using rule 14 (VALUE -> FLOATNUM .)
-    ]               reduce using rule 14 (VALUE -> FLOATNUM .)
-    GT              reduce using rule 14 (VALUE -> FLOATNUM .)
-    LT              reduce using rule 14 (VALUE -> FLOATNUM .)
-    LE              reduce using rule 14 (VALUE -> FLOATNUM .)
-    GE              reduce using rule 14 (VALUE -> FLOATNUM .)
-    NE              reduce using rule 14 (VALUE -> FLOATNUM .)
-    EQ              reduce using rule 14 (VALUE -> FLOATNUM .)
-    )               reduce using rule 14 (VALUE -> FLOATNUM .)
-    :               reduce using rule 14 (VALUE -> FLOATNUM .)
-    {               reduce using rule 14 (VALUE -> FLOATNUM .)
-    BREAK           reduce using rule 14 (VALUE -> FLOATNUM .)
-    CONTINUE        reduce using rule 14 (VALUE -> FLOATNUM .)
-    ID              reduce using rule 14 (VALUE -> FLOATNUM .)
-    IF              reduce using rule 14 (VALUE -> FLOATNUM .)
-    WHILE           reduce using rule 14 (VALUE -> FLOATNUM .)
-    FOR             reduce using rule 14 (VALUE -> FLOATNUM .)
-    PRINT           reduce using rule 14 (VALUE -> FLOATNUM .)
-    RETURN          reduce using rule 14 (VALUE -> FLOATNUM .)
-
-
-state 36
-
-    (15) VALUE -> ID .
-    (21) VALUE -> ID . VECTOR
-    (12) VECTOR -> . [ LIST_VALUE ]
-
-    ,               reduce using rule 15 (VALUE -> ID .)
-    '               reduce using rule 15 (VALUE -> ID .)
-    ;               reduce using rule 15 (VALUE -> ID .)
-    +               reduce using rule 15 (VALUE -> ID .)
-    -               reduce using rule 15 (VALUE -> ID .)
-    *               reduce using rule 15 (VALUE -> ID .)
-    /               reduce using rule 15 (VALUE -> ID .)
-    DOTADD          reduce using rule 15 (VALUE -> ID .)
-    DOTSUB          reduce using rule 15 (VALUE -> ID .)
-    DOTMUL          reduce using rule 15 (VALUE -> ID .)
-    DOTDIV          reduce using rule 15 (VALUE -> ID .)
-    ]               reduce using rule 15 (VALUE -> ID .)
-    GT              reduce using rule 15 (VALUE -> ID .)
-    LT              reduce using rule 15 (VALUE -> ID .)
-    LE              reduce using rule 15 (VALUE -> ID .)
-    GE              reduce using rule 15 (VALUE -> ID .)
-    NE              reduce using rule 15 (VALUE -> ID .)
-    EQ              reduce using rule 15 (VALUE -> ID .)
-    )               reduce using rule 15 (VALUE -> ID .)
-    :               reduce using rule 15 (VALUE -> ID .)
-    {               reduce using rule 15 (VALUE -> ID .)
-    BREAK           reduce using rule 15 (VALUE -> ID .)
-    CONTINUE        reduce using rule 15 (VALUE -> ID .)
-    ID              reduce using rule 15 (VALUE -> ID .)
-    IF              reduce using rule 15 (VALUE -> ID .)
-    WHILE           reduce using rule 15 (VALUE -> ID .)
-    FOR             reduce using rule 15 (VALUE -> ID .)
-    PRINT           reduce using rule 15 (VALUE -> ID .)
-    RETURN          reduce using rule 15 (VALUE -> ID .)
-    [               shift and go to state 42
-
-    VECTOR                         shift and go to state 60
-
-state 37
-
-    (16) VALUE -> STRING .
-
-    ,               reduce using rule 16 (VALUE -> STRING .)
-    '               reduce using rule 16 (VALUE -> STRING .)
-    ;               reduce using rule 16 (VALUE -> STRING .)
-    +               reduce using rule 16 (VALUE -> STRING .)
-    -               reduce using rule 16 (VALUE -> STRING .)
-    *               reduce using rule 16 (VALUE -> STRING .)
-    /               reduce using rule 16 (VALUE -> STRING .)
-    DOTADD          reduce using rule 16 (VALUE -> STRING .)
-    DOTSUB          reduce using rule 16 (VALUE -> STRING .)
-    DOTMUL          reduce using rule 16 (VALUE -> STRING .)
-    DOTDIV          reduce using rule 16 (VALUE -> STRING .)
-    ]               reduce using rule 16 (VALUE -> STRING .)
-    GT              reduce using rule 16 (VALUE -> STRING .)
-    LT              reduce using rule 16 (VALUE -> STRING .)
-    LE              reduce using rule 16 (VALUE -> STRING .)
-    GE              reduce using rule 16 (VALUE -> STRING .)
-    NE              reduce using rule 16 (VALUE -> STRING .)
-    EQ              reduce using rule 16 (VALUE -> STRING .)
-    )               reduce using rule 16 (VALUE -> STRING .)
-    :               reduce using rule 16 (VALUE -> STRING .)
-    {               reduce using rule 16 (VALUE -> STRING .)
-    BREAK           reduce using rule 16 (VALUE -> STRING .)
-    CONTINUE        reduce using rule 16 (VALUE -> STRING .)
-    ID              reduce using rule 16 (VALUE -> STRING .)
-    IF              reduce using rule 16 (VALUE -> STRING .)
-    WHILE           reduce using rule 16 (VALUE -> STRING .)
-    FOR             reduce using rule 16 (VALUE -> STRING .)
-    PRINT           reduce using rule 16 (VALUE -> STRING .)
-    RETURN          reduce using rule 16 (VALUE -> STRING .)
-
-
-state 38
-
-    (17) VALUE -> EYE . ( ARITHMETIC_EXP )
-
-    (               shift and go to state 61
-
-
-state 39
-
-    (18) VALUE -> ZEROS . ( ARITHMETIC_EXP )
-
-    (               shift and go to state 62
-
-
-state 40
-
-    (19) VALUE -> ONES . ( ARITHMETIC_EXP )
-
-    (               shift and go to state 63
-
-
-state 41
-
-    (20) VALUE -> VECTOR .
-
-    ,               reduce using rule 20 (VALUE -> VECTOR .)
-    '               reduce using rule 20 (VALUE -> VECTOR .)
-    ;               reduce using rule 20 (VALUE -> VECTOR .)
-    +               reduce using rule 20 (VALUE -> VECTOR .)
-    -               reduce using rule 20 (VALUE -> VECTOR .)
-    *               reduce using rule 20 (VALUE -> VECTOR .)
-    /               reduce using rule 20 (VALUE -> VECTOR .)
-    DOTADD          reduce using rule 20 (VALUE -> VECTOR .)
-    DOTSUB          reduce using rule 20 (VALUE -> VECTOR .)
-    DOTMUL          reduce using rule 20 (VALUE -> VECTOR .)
-    DOTDIV          reduce using rule 20 (VALUE -> VECTOR .)
-    ]               reduce using rule 20 (VALUE -> VECTOR .)
-    GT              reduce using rule 20 (VALUE -> VECTOR .)
-    LT              reduce using rule 20 (VALUE -> VECTOR .)
-    LE              reduce using rule 20 (VALUE -> VECTOR .)
-    GE              reduce using rule 20 (VALUE -> VECTOR .)
-    NE              reduce using rule 20 (VALUE -> VECTOR .)
-    EQ              reduce using rule 20 (VALUE -> VECTOR .)
-    )               reduce using rule 20 (VALUE -> VECTOR .)
-    :               reduce using rule 20 (VALUE -> VECTOR .)
-    {               reduce using rule 20 (VALUE -> VECTOR .)
-    BREAK           reduce using rule 20 (VALUE -> VECTOR .)
-    CONTINUE        reduce using rule 20 (VALUE -> VECTOR .)
-    ID              reduce using rule 20 (VALUE -> VECTOR .)
-    IF              reduce using rule 20 (VALUE -> VECTOR .)
-    WHILE           reduce using rule 20 (VALUE -> VECTOR .)
-    FOR             reduce using rule 20 (VALUE -> VECTOR .)
-    PRINT           reduce using rule 20 (VALUE -> VECTOR .)
-    RETURN          reduce using rule 20 (VALUE -> VECTOR .)
-
-
-state 42
-
-    (12) VECTOR -> [ . LIST_VALUE ]
-    (23) LIST_VALUE -> . VALUE
-    (24) LIST_VALUE -> . VALUE , LIST_VALUE
-    (13) VALUE -> . INTNUM
-    (14) VALUE -> . FLOATNUM
-    (15) VALUE -> . ID
-    (16) VALUE -> . STRING
-    (17) VALUE -> . EYE ( ARITHMETIC_EXP )
-    (18) VALUE -> . ZEROS ( ARITHMETIC_EXP )
-    (19) VALUE -> . ONES ( ARITHMETIC_EXP )
-    (20) VALUE -> . VECTOR
-    (21) VALUE -> . ID VECTOR
-    (22) VALUE -> . VALUE '
-    (12) VECTOR -> . [ LIST_VALUE ]
-
-    INTNUM          shift and go to state 34
-    FLOATNUM        shift and go to state 35
-    ID              shift and go to state 36
-    STRING          shift and go to state 37
-    EYE             shift and go to state 38
-    ZEROS           shift and go to state 39
-    ONES            shift and go to state 40
-    [               shift and go to state 42
-
-    LIST_VALUE                     shift and go to state 64
-    VALUE                          shift and go to state 33
-    VECTOR                         shift and go to state 41
-
-state 43
-
-    (59) RETURN_FUN -> RETURN LIST_VALUE . ;
-
-    ;               shift and go to state 65
-
-
-state 44
-
-    (3) INSTRUCTION -> { START } .
-
-    {               reduce using rule 3 (INSTRUCTION -> { START } .)
-    BREAK           reduce using rule 3 (INSTRUCTION -> { START } .)
-    CONTINUE        reduce using rule 3 (INSTRUCTION -> { START } .)
-    ID              reduce using rule 3 (INSTRUCTION -> { START } .)
-    IF              reduce using rule 3 (INSTRUCTION -> { START } .)
-    WHILE           reduce using rule 3 (INSTRUCTION -> { START } .)
-    FOR             reduce using rule 3 (INSTRUCTION -> { START } .)
-    PRINT           reduce using rule 3 (INSTRUCTION -> { START } .)
-    RETURN          reduce using rule 3 (INSTRUCTION -> { START } .)
-    $end            reduce using rule 3 (INSTRUCTION -> { START } .)
-    }               reduce using rule 3 (INSTRUCTION -> { START } .)
-    ELSE            reduce using rule 3 (INSTRUCTION -> { START } .)
-
-
-state 45
-
-    (52) ASSIGN_EXP -> ID ASSIGN_OP ARITHMETIC_EXP . ;
-    (46) ARITHMETIC_EXP -> ARITHMETIC_EXP . ARITHMETIC_OP ARITHMETIC_EXP
-    (25) ARITHMETIC_OP -> . +
-    (26) ARITHMETIC_OP -> . -
-    (27) ARITHMETIC_OP -> . *
-    (28) ARITHMETIC_OP -> . /
-    (29) ARITHMETIC_OP -> . DOTADD
-    (30) ARITHMETIC_OP -> . DOTSUB
-    (31) ARITHMETIC_OP -> . DOTMUL
-    (32) ARITHMETIC_OP -> . DOTDIV
-
-    ;               shift and go to state 66
-    +               shift and go to state 68
-    -               shift and go to state 69
-    *               shift and go to state 70
-    /               shift and go to state 71
-    DOTADD          shift and go to state 72
-    DOTSUB          shift and go to state 73
-    DOTMUL          shift and go to state 74
-    DOTDIV          shift and go to state 75
-
-    ARITHMETIC_OP                  shift and go to state 67
-
-state 46
-
-    (47) ARITHMETIC_EXP -> ( . ARITHMETIC_EXP )
-    (46) ARITHMETIC_EXP -> . ARITHMETIC_EXP ARITHMETIC_OP ARITHMETIC_EXP
-    (47) ARITHMETIC_EXP -> . ( ARITHMETIC_EXP )
-    (48) ARITHMETIC_EXP -> . ARITHMETIC_OP_UNARY ARITHMETIC_EXP
-    (49) ARITHMETIC_EXP -> . VALUE
-    (44) ARITHMETIC_OP_UNARY -> . +
-    (45) ARITHMETIC_OP_UNARY -> . -
-    (13) VALUE -> . INTNUM
-    (14) VALUE -> . FLOATNUM
-    (15) VALUE -> . ID
-    (16) VALUE -> . STRING
-    (17) VALUE -> . EYE ( ARITHMETIC_EXP )
-    (18) VALUE -> . ZEROS ( ARITHMETIC_EXP )
-    (19) VALUE -> . ONES ( ARITHMETIC_EXP )
-    (20) VALUE -> . VECTOR
-    (21) VALUE -> . ID VECTOR
-    (22) VALUE -> . VALUE '
-    (12) VECTOR -> . [ LIST_VALUE ]
-
-    (               shift and go to state 46
-    +               shift and go to state 49
-    -               shift and go to state 50
-    INTNUM          shift and go to state 34
-    FLOATNUM        shift and go to state 35
-    ID              shift and go to state 36
-    STRING          shift and go to state 37
-    EYE             shift and go to state 38
-    ZEROS           shift and go to state 39
-    ONES            shift and go to state 40
-    [               shift and go to state 42
-
-    ARITHMETIC_EXP                 shift and go to state 76
-    ARITHMETIC_OP_UNARY            shift and go to state 47
-    VALUE                          shift and go to state 48
-    VECTOR                         shift and go to state 41
-
-state 47
-
-    (48) ARITHMETIC_EXP -> ARITHMETIC_OP_UNARY . ARITHMETIC_EXP
-    (46) ARITHMETIC_EXP -> . ARITHMETIC_EXP ARITHMETIC_OP ARITHMETIC_EXP
-    (47) ARITHMETIC_EXP -> . ( ARITHMETIC_EXP )
-    (48) ARITHMETIC_EXP -> . ARITHMETIC_OP_UNARY ARITHMETIC_EXP
-    (49) ARITHMETIC_EXP -> . VALUE
-    (44) ARITHMETIC_OP_UNARY -> . +
-    (45) ARITHMETIC_OP_UNARY -> . -
-    (13) VALUE -> . INTNUM
-    (14) VALUE -> . FLOATNUM
-    (15) VALUE -> . ID
-    (16) VALUE -> . STRING
-    (17) VALUE -> . EYE ( ARITHMETIC_EXP )
-    (18) VALUE -> . ZEROS ( ARITHMETIC_EXP )
-    (19) VALUE -> . ONES ( ARITHMETIC_EXP )
-    (20) VALUE -> . VECTOR
-    (21) VALUE -> . ID VECTOR
-    (22) VALUE -> . VALUE '
-    (12) VECTOR -> . [ LIST_VALUE ]
-
-    (               shift and go to state 46
-    +               shift and go to state 49
-    -               shift and go to state 50
-    INTNUM          shift and go to state 34
-    FLOATNUM        shift and go to state 35
-    ID              shift and go to state 36
-    STRING          shift and go to state 37
-    EYE             shift and go to state 38
-    ZEROS           shift and go to state 39
-    ONES            shift and go to state 40
-    [               shift and go to state 42
-
-    ARITHMETIC_OP_UNARY            shift and go to state 47
-    ARITHMETIC_EXP                 shift and go to state 77
-    VALUE                          shift and go to state 48
-    VECTOR                         shift and go to state 41
-
-state 48
-
-    (49) ARITHMETIC_EXP -> VALUE .
-    (22) VALUE -> VALUE . '
-
-    ;               reduce using rule 49 (ARITHMETIC_EXP -> VALUE .)
-    +               reduce using rule 49 (ARITHMETIC_EXP -> VALUE .)
-    -               reduce using rule 49 (ARITHMETIC_EXP -> VALUE .)
-    *               reduce using rule 49 (ARITHMETIC_EXP -> VALUE .)
-    /               reduce using rule 49 (ARITHMETIC_EXP -> VALUE .)
-    DOTADD          reduce using rule 49 (ARITHMETIC_EXP -> VALUE .)
-    DOTSUB          reduce using rule 49 (ARITHMETIC_EXP -> VALUE .)
-    DOTMUL          reduce using rule 49 (ARITHMETIC_EXP -> VALUE .)
-    DOTDIV          reduce using rule 49 (ARITHMETIC_EXP -> VALUE .)
-    GT              reduce using rule 49 (ARITHMETIC_EXP -> VALUE .)
-    LT              reduce using rule 49 (ARITHMETIC_EXP -> VALUE .)
-    LE              reduce using rule 49 (ARITHMETIC_EXP -> VALUE .)
-    GE              reduce using rule 49 (ARITHMETIC_EXP -> VALUE .)
-    NE              reduce using rule 49 (ARITHMETIC_EXP -> VALUE .)
-    EQ              reduce using rule 49 (ARITHMETIC_EXP -> VALUE .)
-    )               reduce using rule 49 (ARITHMETIC_EXP -> VALUE .)
-    :               reduce using rule 49 (ARITHMETIC_EXP -> VALUE .)
-    {               reduce using rule 49 (ARITHMETIC_EXP -> VALUE .)
-    BREAK           reduce using rule 49 (ARITHMETIC_EXP -> VALUE .)
-    CONTINUE        reduce using rule 49 (ARITHMETIC_EXP -> VALUE .)
-    ID              reduce using rule 49 (ARITHMETIC_EXP -> VALUE .)
-    IF              reduce using rule 49 (ARITHMETIC_EXP -> VALUE .)
-    WHILE           reduce using rule 49 (ARITHMETIC_EXP -> VALUE .)
-    FOR             reduce using rule 49 (ARITHMETIC_EXP -> VALUE .)
-    PRINT           reduce using rule 49 (ARITHMETIC_EXP -> VALUE .)
-    RETURN          reduce using rule 49 (ARITHMETIC_EXP -> VALUE .)
-    '               shift and go to state 59
-
-
-state 49
-
-    (44) ARITHMETIC_OP_UNARY -> + .
-
-    (               reduce using rule 44 (ARITHMETIC_OP_UNARY -> + .)
-    +               reduce using rule 44 (ARITHMETIC_OP_UNARY -> + .)
-    -               reduce using rule 44 (ARITHMETIC_OP_UNARY -> + .)
-    INTNUM          reduce using rule 44 (ARITHMETIC_OP_UNARY -> + .)
-    FLOATNUM        reduce using rule 44 (ARITHMETIC_OP_UNARY -> + .)
-    ID              reduce using rule 44 (ARITHMETIC_OP_UNARY -> + .)
-    STRING          reduce using rule 44 (ARITHMETIC_OP_UNARY -> + .)
-    EYE             reduce using rule 44 (ARITHMETIC_OP_UNARY -> + .)
-    ZEROS           reduce using rule 44 (ARITHMETIC_OP_UNARY -> + .)
-    ONES            reduce using rule 44 (ARITHMETIC_OP_UNARY -> + .)
-    [               reduce using rule 44 (ARITHMETIC_OP_UNARY -> + .)
-
-
-state 50
-
-    (45) ARITHMETIC_OP_UNARY -> - .
-
-    (               reduce using rule 45 (ARITHMETIC_OP_UNARY -> - .)
-    +               reduce using rule 45 (ARITHMETIC_OP_UNARY -> - .)
-    -               reduce using rule 45 (ARITHMETIC_OP_UNARY -> - .)
-    INTNUM          reduce using rule 45 (ARITHMETIC_OP_UNARY -> - .)
-    FLOATNUM        reduce using rule 45 (ARITHMETIC_OP_UNARY -> - .)
-    ID              reduce using rule 45 (ARITHMETIC_OP_UNARY -> - .)
-    STRING          reduce using rule 45 (ARITHMETIC_OP_UNARY -> - .)
-    EYE             reduce using rule 45 (ARITHMETIC_OP_UNARY -> - .)
-    ZEROS           reduce using rule 45 (ARITHMETIC_OP_UNARY -> - .)
-    ONES            reduce using rule 45 (ARITHMETIC_OP_UNARY -> - .)
-    [               reduce using rule 45 (ARITHMETIC_OP_UNARY -> - .)
-
-
-state 51
-
-    (53) ASSIGN_EXP -> ID [ LIST_VALUE . ] ASSIGN_OP ARITHMETIC_EXP ;
-
-    ]               shift and go to state 78
-
-
-state 52
-
-    (51) RELATION_EXP -> ( . RELATION_EXP )
-    (47) ARITHMETIC_EXP -> ( . ARITHMETIC_EXP )
-    (50) RELATION_EXP -> . ARITHMETIC_EXP RELATION_OP ARITHMETIC_EXP
-    (51) RELATION_EXP -> . ( RELATION_EXP )
-    (46) ARITHMETIC_EXP -> . ARITHMETIC_EXP ARITHMETIC_OP ARITHMETIC_EXP
-    (47) ARITHMETIC_EXP -> . ( ARITHMETIC_EXP )
-    (48) ARITHMETIC_EXP -> . ARITHMETIC_OP_UNARY ARITHMETIC_EXP
-    (49) ARITHMETIC_EXP -> . VALUE
-    (44) ARITHMETIC_OP_UNARY -> . +
-    (45) ARITHMETIC_OP_UNARY -> . -
-    (13) VALUE -> . INTNUM
-    (14) VALUE -> . FLOATNUM
-    (15) VALUE -> . ID
-    (16) VALUE -> . STRING
-    (17) VALUE -> . EYE ( ARITHMETIC_EXP )
-    (18) VALUE -> . ZEROS ( ARITHMETIC_EXP )
-    (19) VALUE -> . ONES ( ARITHMETIC_EXP )
-    (20) VALUE -> . VECTOR
-    (21) VALUE -> . ID VECTOR
-    (22) VALUE -> . VALUE '
-    (12) VECTOR -> . [ LIST_VALUE ]
-
-    (               shift and go to state 52
-    +               shift and go to state 49
-    -               shift and go to state 50
-    INTNUM          shift and go to state 34
-    FLOATNUM        shift and go to state 35
-    ID              shift and go to state 36
-    STRING          shift and go to state 37
-    EYE             shift and go to state 38
-    ZEROS           shift and go to state 39
-    ONES            shift and go to state 40
-    [               shift and go to state 42
-
-    RELATION_EXP                   shift and go to state 79
-    ARITHMETIC_EXP                 shift and go to state 80
-    ARITHMETIC_OP_UNARY            shift and go to state 47
-    VALUE                          shift and go to state 48
-    VECTOR                         shift and go to state 41
-
-state 53
-
-    (54) IF_INSTRUCTION -> IF ( RELATION_EXP . ) INSTRUCTION
-    (55) IF_INSTRUCTION -> IF ( RELATION_EXP . ) INSTRUCTION ELSE INSTRUCTION
-
-    )               shift and go to state 81
-
-
-state 54
-
-    (50) RELATION_EXP -> ARITHMETIC_EXP . RELATION_OP ARITHMETIC_EXP
-    (46) ARITHMETIC_EXP -> ARITHMETIC_EXP . ARITHMETIC_OP ARITHMETIC_EXP
-    (38) RELATION_OP -> . GT
-    (39) RELATION_OP -> . LT
-    (40) RELATION_OP -> . LE
-    (41) RELATION_OP -> . GE
-    (42) RELATION_OP -> . NE
-    (43) RELATION_OP -> . EQ
-    (25) ARITHMETIC_OP -> . +
-    (26) ARITHMETIC_OP -> . -
-    (27) ARITHMETIC_OP -> . *
-    (28) ARITHMETIC_OP -> . /
-    (29) ARITHMETIC_OP -> . DOTADD
-    (30) ARITHMETIC_OP -> . DOTSUB
-    (31) ARITHMETIC_OP -> . DOTMUL
-    (32) ARITHMETIC_OP -> . DOTDIV
-
-    GT              shift and go to state 83
-    LT              shift and go to state 84
-    LE              shift and go to state 85
-    GE              shift and go to state 86
-    NE              shift and go to state 87
-    EQ              shift and go to state 88
-    +               shift and go to state 68
-    -               shift and go to state 69
-    *               shift and go to state 70
-    /               shift and go to state 71
-    DOTADD          shift and go to state 72
-    DOTSUB          shift and go to state 73
-    DOTMUL          shift and go to state 74
-    DOTDIV          shift and go to state 75
-
-    RELATION_OP                    shift and go to state 82
-    ARITHMETIC_OP                  shift and go to state 67
-
-state 55
-
-    (56) WHILE_INSTRUCTION -> WHILE ( RELATION_EXP . ) INSTRUCTION
-
-    )               shift and go to state 89
-
-
-state 56
-
-    (57) FOR_INSTRUCTION -> FOR ID = . ARITHMETIC_EXP : ARITHMETIC_EXP INSTRUCTION
-    (46) ARITHMETIC_EXP -> . ARITHMETIC_EXP ARITHMETIC_OP ARITHMETIC_EXP
-    (47) ARITHMETIC_EXP -> . ( ARITHMETIC_EXP )
-    (48) ARITHMETIC_EXP -> . ARITHMETIC_OP_UNARY ARITHMETIC_EXP
-    (49) ARITHMETIC_EXP -> . VALUE
-    (44) ARITHMETIC_OP_UNARY -> . +
-    (45) ARITHMETIC_OP_UNARY -> . -
-    (13) VALUE -> . INTNUM
-    (14) VALUE -> . FLOATNUM
-    (15) VALUE -> . ID
-    (16) VALUE -> . STRING
-    (17) VALUE -> . EYE ( ARITHMETIC_EXP )
-    (18) VALUE -> . ZEROS ( ARITHMETIC_EXP )
-    (19) VALUE -> . ONES ( ARITHMETIC_EXP )
-    (20) VALUE -> . VECTOR
-    (21) VALUE -> . ID VECTOR
-    (22) VALUE -> . VALUE '
-    (12) VECTOR -> . [ LIST_VALUE ]
-
-    (               shift and go to state 46
-    +               shift and go to state 49
-    -               shift and go to state 50
-    INTNUM          shift and go to state 34
-    FLOATNUM        shift and go to state 35
-    ID              shift and go to state 36
-    STRING          shift and go to state 37
-    EYE             shift and go to state 38
-    ZEROS           shift and go to state 39
-    ONES            shift and go to state 40
-    [               shift and go to state 42
-
-    ARITHMETIC_EXP                 shift and go to state 90
-    ARITHMETIC_OP_UNARY            shift and go to state 47
-    VALUE                          shift and go to state 48
-    VECTOR                         shift and go to state 41
-
-state 57
-
-    (58) PRINT_FUN -> PRINT LIST_VALUE ; .
-
-    {               reduce using rule 58 (PRINT_FUN -> PRINT LIST_VALUE ; .)
-    BREAK           reduce using rule 58 (PRINT_FUN -> PRINT LIST_VALUE ; .)
-    CONTINUE        reduce using rule 58 (PRINT_FUN -> PRINT LIST_VALUE ; .)
-    ID              reduce using rule 58 (PRINT_FUN -> PRINT LIST_VALUE ; .)
-    IF              reduce using rule 58 (PRINT_FUN -> PRINT LIST_VALUE ; .)
-    WHILE           reduce using rule 58 (PRINT_FUN -> PRINT LIST_VALUE ; .)
-    FOR             reduce using rule 58 (PRINT_FUN -> PRINT LIST_VALUE ; .)
-    PRINT           reduce using rule 58 (PRINT_FUN -> PRINT LIST_VALUE ; .)
-    RETURN          reduce using rule 58 (PRINT_FUN -> PRINT LIST_VALUE ; .)
-    $end            reduce using rule 58 (PRINT_FUN -> PRINT LIST_VALUE ; .)
-    }               reduce using rule 58 (PRINT_FUN -> PRINT LIST_VALUE ; .)
-    ELSE            reduce using rule 58 (PRINT_FUN -> PRINT LIST_VALUE ; .)
-
-
-state 58
-
-    (24) LIST_VALUE -> VALUE , . LIST_VALUE
-    (23) LIST_VALUE -> . VALUE
-    (24) LIST_VALUE -> . VALUE , LIST_VALUE
-    (13) VALUE -> . INTNUM
-    (14) VALUE -> . FLOATNUM
-    (15) VALUE -> . ID
-    (16) VALUE -> . STRING
-    (17) VALUE -> . EYE ( ARITHMETIC_EXP )
-    (18) VALUE -> . ZEROS ( ARITHMETIC_EXP )
-    (19) VALUE -> . ONES ( ARITHMETIC_EXP )
-    (20) VALUE -> . VECTOR
-    (21) VALUE -> . ID VECTOR
-    (22) VALUE -> . VALUE '
-    (12) VECTOR -> . [ LIST_VALUE ]
-
-    INTNUM          shift and go to state 34
-    FLOATNUM        shift and go to state 35
-    ID              shift and go to state 36
-    STRING          shift and go to state 37
-    EYE             shift and go to state 38
-    ZEROS           shift and go to state 39
-    ONES            shift and go to state 40
-    [               shift and go to state 42
-
-    VALUE                          shift and go to state 33
-    LIST_VALUE                     shift and go to state 91
-    VECTOR                         shift and go to state 41
-
-state 59
-
-    (22) VALUE -> VALUE ' .
-
-    ,               reduce using rule 22 (VALUE -> VALUE ' .)
-    '               reduce using rule 22 (VALUE -> VALUE ' .)
-    ;               reduce using rule 22 (VALUE -> VALUE ' .)
-    +               reduce using rule 22 (VALUE -> VALUE ' .)
-    -               reduce using rule 22 (VALUE -> VALUE ' .)
-    *               reduce using rule 22 (VALUE -> VALUE ' .)
-    /               reduce using rule 22 (VALUE -> VALUE ' .)
-    DOTADD          reduce using rule 22 (VALUE -> VALUE ' .)
-    DOTSUB          reduce using rule 22 (VALUE -> VALUE ' .)
-    DOTMUL          reduce using rule 22 (VALUE -> VALUE ' .)
-    DOTDIV          reduce using rule 22 (VALUE -> VALUE ' .)
-    ]               reduce using rule 22 (VALUE -> VALUE ' .)
-    GT              reduce using rule 22 (VALUE -> VALUE ' .)
-    LT              reduce using rule 22 (VALUE -> VALUE ' .)
-    LE              reduce using rule 22 (VALUE -> VALUE ' .)
-    GE              reduce using rule 22 (VALUE -> VALUE ' .)
-    NE              reduce using rule 22 (VALUE -> VALUE ' .)
-    EQ              reduce using rule 22 (VALUE -> VALUE ' .)
-    )               reduce using rule 22 (VALUE -> VALUE ' .)
-    :               reduce using rule 22 (VALUE -> VALUE ' .)
-    {               reduce using rule 22 (VALUE -> VALUE ' .)
-    BREAK           reduce using rule 22 (VALUE -> VALUE ' .)
-    CONTINUE        reduce using rule 22 (VALUE -> VALUE ' .)
-    ID              reduce using rule 22 (VALUE -> VALUE ' .)
-    IF              reduce using rule 22 (VALUE -> VALUE ' .)
-    WHILE           reduce using rule 22 (VALUE -> VALUE ' .)
-    FOR             reduce using rule 22 (VALUE -> VALUE ' .)
-    PRINT           reduce using rule 22 (VALUE -> VALUE ' .)
-    RETURN          reduce using rule 22 (VALUE -> VALUE ' .)
-
-
-state 60
-
-    (21) VALUE -> ID VECTOR .
-
-    ,               reduce using rule 21 (VALUE -> ID VECTOR .)
-    '               reduce using rule 21 (VALUE -> ID VECTOR .)
-    ;               reduce using rule 21 (VALUE -> ID VECTOR .)
-    +               reduce using rule 21 (VALUE -> ID VECTOR .)
-    -               reduce using rule 21 (VALUE -> ID VECTOR .)
-    *               reduce using rule 21 (VALUE -> ID VECTOR .)
-    /               reduce using rule 21 (VALUE -> ID VECTOR .)
-    DOTADD          reduce using rule 21 (VALUE -> ID VECTOR .)
-    DOTSUB          reduce using rule 21 (VALUE -> ID VECTOR .)
-    DOTMUL          reduce using rule 21 (VALUE -> ID VECTOR .)
-    DOTDIV          reduce using rule 21 (VALUE -> ID VECTOR .)
-    ]               reduce using rule 21 (VALUE -> ID VECTOR .)
-    GT              reduce using rule 21 (VALUE -> ID VECTOR .)
-    LT              reduce using rule 21 (VALUE -> ID VECTOR .)
-    LE              reduce using rule 21 (VALUE -> ID VECTOR .)
-    GE              reduce using rule 21 (VALUE -> ID VECTOR .)
-    NE              reduce using rule 21 (VALUE -> ID VECTOR .)
-    EQ              reduce using rule 21 (VALUE -> ID VECTOR .)
-    )               reduce using rule 21 (VALUE -> ID VECTOR .)
-    :               reduce using rule 21 (VALUE -> ID VECTOR .)
-    {               reduce using rule 21 (VALUE -> ID VECTOR .)
-    BREAK           reduce using rule 21 (VALUE -> ID VECTOR .)
-    CONTINUE        reduce using rule 21 (VALUE -> ID VECTOR .)
-    ID              reduce using rule 21 (VALUE -> ID VECTOR .)
-    IF              reduce using rule 21 (VALUE -> ID VECTOR .)
-    WHILE           reduce using rule 21 (VALUE -> ID VECTOR .)
-    FOR             reduce using rule 21 (VALUE -> ID VECTOR .)
-    PRINT           reduce using rule 21 (VALUE -> ID VECTOR .)
-    RETURN          reduce using rule 21 (VALUE -> ID VECTOR .)
-
-
-state 61
-
-    (17) VALUE -> EYE ( . ARITHMETIC_EXP )
-    (46) ARITHMETIC_EXP -> . ARITHMETIC_EXP ARITHMETIC_OP ARITHMETIC_EXP
-    (47) ARITHMETIC_EXP -> . ( ARITHMETIC_EXP )
-    (48) ARITHMETIC_EXP -> . ARITHMETIC_OP_UNARY ARITHMETIC_EXP
-    (49) ARITHMETIC_EXP -> . VALUE
-    (44) ARITHMETIC_OP_UNARY -> . +
-    (45) ARITHMETIC_OP_UNARY -> . -
-    (13) VALUE -> . INTNUM
-    (14) VALUE -> . FLOATNUM
-    (15) VALUE -> . ID
-    (16) VALUE -> . STRING
-    (17) VALUE -> . EYE ( ARITHMETIC_EXP )
-    (18) VALUE -> . ZEROS ( ARITHMETIC_EXP )
-    (19) VALUE -> . ONES ( ARITHMETIC_EXP )
-    (20) VALUE -> . VECTOR
-    (21) VALUE -> . ID VECTOR
-    (22) VALUE -> . VALUE '
-    (12) VECTOR -> . [ LIST_VALUE ]
-
-    (               shift and go to state 46
-    +               shift and go to state 49
-    -               shift and go to state 50
-    INTNUM          shift and go to state 34
-    FLOATNUM        shift and go to state 35
-    ID              shift and go to state 36
-    STRING          shift and go to state 37
-    EYE             shift and go to state 38
-    ZEROS           shift and go to state 39
-    ONES            shift and go to state 40
-    [               shift and go to state 42
-
-    ARITHMETIC_EXP                 shift and go to state 92
-    ARITHMETIC_OP_UNARY            shift and go to state 47
-    VALUE                          shift and go to state 48
-    VECTOR                         shift and go to state 41
-
-state 62
-
-    (18) VALUE -> ZEROS ( . ARITHMETIC_EXP )
-    (46) ARITHMETIC_EXP -> . ARITHMETIC_EXP ARITHMETIC_OP ARITHMETIC_EXP
-    (47) ARITHMETIC_EXP -> . ( ARITHMETIC_EXP )
-    (48) ARITHMETIC_EXP -> . ARITHMETIC_OP_UNARY ARITHMETIC_EXP
-    (49) ARITHMETIC_EXP -> . VALUE
-    (44) ARITHMETIC_OP_UNARY -> . +
-    (45) ARITHMETIC_OP_UNARY -> . -
-    (13) VALUE -> . INTNUM
-    (14) VALUE -> . FLOATNUM
-    (15) VALUE -> . ID
-    (16) VALUE -> . STRING
-    (17) VALUE -> . EYE ( ARITHMETIC_EXP )
-    (18) VALUE -> . ZEROS ( ARITHMETIC_EXP )
-    (19) VALUE -> . ONES ( ARITHMETIC_EXP )
-    (20) VALUE -> . VECTOR
-    (21) VALUE -> . ID VECTOR
-    (22) VALUE -> . VALUE '
-    (12) VECTOR -> . [ LIST_VALUE ]
-
-    (               shift and go to state 46
-    +               shift and go to state 49
-    -               shift and go to state 50
-    INTNUM          shift and go to state 34
-    FLOATNUM        shift and go to state 35
-    ID              shift and go to state 36
-    STRING          shift and go to state 37
-    EYE             shift and go to state 38
-    ZEROS           shift and go to state 39
-    ONES            shift and go to state 40
-    [               shift and go to state 42
-
-    ARITHMETIC_EXP                 shift and go to state 93
-    ARITHMETIC_OP_UNARY            shift and go to state 47
-    VALUE                          shift and go to state 48
-    VECTOR                         shift and go to state 41
-
-state 63
-
-    (19) VALUE -> ONES ( . ARITHMETIC_EXP )
-    (46) ARITHMETIC_EXP -> . ARITHMETIC_EXP ARITHMETIC_OP ARITHMETIC_EXP
-    (47) ARITHMETIC_EXP -> . ( ARITHMETIC_EXP )
-    (48) ARITHMETIC_EXP -> . ARITHMETIC_OP_UNARY ARITHMETIC_EXP
-    (49) ARITHMETIC_EXP -> . VALUE
-    (44) ARITHMETIC_OP_UNARY -> . +
-    (45) ARITHMETIC_OP_UNARY -> . -
-    (13) VALUE -> . INTNUM
-    (14) VALUE -> . FLOATNUM
-    (15) VALUE -> . ID
-    (16) VALUE -> . STRING
-    (17) VALUE -> . EYE ( ARITHMETIC_EXP )
-    (18) VALUE -> . ZEROS ( ARITHMETIC_EXP )
-    (19) VALUE -> . ONES ( ARITHMETIC_EXP )
-    (20) VALUE -> . VECTOR
-    (21) VALUE -> . ID VECTOR
-    (22) VALUE -> . VALUE '
-    (12) VECTOR -> . [ LIST_VALUE ]
-
-    (               shift and go to state 46
-    +               shift and go to state 49
-    -               shift and go to state 50
-    INTNUM          shift and go to state 34
-    FLOATNUM        shift and go to state 35
-    ID              shift and go to state 36
-    STRING          shift and go to state 37
-    EYE             shift and go to state 38
-    ZEROS           shift and go to state 39
-    ONES            shift and go to state 40
-    [               shift and go to state 42
-
-    ARITHMETIC_EXP                 shift and go to state 94
-    ARITHMETIC_OP_UNARY            shift and go to state 47
-    VALUE                          shift and go to state 48
-    VECTOR                         shift and go to state 41
-
-state 64
-
-    (12) VECTOR -> [ LIST_VALUE . ]
-
-    ]               shift and go to state 95
-
-
-state 65
-
-    (59) RETURN_FUN -> RETURN LIST_VALUE ; .
-
-    {               reduce using rule 59 (RETURN_FUN -> RETURN LIST_VALUE ; .)
-    BREAK           reduce using rule 59 (RETURN_FUN -> RETURN LIST_VALUE ; .)
-    CONTINUE        reduce using rule 59 (RETURN_FUN -> RETURN LIST_VALUE ; .)
-    ID              reduce using rule 59 (RETURN_FUN -> RETURN LIST_VALUE ; .)
-    IF              reduce using rule 59 (RETURN_FUN -> RETURN LIST_VALUE ; .)
-    WHILE           reduce using rule 59 (RETURN_FUN -> RETURN LIST_VALUE ; .)
-    FOR             reduce using rule 59 (RETURN_FUN -> RETURN LIST_VALUE ; .)
-    PRINT           reduce using rule 59 (RETURN_FUN -> RETURN LIST_VALUE ; .)
-    RETURN          reduce using rule 59 (RETURN_FUN -> RETURN LIST_VALUE ; .)
-    $end            reduce using rule 59 (RETURN_FUN -> RETURN LIST_VALUE ; .)
-    }               reduce using rule 59 (RETURN_FUN -> RETURN LIST_VALUE ; .)
-    ELSE            reduce using rule 59 (RETURN_FUN -> RETURN LIST_VALUE ; .)
-
-
-state 66
-
-    (52) ASSIGN_EXP -> ID ASSIGN_OP ARITHMETIC_EXP ; .
-
-    {               reduce using rule 52 (ASSIGN_EXP -> ID ASSIGN_OP ARITHMETIC_EXP ; .)
-    BREAK           reduce using rule 52 (ASSIGN_EXP -> ID ASSIGN_OP ARITHMETIC_EXP ; .)
-    CONTINUE        reduce using rule 52 (ASSIGN_EXP -> ID ASSIGN_OP ARITHMETIC_EXP ; .)
-    ID              reduce using rule 52 (ASSIGN_EXP -> ID ASSIGN_OP ARITHMETIC_EXP ; .)
-    IF              reduce using rule 52 (ASSIGN_EXP -> ID ASSIGN_OP ARITHMETIC_EXP ; .)
-    WHILE           reduce using rule 52 (ASSIGN_EXP -> ID ASSIGN_OP ARITHMETIC_EXP ; .)
-    FOR             reduce using rule 52 (ASSIGN_EXP -> ID ASSIGN_OP ARITHMETIC_EXP ; .)
-    PRINT           reduce using rule 52 (ASSIGN_EXP -> ID ASSIGN_OP ARITHMETIC_EXP ; .)
-    RETURN          reduce using rule 52 (ASSIGN_EXP -> ID ASSIGN_OP ARITHMETIC_EXP ; .)
-    $end            reduce using rule 52 (ASSIGN_EXP -> ID ASSIGN_OP ARITHMETIC_EXP ; .)
-    }               reduce using rule 52 (ASSIGN_EXP -> ID ASSIGN_OP ARITHMETIC_EXP ; .)
-    ELSE            reduce using rule 52 (ASSIGN_EXP -> ID ASSIGN_OP ARITHMETIC_EXP ; .)
-
-
-state 67
-
-    (46) ARITHMETIC_EXP -> ARITHMETIC_EXP ARITHMETIC_OP . ARITHMETIC_EXP
-    (46) ARITHMETIC_EXP -> . ARITHMETIC_EXP ARITHMETIC_OP ARITHMETIC_EXP
-    (47) ARITHMETIC_EXP -> . ( ARITHMETIC_EXP )
-    (48) ARITHMETIC_EXP -> . ARITHMETIC_OP_UNARY ARITHMETIC_EXP
-    (49) ARITHMETIC_EXP -> . VALUE
-    (44) ARITHMETIC_OP_UNARY -> . +
-    (45) ARITHMETIC_OP_UNARY -> . -
-    (13) VALUE -> . INTNUM
-    (14) VALUE -> . FLOATNUM
-    (15) VALUE -> . ID
-    (16) VALUE -> . STRING
-    (17) VALUE -> . EYE ( ARITHMETIC_EXP )
-    (18) VALUE -> . ZEROS ( ARITHMETIC_EXP )
-    (19) VALUE -> . ONES ( ARITHMETIC_EXP )
-    (20) VALUE -> . VECTOR
-    (21) VALUE -> . ID VECTOR
-    (22) VALUE -> . VALUE '
-    (12) VECTOR -> . [ LIST_VALUE ]
-
-    (               shift and go to state 46
-    +               shift and go to state 49
-    -               shift and go to state 50
-    INTNUM          shift and go to state 34
-    FLOATNUM        shift and go to state 35
-    ID              shift and go to state 36
-    STRING          shift and go to state 37
-    EYE             shift and go to state 38
-    ZEROS           shift and go to state 39
-    ONES            shift and go to state 40
-    [               shift and go to state 42
-
-    ARITHMETIC_EXP                 shift and go to state 96
-    ARITHMETIC_OP_UNARY            shift and go to state 47
-    VALUE                          shift and go to state 48
-    VECTOR                         shift and go to state 41
-
-state 68
-
-    (25) ARITHMETIC_OP -> + .
-
-    (               reduce using rule 25 (ARITHMETIC_OP -> + .)
-    +               reduce using rule 25 (ARITHMETIC_OP -> + .)
-    -               reduce using rule 25 (ARITHMETIC_OP -> + .)
-    INTNUM          reduce using rule 25 (ARITHMETIC_OP -> + .)
-    FLOATNUM        reduce using rule 25 (ARITHMETIC_OP -> + .)
-    ID              reduce using rule 25 (ARITHMETIC_OP -> + .)
-    STRING          reduce using rule 25 (ARITHMETIC_OP -> + .)
-    EYE             reduce using rule 25 (ARITHMETIC_OP -> + .)
-    ZEROS           reduce using rule 25 (ARITHMETIC_OP -> + .)
-    ONES            reduce using rule 25 (ARITHMETIC_OP -> + .)
-    [               reduce using rule 25 (ARITHMETIC_OP -> + .)
-
-
-state 69
-
-    (26) ARITHMETIC_OP -> - .
-
-    (               reduce using rule 26 (ARITHMETIC_OP -> - .)
-    +               reduce using rule 26 (ARITHMETIC_OP -> - .)
-    -               reduce using rule 26 (ARITHMETIC_OP -> - .)
-    INTNUM          reduce using rule 26 (ARITHMETIC_OP -> - .)
-    FLOATNUM        reduce using rule 26 (ARITHMETIC_OP -> - .)
-    ID              reduce using rule 26 (ARITHMETIC_OP -> - .)
-    STRING          reduce using rule 26 (ARITHMETIC_OP -> - .)
-    EYE             reduce using rule 26 (ARITHMETIC_OP -> - .)
-    ZEROS           reduce using rule 26 (ARITHMETIC_OP -> - .)
-    ONES            reduce using rule 26 (ARITHMETIC_OP -> - .)
-    [               reduce using rule 26 (ARITHMETIC_OP -> - .)
-
-
-state 70
-
-    (27) ARITHMETIC_OP -> * .
-
-    (               reduce using rule 27 (ARITHMETIC_OP -> * .)
-    +               reduce using rule 27 (ARITHMETIC_OP -> * .)
-    -               reduce using rule 27 (ARITHMETIC_OP -> * .)
-    INTNUM          reduce using rule 27 (ARITHMETIC_OP -> * .)
-    FLOATNUM        reduce using rule 27 (ARITHMETIC_OP -> * .)
-    ID              reduce using rule 27 (ARITHMETIC_OP -> * .)
-    STRING          reduce using rule 27 (ARITHMETIC_OP -> * .)
-    EYE             reduce using rule 27 (ARITHMETIC_OP -> * .)
-    ZEROS           reduce using rule 27 (ARITHMETIC_OP -> * .)
-    ONES            reduce using rule 27 (ARITHMETIC_OP -> * .)
-    [               reduce using rule 27 (ARITHMETIC_OP -> * .)
-
-
-state 71
-
-    (28) ARITHMETIC_OP -> / .
-
-    (               reduce using rule 28 (ARITHMETIC_OP -> / .)
-    +               reduce using rule 28 (ARITHMETIC_OP -> / .)
-    -               reduce using rule 28 (ARITHMETIC_OP -> / .)
-    INTNUM          reduce using rule 28 (ARITHMETIC_OP -> / .)
-    FLOATNUM        reduce using rule 28 (ARITHMETIC_OP -> / .)
-    ID              reduce using rule 28 (ARITHMETIC_OP -> / .)
-    STRING          reduce using rule 28 (ARITHMETIC_OP -> / .)
-    EYE             reduce using rule 28 (ARITHMETIC_OP -> / .)
-    ZEROS           reduce using rule 28 (ARITHMETIC_OP -> / .)
-    ONES            reduce using rule 28 (ARITHMETIC_OP -> / .)
-    [               reduce using rule 28 (ARITHMETIC_OP -> / .)
-
-
-state 72
-
-    (29) ARITHMETIC_OP -> DOTADD .
-
-    (               reduce using rule 29 (ARITHMETIC_OP -> DOTADD .)
-    +               reduce using rule 29 (ARITHMETIC_OP -> DOTADD .)
-    -               reduce using rule 29 (ARITHMETIC_OP -> DOTADD .)
-    INTNUM          reduce using rule 29 (ARITHMETIC_OP -> DOTADD .)
-    FLOATNUM        reduce using rule 29 (ARITHMETIC_OP -> DOTADD .)
-    ID              reduce using rule 29 (ARITHMETIC_OP -> DOTADD .)
-    STRING          reduce using rule 29 (ARITHMETIC_OP -> DOTADD .)
-    EYE             reduce using rule 29 (ARITHMETIC_OP -> DOTADD .)
-    ZEROS           reduce using rule 29 (ARITHMETIC_OP -> DOTADD .)
-    ONES            reduce using rule 29 (ARITHMETIC_OP -> DOTADD .)
-    [               reduce using rule 29 (ARITHMETIC_OP -> DOTADD .)
-
-
-state 73
-
-    (30) ARITHMETIC_OP -> DOTSUB .
-
-    (               reduce using rule 30 (ARITHMETIC_OP -> DOTSUB .)
-    +               reduce using rule 30 (ARITHMETIC_OP -> DOTSUB .)
-    -               reduce using rule 30 (ARITHMETIC_OP -> DOTSUB .)
-    INTNUM          reduce using rule 30 (ARITHMETIC_OP -> DOTSUB .)
-    FLOATNUM        reduce using rule 30 (ARITHMETIC_OP -> DOTSUB .)
-    ID              reduce using rule 30 (ARITHMETIC_OP -> DOTSUB .)
-    STRING          reduce using rule 30 (ARITHMETIC_OP -> DOTSUB .)
-    EYE             reduce using rule 30 (ARITHMETIC_OP -> DOTSUB .)
-    ZEROS           reduce using rule 30 (ARITHMETIC_OP -> DOTSUB .)
-    ONES            reduce using rule 30 (ARITHMETIC_OP -> DOTSUB .)
-    [               reduce using rule 30 (ARITHMETIC_OP -> DOTSUB .)
-
-
-state 74
-
-    (31) ARITHMETIC_OP -> DOTMUL .
-
-    (               reduce using rule 31 (ARITHMETIC_OP -> DOTMUL .)
-    +               reduce using rule 31 (ARITHMETIC_OP -> DOTMUL .)
-    -               reduce using rule 31 (ARITHMETIC_OP -> DOTMUL .)
-    INTNUM          reduce using rule 31 (ARITHMETIC_OP -> DOTMUL .)
-    FLOATNUM        reduce using rule 31 (ARITHMETIC_OP -> DOTMUL .)
-    ID              reduce using rule 31 (ARITHMETIC_OP -> DOTMUL .)
-    STRING          reduce using rule 31 (ARITHMETIC_OP -> DOTMUL .)
-    EYE             reduce using rule 31 (ARITHMETIC_OP -> DOTMUL .)
-    ZEROS           reduce using rule 31 (ARITHMETIC_OP -> DOTMUL .)
-    ONES            reduce using rule 31 (ARITHMETIC_OP -> DOTMUL .)
-    [               reduce using rule 31 (ARITHMETIC_OP -> DOTMUL .)
-
-
-state 75
-
-    (32) ARITHMETIC_OP -> DOTDIV .
-
-    (               reduce using rule 32 (ARITHMETIC_OP -> DOTDIV .)
-    +               reduce using rule 32 (ARITHMETIC_OP -> DOTDIV .)
-    -               reduce using rule 32 (ARITHMETIC_OP -> DOTDIV .)
-    INTNUM          reduce using rule 32 (ARITHMETIC_OP -> DOTDIV .)
-    FLOATNUM        reduce using rule 32 (ARITHMETIC_OP -> DOTDIV .)
-    ID              reduce using rule 32 (ARITHMETIC_OP -> DOTDIV .)
-    STRING          reduce using rule 32 (ARITHMETIC_OP -> DOTDIV .)
-    EYE             reduce using rule 32 (ARITHMETIC_OP -> DOTDIV .)
-    ZEROS           reduce using rule 32 (ARITHMETIC_OP -> DOTDIV .)
-    ONES            reduce using rule 32 (ARITHMETIC_OP -> DOTDIV .)
-    [               reduce using rule 32 (ARITHMETIC_OP -> DOTDIV .)
-
-
-state 76
-
-    (47) ARITHMETIC_EXP -> ( ARITHMETIC_EXP . )
-    (46) ARITHMETIC_EXP -> ARITHMETIC_EXP . ARITHMETIC_OP ARITHMETIC_EXP
-    (25) ARITHMETIC_OP -> . +
-    (26) ARITHMETIC_OP -> . -
-    (27) ARITHMETIC_OP -> . *
-    (28) ARITHMETIC_OP -> . /
-    (29) ARITHMETIC_OP -> . DOTADD
-    (30) ARITHMETIC_OP -> . DOTSUB
-    (31) ARITHMETIC_OP -> . DOTMUL
-    (32) ARITHMETIC_OP -> . DOTDIV
-
-    )               shift and go to state 97
-    +               shift and go to state 68
-    -               shift and go to state 69
-    *               shift and go to state 70
-    /               shift and go to state 71
-    DOTADD          shift and go to state 72
-    DOTSUB          shift and go to state 73
-    DOTMUL          shift and go to state 74
-    DOTDIV          shift and go to state 75
-
-    ARITHMETIC_OP                  shift and go to state 67
-
-state 77
-
-    (48) ARITHMETIC_EXP -> ARITHMETIC_OP_UNARY ARITHMETIC_EXP .
-    (46) ARITHMETIC_EXP -> ARITHMETIC_EXP . ARITHMETIC_OP ARITHMETIC_EXP
-    (25) ARITHMETIC_OP -> . +
-    (26) ARITHMETIC_OP -> . -
-    (27) ARITHMETIC_OP -> . *
-    (28) ARITHMETIC_OP -> . /
-    (29) ARITHMETIC_OP -> . DOTADD
-    (30) ARITHMETIC_OP -> . DOTSUB
-    (31) ARITHMETIC_OP -> . DOTMUL
-    (32) ARITHMETIC_OP -> . DOTDIV
-
-    ;               reduce using rule 48 (ARITHMETIC_EXP -> ARITHMETIC_OP_UNARY ARITHMETIC_EXP .)
-    +               reduce using rule 48 (ARITHMETIC_EXP -> ARITHMETIC_OP_UNARY ARITHMETIC_EXP .)
-    -               reduce using rule 48 (ARITHMETIC_EXP -> ARITHMETIC_OP_UNARY ARITHMETIC_EXP .)
-    *               reduce using rule 48 (ARITHMETIC_EXP -> ARITHMETIC_OP_UNARY ARITHMETIC_EXP .)
-    /               reduce using rule 48 (ARITHMETIC_EXP -> ARITHMETIC_OP_UNARY ARITHMETIC_EXP .)
-    DOTADD          reduce using rule 48 (ARITHMETIC_EXP -> ARITHMETIC_OP_UNARY ARITHMETIC_EXP .)
-    DOTSUB          reduce using rule 48 (ARITHMETIC_EXP -> ARITHMETIC_OP_UNARY ARITHMETIC_EXP .)
-    DOTMUL          reduce using rule 48 (ARITHMETIC_EXP -> ARITHMETIC_OP_UNARY ARITHMETIC_EXP .)
-    DOTDIV          reduce using rule 48 (ARITHMETIC_EXP -> ARITHMETIC_OP_UNARY ARITHMETIC_EXP .)
-    GT              reduce using rule 48 (ARITHMETIC_EXP -> ARITHMETIC_OP_UNARY ARITHMETIC_EXP .)
-    LT              reduce using rule 48 (ARITHMETIC_EXP -> ARITHMETIC_OP_UNARY ARITHMETIC_EXP .)
-    LE              reduce using rule 48 (ARITHMETIC_EXP -> ARITHMETIC_OP_UNARY ARITHMETIC_EXP .)
-    GE              reduce using rule 48 (ARITHMETIC_EXP -> ARITHMETIC_OP_UNARY ARITHMETIC_EXP .)
-    NE              reduce using rule 48 (ARITHMETIC_EXP -> ARITHMETIC_OP_UNARY ARITHMETIC_EXP .)
-    EQ              reduce using rule 48 (ARITHMETIC_EXP -> ARITHMETIC_OP_UNARY ARITHMETIC_EXP .)
-    )               reduce using rule 48 (ARITHMETIC_EXP -> ARITHMETIC_OP_UNARY ARITHMETIC_EXP .)
-    :               reduce using rule 48 (ARITHMETIC_EXP -> ARITHMETIC_OP_UNARY ARITHMETIC_EXP .)
-    {               reduce using rule 48 (ARITHMETIC_EXP -> ARITHMETIC_OP_UNARY ARITHMETIC_EXP .)
-    BREAK           reduce using rule 48 (ARITHMETIC_EXP -> ARITHMETIC_OP_UNARY ARITHMETIC_EXP .)
-    CONTINUE        reduce using rule 48 (ARITHMETIC_EXP -> ARITHMETIC_OP_UNARY ARITHMETIC_EXP .)
-    ID              reduce using rule 48 (ARITHMETIC_EXP -> ARITHMETIC_OP_UNARY ARITHMETIC_EXP .)
-    IF              reduce using rule 48 (ARITHMETIC_EXP -> ARITHMETIC_OP_UNARY ARITHMETIC_EXP .)
-    WHILE           reduce using rule 48 (ARITHMETIC_EXP -> ARITHMETIC_OP_UNARY ARITHMETIC_EXP .)
-    FOR             reduce using rule 48 (ARITHMETIC_EXP -> ARITHMETIC_OP_UNARY ARITHMETIC_EXP .)
-    PRINT           reduce using rule 48 (ARITHMETIC_EXP -> ARITHMETIC_OP_UNARY ARITHMETIC_EXP .)
-    RETURN          reduce using rule 48 (ARITHMETIC_EXP -> ARITHMETIC_OP_UNARY ARITHMETIC_EXP .)
-
-  ! +               [ shift and go to state 68 ]
-  ! -               [ shift and go to state 69 ]
-  ! *               [ shift and go to state 70 ]
-  ! /               [ shift and go to state 71 ]
-  ! DOTADD          [ shift and go to state 72 ]
-  ! DOTSUB          [ shift and go to state 73 ]
-  ! DOTMUL          [ shift and go to state 74 ]
-  ! DOTDIV          [ shift and go to state 75 ]
-
-    ARITHMETIC_OP                  shift and go to state 67
-
-state 78
-
-    (53) ASSIGN_EXP -> ID [ LIST_VALUE ] . ASSIGN_OP ARITHMETIC_EXP ;
-    (33) ASSIGN_OP -> . ADDASSIGN
-    (34) ASSIGN_OP -> . SUBASSIGN
-    (35) ASSIGN_OP -> . MULASSIGN
-    (36) ASSIGN_OP -> . DIVASSIGN
-    (37) ASSIGN_OP -> . =
-
-    ADDASSIGN       shift and go to state 24
-    SUBASSIGN       shift and go to state 25
-    MULASSIGN       shift and go to state 26
-    DIVASSIGN       shift and go to state 27
-    =               shift and go to state 28
-
-    ASSIGN_OP                      shift and go to state 98
-
-state 79
-
-    (51) RELATION_EXP -> ( RELATION_EXP . )
-
-    )               shift and go to state 99
-
-
-state 80
-
-    (47) ARITHMETIC_EXP -> ( ARITHMETIC_EXP . )
-    (50) RELATION_EXP -> ARITHMETIC_EXP . RELATION_OP ARITHMETIC_EXP
-    (46) ARITHMETIC_EXP -> ARITHMETIC_EXP . ARITHMETIC_OP ARITHMETIC_EXP
-    (38) RELATION_OP -> . GT
-    (39) RELATION_OP -> . LT
-    (40) RELATION_OP -> . LE
-    (41) RELATION_OP -> . GE
-    (42) RELATION_OP -> . NE
-    (43) RELATION_OP -> . EQ
-    (25) ARITHMETIC_OP -> . +
-    (26) ARITHMETIC_OP -> . -
-    (27) ARITHMETIC_OP -> . *
-    (28) ARITHMETIC_OP -> . /
-    (29) ARITHMETIC_OP -> . DOTADD
-    (30) ARITHMETIC_OP -> . DOTSUB
-    (31) ARITHMETIC_OP -> . DOTMUL
-    (32) ARITHMETIC_OP -> . DOTDIV
-
-    )               shift and go to state 97
-    GT              shift and go to state 83
-    LT              shift and go to state 84
-    LE              shift and go to state 85
-    GE              shift and go to state 86
-    NE              shift and go to state 87
-    EQ              shift and go to state 88
-    +               shift and go to state 68
-    -               shift and go to state 69
-    *               shift and go to state 70
-    /               shift and go to state 71
-    DOTADD          shift and go to state 72
-    DOTSUB          shift and go to state 73
-    DOTMUL          shift and go to state 74
-    DOTDIV          shift and go to state 75
-
-    RELATION_OP                    shift and go to state 82
-    ARITHMETIC_OP                  shift and go to state 67
-
-state 81
-
-    (54) IF_INSTRUCTION -> IF ( RELATION_EXP ) . INSTRUCTION
-    (55) IF_INSTRUCTION -> IF ( RELATION_EXP ) . INSTRUCTION ELSE INSTRUCTION
-    (3) INSTRUCTION -> . { START }
-    (4) INSTRUCTION -> . ASSIGN_EXP
-    (5) INSTRUCTION -> . IF_INSTRUCTION
-    (6) INSTRUCTION -> . WHILE_INSTRUCTION
-    (7) INSTRUCTION -> . FOR_INSTRUCTION
-    (8) INSTRUCTION -> . PRINT_FUN
-    (9) INSTRUCTION -> . RETURN_FUN
-    (10) INSTRUCTION -> . BREAK ;
-    (11) INSTRUCTION -> . CONTINUE ;
-    (52) ASSIGN_EXP -> . ID ASSIGN_OP ARITHMETIC_EXP ;
-    (53) ASSIGN_EXP -> . ID [ LIST_VALUE ] ASSIGN_OP ARITHMETIC_EXP ;
-    (54) IF_INSTRUCTION -> . IF ( RELATION_EXP ) INSTRUCTION
-    (55) IF_INSTRUCTION -> . IF ( RELATION_EXP ) INSTRUCTION ELSE INSTRUCTION
-    (56) WHILE_INSTRUCTION -> . WHILE ( RELATION_EXP ) INSTRUCTION
-    (57) FOR_INSTRUCTION -> . FOR ID = ARITHMETIC_EXP : ARITHMETIC_EXP INSTRUCTION
-    (58) PRINT_FUN -> . PRINT LIST_VALUE ;
-    (59) RETURN_FUN -> . RETURN LIST_VALUE ;
-
-    {               shift and go to state 3
-    BREAK           shift and go to state 10
-    CONTINUE        shift and go to state 11
-    ID              shift and go to state 12
-    IF              shift and go to state 13
-    WHILE           shift and go to state 14
-    FOR             shift and go to state 15
-    PRINT           shift and go to state 16
-    RETURN          shift and go to state 17
-
-    INSTRUCTION                    shift and go to state 100
-    ASSIGN_EXP                     shift and go to state 4
-    IF_INSTRUCTION                 shift and go to state 5
-    WHILE_INSTRUCTION              shift and go to state 6
-    FOR_INSTRUCTION                shift and go to state 7
-    PRINT_FUN                      shift and go to state 8
-    RETURN_FUN                     shift and go to state 9
-
-state 82
-
-    (50) RELATION_EXP -> ARITHMETIC_EXP RELATION_OP . ARITHMETIC_EXP
-    (46) ARITHMETIC_EXP -> . ARITHMETIC_EXP ARITHMETIC_OP ARITHMETIC_EXP
-    (47) ARITHMETIC_EXP -> . ( ARITHMETIC_EXP )
-    (48) ARITHMETIC_EXP -> . ARITHMETIC_OP_UNARY ARITHMETIC_EXP
-    (49) ARITHMETIC_EXP -> . VALUE
-    (44) ARITHMETIC_OP_UNARY -> . +
-    (45) ARITHMETIC_OP_UNARY -> . -
-    (13) VALUE -> . INTNUM
-    (14) VALUE -> . FLOATNUM
-    (15) VALUE -> . ID
-    (16) VALUE -> . STRING
-    (17) VALUE -> . EYE ( ARITHMETIC_EXP )
-    (18) VALUE -> . ZEROS ( ARITHMETIC_EXP )
-    (19) VALUE -> . ONES ( ARITHMETIC_EXP )
-    (20) VALUE -> . VECTOR
-    (21) VALUE -> . ID VECTOR
-    (22) VALUE -> . VALUE '
-    (12) VECTOR -> . [ LIST_VALUE ]
-
-    (               shift and go to state 46
-    +               shift and go to state 49
-    -               shift and go to state 50
-    INTNUM          shift and go to state 34
-    FLOATNUM        shift and go to state 35
-    ID              shift and go to state 36
-    STRING          shift and go to state 37
-    EYE             shift and go to state 38
-    ZEROS           shift and go to state 39
-    ONES            shift and go to state 40
-    [               shift and go to state 42
-
-    ARITHMETIC_EXP                 shift and go to state 101
-    ARITHMETIC_OP_UNARY            shift and go to state 47
-    VALUE                          shift and go to state 48
-    VECTOR                         shift and go to state 41
-
-state 83
-
-    (38) RELATION_OP -> GT .
-
-    (               reduce using rule 38 (RELATION_OP -> GT .)
-    +               reduce using rule 38 (RELATION_OP -> GT .)
-    -               reduce using rule 38 (RELATION_OP -> GT .)
-    INTNUM          reduce using rule 38 (RELATION_OP -> GT .)
-    FLOATNUM        reduce using rule 38 (RELATION_OP -> GT .)
-    ID              reduce using rule 38 (RELATION_OP -> GT .)
-    STRING          reduce using rule 38 (RELATION_OP -> GT .)
-    EYE             reduce using rule 38 (RELATION_OP -> GT .)
-    ZEROS           reduce using rule 38 (RELATION_OP -> GT .)
-    ONES            reduce using rule 38 (RELATION_OP -> GT .)
-    [               reduce using rule 38 (RELATION_OP -> GT .)
-
-
-state 84
-
-    (39) RELATION_OP -> LT .
-
-    (               reduce using rule 39 (RELATION_OP -> LT .)
-    +               reduce using rule 39 (RELATION_OP -> LT .)
-    -               reduce using rule 39 (RELATION_OP -> LT .)
-    INTNUM          reduce using rule 39 (RELATION_OP -> LT .)
-    FLOATNUM        reduce using rule 39 (RELATION_OP -> LT .)
-    ID              reduce using rule 39 (RELATION_OP -> LT .)
-    STRING          reduce using rule 39 (RELATION_OP -> LT .)
-    EYE             reduce using rule 39 (RELATION_OP -> LT .)
-    ZEROS           reduce using rule 39 (RELATION_OP -> LT .)
-    ONES            reduce using rule 39 (RELATION_OP -> LT .)
-    [               reduce using rule 39 (RELATION_OP -> LT .)
-
-
-state 85
-
-    (40) RELATION_OP -> LE .
-
-    (               reduce using rule 40 (RELATION_OP -> LE .)
-    +               reduce using rule 40 (RELATION_OP -> LE .)
-    -               reduce using rule 40 (RELATION_OP -> LE .)
-    INTNUM          reduce using rule 40 (RELATION_OP -> LE .)
-    FLOATNUM        reduce using rule 40 (RELATION_OP -> LE .)
-    ID              reduce using rule 40 (RELATION_OP -> LE .)
-    STRING          reduce using rule 40 (RELATION_OP -> LE .)
-    EYE             reduce using rule 40 (RELATION_OP -> LE .)
-    ZEROS           reduce using rule 40 (RELATION_OP -> LE .)
-    ONES            reduce using rule 40 (RELATION_OP -> LE .)
-    [               reduce using rule 40 (RELATION_OP -> LE .)
-
-
-state 86
-
-    (41) RELATION_OP -> GE .
-
-    (               reduce using rule 41 (RELATION_OP -> GE .)
-    +               reduce using rule 41 (RELATION_OP -> GE .)
-    -               reduce using rule 41 (RELATION_OP -> GE .)
-    INTNUM          reduce using rule 41 (RELATION_OP -> GE .)
-    FLOATNUM        reduce using rule 41 (RELATION_OP -> GE .)
-    ID              reduce using rule 41 (RELATION_OP -> GE .)
-    STRING          reduce using rule 41 (RELATION_OP -> GE .)
-    EYE             reduce using rule 41 (RELATION_OP -> GE .)
-    ZEROS           reduce using rule 41 (RELATION_OP -> GE .)
-    ONES            reduce using rule 41 (RELATION_OP -> GE .)
-    [               reduce using rule 41 (RELATION_OP -> GE .)
-
-
-state 87
-
-    (42) RELATION_OP -> NE .
-
-    (               reduce using rule 42 (RELATION_OP -> NE .)
-    +               reduce using rule 42 (RELATION_OP -> NE .)
-    -               reduce using rule 42 (RELATION_OP -> NE .)
-    INTNUM          reduce using rule 42 (RELATION_OP -> NE .)
-    FLOATNUM        reduce using rule 42 (RELATION_OP -> NE .)
-    ID              reduce using rule 42 (RELATION_OP -> NE .)
-    STRING          reduce using rule 42 (RELATION_OP -> NE .)
-    EYE             reduce using rule 42 (RELATION_OP -> NE .)
-    ZEROS           reduce using rule 42 (RELATION_OP -> NE .)
-    ONES            reduce using rule 42 (RELATION_OP -> NE .)
-    [               reduce using rule 42 (RELATION_OP -> NE .)
-
-
-state 88
-
-    (43) RELATION_OP -> EQ .
-
-    (               reduce using rule 43 (RELATION_OP -> EQ .)
-    +               reduce using rule 43 (RELATION_OP -> EQ .)
-    -               reduce using rule 43 (RELATION_OP -> EQ .)
-    INTNUM          reduce using rule 43 (RELATION_OP -> EQ .)
-    FLOATNUM        reduce using rule 43 (RELATION_OP -> EQ .)
-    ID              reduce using rule 43 (RELATION_OP -> EQ .)
-    STRING          reduce using rule 43 (RELATION_OP -> EQ .)
-    EYE             reduce using rule 43 (RELATION_OP -> EQ .)
-    ZEROS           reduce using rule 43 (RELATION_OP -> EQ .)
-    ONES            reduce using rule 43 (RELATION_OP -> EQ .)
-    [               reduce using rule 43 (RELATION_OP -> EQ .)
-
-
-state 89
-
-    (56) WHILE_INSTRUCTION -> WHILE ( RELATION_EXP ) . INSTRUCTION
-    (3) INSTRUCTION -> . { START }
-    (4) INSTRUCTION -> . ASSIGN_EXP
-    (5) INSTRUCTION -> . IF_INSTRUCTION
-    (6) INSTRUCTION -> . WHILE_INSTRUCTION
-    (7) INSTRUCTION -> . FOR_INSTRUCTION
-    (8) INSTRUCTION -> . PRINT_FUN
-    (9) INSTRUCTION -> . RETURN_FUN
-    (10) INSTRUCTION -> . BREAK ;
-    (11) INSTRUCTION -> . CONTINUE ;
-    (52) ASSIGN_EXP -> . ID ASSIGN_OP ARITHMETIC_EXP ;
-    (53) ASSIGN_EXP -> . ID [ LIST_VALUE ] ASSIGN_OP ARITHMETIC_EXP ;
-    (54) IF_INSTRUCTION -> . IF ( RELATION_EXP ) INSTRUCTION
-    (55) IF_INSTRUCTION -> . IF ( RELATION_EXP ) INSTRUCTION ELSE INSTRUCTION
-    (56) WHILE_INSTRUCTION -> . WHILE ( RELATION_EXP ) INSTRUCTION
-    (57) FOR_INSTRUCTION -> . FOR ID = ARITHMETIC_EXP : ARITHMETIC_EXP INSTRUCTION
-    (58) PRINT_FUN -> . PRINT LIST_VALUE ;
-    (59) RETURN_FUN -> . RETURN LIST_VALUE ;
-
-    {               shift and go to state 3
-    BREAK           shift and go to state 10
-    CONTINUE        shift and go to state 11
-    ID              shift and go to state 12
-    IF              shift and go to state 13
-    WHILE           shift and go to state 14
-    FOR             shift and go to state 15
-    PRINT           shift and go to state 16
-    RETURN          shift and go to state 17
-
-    INSTRUCTION                    shift and go to state 102
-    ASSIGN_EXP                     shift and go to state 4
-    IF_INSTRUCTION                 shift and go to state 5
-    WHILE_INSTRUCTION              shift and go to state 6
-    FOR_INSTRUCTION                shift and go to state 7
-    PRINT_FUN                      shift and go to state 8
-    RETURN_FUN                     shift and go to state 9
-
-state 90
-
-    (57) FOR_INSTRUCTION -> FOR ID = ARITHMETIC_EXP . : ARITHMETIC_EXP INSTRUCTION
-    (46) ARITHMETIC_EXP -> ARITHMETIC_EXP . ARITHMETIC_OP ARITHMETIC_EXP
-    (25) ARITHMETIC_OP -> . +
-    (26) ARITHMETIC_OP -> . -
-    (27) ARITHMETIC_OP -> . *
-    (28) ARITHMETIC_OP -> . /
-    (29) ARITHMETIC_OP -> . DOTADD
-    (30) ARITHMETIC_OP -> . DOTSUB
-    (31) ARITHMETIC_OP -> . DOTMUL
-    (32) ARITHMETIC_OP -> . DOTDIV
-
-    :               shift and go to state 103
-    +               shift and go to state 68
-    -               shift and go to state 69
-    *               shift and go to state 70
-    /               shift and go to state 71
-    DOTADD          shift and go to state 72
-    DOTSUB          shift and go to state 73
-    DOTMUL          shift and go to state 74
-    DOTDIV          shift and go to state 75
-
-    ARITHMETIC_OP                  shift and go to state 67
-
-state 91
-
-    (24) LIST_VALUE -> VALUE , LIST_VALUE .
-
-    ;               reduce using rule 24 (LIST_VALUE -> VALUE , LIST_VALUE .)
-    ]               reduce using rule 24 (LIST_VALUE -> VALUE , LIST_VALUE .)
-
-
-state 92
-
-    (17) VALUE -> EYE ( ARITHMETIC_EXP . )
-    (46) ARITHMETIC_EXP -> ARITHMETIC_EXP . ARITHMETIC_OP ARITHMETIC_EXP
-    (25) ARITHMETIC_OP -> . +
-    (26) ARITHMETIC_OP -> . -
-    (27) ARITHMETIC_OP -> . *
-    (28) ARITHMETIC_OP -> . /
-    (29) ARITHMETIC_OP -> . DOTADD
-    (30) ARITHMETIC_OP -> . DOTSUB
-    (31) ARITHMETIC_OP -> . DOTMUL
-    (32) ARITHMETIC_OP -> . DOTDIV
-
-    )               shift and go to state 104
-    +               shift and go to state 68
-    -               shift and go to state 69
-    *               shift and go to state 70
-    /               shift and go to state 71
-    DOTADD          shift and go to state 72
-    DOTSUB          shift and go to state 73
-    DOTMUL          shift and go to state 74
-    DOTDIV          shift and go to state 75
-
-    ARITHMETIC_OP                  shift and go to state 67
-
-state 93
-
-    (18) VALUE -> ZEROS ( ARITHMETIC_EXP . )
-    (46) ARITHMETIC_EXP -> ARITHMETIC_EXP . ARITHMETIC_OP ARITHMETIC_EXP
-    (25) ARITHMETIC_OP -> . +
-    (26) ARITHMETIC_OP -> . -
-    (27) ARITHMETIC_OP -> . *
-    (28) ARITHMETIC_OP -> . /
-    (29) ARITHMETIC_OP -> . DOTADD
-    (30) ARITHMETIC_OP -> . DOTSUB
-    (31) ARITHMETIC_OP -> . DOTMUL
-    (32) ARITHMETIC_OP -> . DOTDIV
-
-    )               shift and go to state 105
-    +               shift and go to state 68
-    -               shift and go to state 69
-    *               shift and go to state 70
-    /               shift and go to state 71
-    DOTADD          shift and go to state 72
-    DOTSUB          shift and go to state 73
-    DOTMUL          shift and go to state 74
-    DOTDIV          shift and go to state 75
-
-    ARITHMETIC_OP                  shift and go to state 67
-
-state 94
-
-    (19) VALUE -> ONES ( ARITHMETIC_EXP . )
-    (46) ARITHMETIC_EXP -> ARITHMETIC_EXP . ARITHMETIC_OP ARITHMETIC_EXP
-    (25) ARITHMETIC_OP -> . +
-    (26) ARITHMETIC_OP -> . -
-    (27) ARITHMETIC_OP -> . *
-    (28) ARITHMETIC_OP -> . /
-    (29) ARITHMETIC_OP -> . DOTADD
-    (30) ARITHMETIC_OP -> . DOTSUB
-    (31) ARITHMETIC_OP -> . DOTMUL
-    (32) ARITHMETIC_OP -> . DOTDIV
-
-    )               shift and go to state 106
-    +               shift and go to state 68
-    -               shift and go to state 69
-    *               shift and go to state 70
-    /               shift and go to state 71
-    DOTADD          shift and go to state 72
-    DOTSUB          shift and go to state 73
-    DOTMUL          shift and go to state 74
-    DOTDIV          shift and go to state 75
-
-    ARITHMETIC_OP                  shift and go to state 67
-
-state 95
-
-    (12) VECTOR -> [ LIST_VALUE ] .
-
-    ,               reduce using rule 12 (VECTOR -> [ LIST_VALUE ] .)
-    '               reduce using rule 12 (VECTOR -> [ LIST_VALUE ] .)
-    ;               reduce using rule 12 (VECTOR -> [ LIST_VALUE ] .)
-    +               reduce using rule 12 (VECTOR -> [ LIST_VALUE ] .)
-    -               reduce using rule 12 (VECTOR -> [ LIST_VALUE ] .)
-    *               reduce using rule 12 (VECTOR -> [ LIST_VALUE ] .)
-    /               reduce using rule 12 (VECTOR -> [ LIST_VALUE ] .)
-    DOTADD          reduce using rule 12 (VECTOR -> [ LIST_VALUE ] .)
-    DOTSUB          reduce using rule 12 (VECTOR -> [ LIST_VALUE ] .)
-    DOTMUL          reduce using rule 12 (VECTOR -> [ LIST_VALUE ] .)
-    DOTDIV          reduce using rule 12 (VECTOR -> [ LIST_VALUE ] .)
-    ]               reduce using rule 12 (VECTOR -> [ LIST_VALUE ] .)
-    GT              reduce using rule 12 (VECTOR -> [ LIST_VALUE ] .)
-    LT              reduce using rule 12 (VECTOR -> [ LIST_VALUE ] .)
-    LE              reduce using rule 12 (VECTOR -> [ LIST_VALUE ] .)
-    GE              reduce using rule 12 (VECTOR -> [ LIST_VALUE ] .)
-    NE              reduce using rule 12 (VECTOR -> [ LIST_VALUE ] .)
-    EQ              reduce using rule 12 (VECTOR -> [ LIST_VALUE ] .)
-    )               reduce using rule 12 (VECTOR -> [ LIST_VALUE ] .)
-    :               reduce using rule 12 (VECTOR -> [ LIST_VALUE ] .)
-    {               reduce using rule 12 (VECTOR -> [ LIST_VALUE ] .)
-    BREAK           reduce using rule 12 (VECTOR -> [ LIST_VALUE ] .)
-    CONTINUE        reduce using rule 12 (VECTOR -> [ LIST_VALUE ] .)
-    ID              reduce using rule 12 (VECTOR -> [ LIST_VALUE ] .)
-    IF              reduce using rule 12 (VECTOR -> [ LIST_VALUE ] .)
-    WHILE           reduce using rule 12 (VECTOR -> [ LIST_VALUE ] .)
-    FOR             reduce using rule 12 (VECTOR -> [ LIST_VALUE ] .)
-    PRINT           reduce using rule 12 (VECTOR -> [ LIST_VALUE ] .)
-    RETURN          reduce using rule 12 (VECTOR -> [ LIST_VALUE ] .)
-
-
-state 96
-
-    (46) ARITHMETIC_EXP -> ARITHMETIC_EXP ARITHMETIC_OP ARITHMETIC_EXP .
-    (46) ARITHMETIC_EXP -> ARITHMETIC_EXP . ARITHMETIC_OP ARITHMETIC_EXP
-    (25) ARITHMETIC_OP -> . +
-    (26) ARITHMETIC_OP -> . -
-    (27) ARITHMETIC_OP -> . *
-    (28) ARITHMETIC_OP -> . /
-    (29) ARITHMETIC_OP -> . DOTADD
-    (30) ARITHMETIC_OP -> . DOTSUB
-    (31) ARITHMETIC_OP -> . DOTMUL
-    (32) ARITHMETIC_OP -> . DOTDIV
-
-    ;               reduce using rule 46 (ARITHMETIC_EXP -> ARITHMETIC_EXP ARITHMETIC_OP ARITHMETIC_EXP .)
-    +               reduce using rule 46 (ARITHMETIC_EXP -> ARITHMETIC_EXP ARITHMETIC_OP ARITHMETIC_EXP .)
-    -               reduce using rule 46 (ARITHMETIC_EXP -> ARITHMETIC_EXP ARITHMETIC_OP ARITHMETIC_EXP .)
-    *               reduce using rule 46 (ARITHMETIC_EXP -> ARITHMETIC_EXP ARITHMETIC_OP ARITHMETIC_EXP .)
-    /               reduce using rule 46 (ARITHMETIC_EXP -> ARITHMETIC_EXP ARITHMETIC_OP ARITHMETIC_EXP .)
-    DOTADD          reduce using rule 46 (ARITHMETIC_EXP -> ARITHMETIC_EXP ARITHMETIC_OP ARITHMETIC_EXP .)
-    DOTSUB          reduce using rule 46 (ARITHMETIC_EXP -> ARITHMETIC_EXP ARITHMETIC_OP ARITHMETIC_EXP .)
-    DOTMUL          reduce using rule 46 (ARITHMETIC_EXP -> ARITHMETIC_EXP ARITHMETIC_OP ARITHMETIC_EXP .)
-    DOTDIV          reduce using rule 46 (ARITHMETIC_EXP -> ARITHMETIC_EXP ARITHMETIC_OP ARITHMETIC_EXP .)
-    GT              reduce using rule 46 (ARITHMETIC_EXP -> ARITHMETIC_EXP ARITHMETIC_OP ARITHMETIC_EXP .)
-    LT              reduce using rule 46 (ARITHMETIC_EXP -> ARITHMETIC_EXP ARITHMETIC_OP ARITHMETIC_EXP .)
-    LE              reduce using rule 46 (ARITHMETIC_EXP -> ARITHMETIC_EXP ARITHMETIC_OP ARITHMETIC_EXP .)
-    GE              reduce using rule 46 (ARITHMETIC_EXP -> ARITHMETIC_EXP ARITHMETIC_OP ARITHMETIC_EXP .)
-    NE              reduce using rule 46 (ARITHMETIC_EXP -> ARITHMETIC_EXP ARITHMETIC_OP ARITHMETIC_EXP .)
-    EQ              reduce using rule 46 (ARITHMETIC_EXP -> ARITHMETIC_EXP ARITHMETIC_OP ARITHMETIC_EXP .)
-    )               reduce using rule 46 (ARITHMETIC_EXP -> ARITHMETIC_EXP ARITHMETIC_OP ARITHMETIC_EXP .)
-    :               reduce using rule 46 (ARITHMETIC_EXP -> ARITHMETIC_EXP ARITHMETIC_OP ARITHMETIC_EXP .)
-    {               reduce using rule 46 (ARITHMETIC_EXP -> ARITHMETIC_EXP ARITHMETIC_OP ARITHMETIC_EXP .)
-    BREAK           reduce using rule 46 (ARITHMETIC_EXP -> ARITHMETIC_EXP ARITHMETIC_OP ARITHMETIC_EXP .)
-    CONTINUE        reduce using rule 46 (ARITHMETIC_EXP -> ARITHMETIC_EXP ARITHMETIC_OP ARITHMETIC_EXP .)
-    ID              reduce using rule 46 (ARITHMETIC_EXP -> ARITHMETIC_EXP ARITHMETIC_OP ARITHMETIC_EXP .)
-    IF              reduce using rule 46 (ARITHMETIC_EXP -> ARITHMETIC_EXP ARITHMETIC_OP ARITHMETIC_EXP .)
-    WHILE           reduce using rule 46 (ARITHMETIC_EXP -> ARITHMETIC_EXP ARITHMETIC_OP ARITHMETIC_EXP .)
-    FOR             reduce using rule 46 (ARITHMETIC_EXP -> ARITHMETIC_EXP ARITHMETIC_OP ARITHMETIC_EXP .)
-    PRINT           reduce using rule 46 (ARITHMETIC_EXP -> ARITHMETIC_EXP ARITHMETIC_OP ARITHMETIC_EXP .)
-    RETURN          reduce using rule 46 (ARITHMETIC_EXP -> ARITHMETIC_EXP ARITHMETIC_OP ARITHMETIC_EXP .)
-
-  ! +               [ shift and go to state 68 ]
-  ! -               [ shift and go to state 69 ]
-  ! *               [ shift and go to state 70 ]
-  ! /               [ shift and go to state 71 ]
-  ! DOTADD          [ shift and go to state 72 ]
-  ! DOTSUB          [ shift and go to state 73 ]
-  ! DOTMUL          [ shift and go to state 74 ]
-  ! DOTDIV          [ shift and go to state 75 ]
-
-    ARITHMETIC_OP                  shift and go to state 67
-
-state 97
-
-    (47) ARITHMETIC_EXP -> ( ARITHMETIC_EXP ) .
-
-    ;               reduce using rule 47 (ARITHMETIC_EXP -> ( ARITHMETIC_EXP ) .)
-    +               reduce using rule 47 (ARITHMETIC_EXP -> ( ARITHMETIC_EXP ) .)
-    -               reduce using rule 47 (ARITHMETIC_EXP -> ( ARITHMETIC_EXP ) .)
-    *               reduce using rule 47 (ARITHMETIC_EXP -> ( ARITHMETIC_EXP ) .)
-    /               reduce using rule 47 (ARITHMETIC_EXP -> ( ARITHMETIC_EXP ) .)
-    DOTADD          reduce using rule 47 (ARITHMETIC_EXP -> ( ARITHMETIC_EXP ) .)
-    DOTSUB          reduce using rule 47 (ARITHMETIC_EXP -> ( ARITHMETIC_EXP ) .)
-    DOTMUL          reduce using rule 47 (ARITHMETIC_EXP -> ( ARITHMETIC_EXP ) .)
-    DOTDIV          reduce using rule 47 (ARITHMETIC_EXP -> ( ARITHMETIC_EXP ) .)
-    GT              reduce using rule 47 (ARITHMETIC_EXP -> ( ARITHMETIC_EXP ) .)
-    LT              reduce using rule 47 (ARITHMETIC_EXP -> ( ARITHMETIC_EXP ) .)
-    LE              reduce using rule 47 (ARITHMETIC_EXP -> ( ARITHMETIC_EXP ) .)
-    GE              reduce using rule 47 (ARITHMETIC_EXP -> ( ARITHMETIC_EXP ) .)
-    NE              reduce using rule 47 (ARITHMETIC_EXP -> ( ARITHMETIC_EXP ) .)
-    EQ              reduce using rule 47 (ARITHMETIC_EXP -> ( ARITHMETIC_EXP ) .)
-    )               reduce using rule 47 (ARITHMETIC_EXP -> ( ARITHMETIC_EXP ) .)
-    :               reduce using rule 47 (ARITHMETIC_EXP -> ( ARITHMETIC_EXP ) .)
-    {               reduce using rule 47 (ARITHMETIC_EXP -> ( ARITHMETIC_EXP ) .)
-    BREAK           reduce using rule 47 (ARITHMETIC_EXP -> ( ARITHMETIC_EXP ) .)
-    CONTINUE        reduce using rule 47 (ARITHMETIC_EXP -> ( ARITHMETIC_EXP ) .)
-    ID              reduce using rule 47 (ARITHMETIC_EXP -> ( ARITHMETIC_EXP ) .)
-    IF              reduce using rule 47 (ARITHMETIC_EXP -> ( ARITHMETIC_EXP ) .)
-    WHILE           reduce using rule 47 (ARITHMETIC_EXP -> ( ARITHMETIC_EXP ) .)
-    FOR             reduce using rule 47 (ARITHMETIC_EXP -> ( ARITHMETIC_EXP ) .)
-    PRINT           reduce using rule 47 (ARITHMETIC_EXP -> ( ARITHMETIC_EXP ) .)
-    RETURN          reduce using rule 47 (ARITHMETIC_EXP -> ( ARITHMETIC_EXP ) .)
-
-
-state 98
-
-    (53) ASSIGN_EXP -> ID [ LIST_VALUE ] ASSIGN_OP . ARITHMETIC_EXP ;
-    (46) ARITHMETIC_EXP -> . ARITHMETIC_EXP ARITHMETIC_OP ARITHMETIC_EXP
-    (47) ARITHMETIC_EXP -> . ( ARITHMETIC_EXP )
-    (48) ARITHMETIC_EXP -> . ARITHMETIC_OP_UNARY ARITHMETIC_EXP
-    (49) ARITHMETIC_EXP -> . VALUE
-    (44) ARITHMETIC_OP_UNARY -> . +
-    (45) ARITHMETIC_OP_UNARY -> . -
-    (13) VALUE -> . INTNUM
-    (14) VALUE -> . FLOATNUM
-    (15) VALUE -> . ID
-    (16) VALUE -> . STRING
-    (17) VALUE -> . EYE ( ARITHMETIC_EXP )
-    (18) VALUE -> . ZEROS ( ARITHMETIC_EXP )
-    (19) VALUE -> . ONES ( ARITHMETIC_EXP )
-    (20) VALUE -> . VECTOR
-    (21) VALUE -> . ID VECTOR
-    (22) VALUE -> . VALUE '
-    (12) VECTOR -> . [ LIST_VALUE ]
-
-    (               shift and go to state 46
-    +               shift and go to state 49
-    -               shift and go to state 50
-    INTNUM          shift and go to state 34
-    FLOATNUM        shift and go to state 35
-    ID              shift and go to state 36
-    STRING          shift and go to state 37
-    EYE             shift and go to state 38
-    ZEROS           shift and go to state 39
-    ONES            shift and go to state 40
-    [               shift and go to state 42
-
-    ARITHMETIC_EXP                 shift and go to state 107
-    ARITHMETIC_OP_UNARY            shift and go to state 47
-    VALUE                          shift and go to state 48
-    VECTOR                         shift and go to state 41
-
-state 99
-
-    (51) RELATION_EXP -> ( RELATION_EXP ) .
-
-    )               reduce using rule 51 (RELATION_EXP -> ( RELATION_EXP ) .)
-
-
-state 100
-
-    (54) IF_INSTRUCTION -> IF ( RELATION_EXP ) INSTRUCTION .
-    (55) IF_INSTRUCTION -> IF ( RELATION_EXP ) INSTRUCTION . ELSE INSTRUCTION
-
-    {               reduce using rule 54 (IF_INSTRUCTION -> IF ( RELATION_EXP ) INSTRUCTION .)
-    BREAK           reduce using rule 54 (IF_INSTRUCTION -> IF ( RELATION_EXP ) INSTRUCTION .)
-    CONTINUE        reduce using rule 54 (IF_INSTRUCTION -> IF ( RELATION_EXP ) INSTRUCTION .)
-    ID              reduce using rule 54 (IF_INSTRUCTION -> IF ( RELATION_EXP ) INSTRUCTION .)
-    IF              reduce using rule 54 (IF_INSTRUCTION -> IF ( RELATION_EXP ) INSTRUCTION .)
-    WHILE           reduce using rule 54 (IF_INSTRUCTION -> IF ( RELATION_EXP ) INSTRUCTION .)
-    FOR             reduce using rule 54 (IF_INSTRUCTION -> IF ( RELATION_EXP ) INSTRUCTION .)
-    PRINT           reduce using rule 54 (IF_INSTRUCTION -> IF ( RELATION_EXP ) INSTRUCTION .)
-    RETURN          reduce using rule 54 (IF_INSTRUCTION -> IF ( RELATION_EXP ) INSTRUCTION .)
-    $end            reduce using rule 54 (IF_INSTRUCTION -> IF ( RELATION_EXP ) INSTRUCTION .)
-    }               reduce using rule 54 (IF_INSTRUCTION -> IF ( RELATION_EXP ) INSTRUCTION .)
-    ELSE            shift and go to state 108
-
-  ! ELSE            [ reduce using rule 54 (IF_INSTRUCTION -> IF ( RELATION_EXP ) INSTRUCTION .) ]
-
-
-state 101
-
-    (50) RELATION_EXP -> ARITHMETIC_EXP RELATION_OP ARITHMETIC_EXP .
-    (46) ARITHMETIC_EXP -> ARITHMETIC_EXP . ARITHMETIC_OP ARITHMETIC_EXP
-    (25) ARITHMETIC_OP -> . +
-    (26) ARITHMETIC_OP -> . -
-    (27) ARITHMETIC_OP -> . *
-    (28) ARITHMETIC_OP -> . /
-    (29) ARITHMETIC_OP -> . DOTADD
-    (30) ARITHMETIC_OP -> . DOTSUB
-    (31) ARITHMETIC_OP -> . DOTMUL
-    (32) ARITHMETIC_OP -> . DOTDIV
-
-    )               reduce using rule 50 (RELATION_EXP -> ARITHMETIC_EXP RELATION_OP ARITHMETIC_EXP .)
-    +               shift and go to state 68
-    -               shift and go to state 69
-    *               shift and go to state 70
-    /               shift and go to state 71
-    DOTADD          shift and go to state 72
-    DOTSUB          shift and go to state 73
-    DOTMUL          shift and go to state 74
-    DOTDIV          shift and go to state 75
-
-    ARITHMETIC_OP                  shift and go to state 67
-
-state 102
-
-    (56) WHILE_INSTRUCTION -> WHILE ( RELATION_EXP ) INSTRUCTION .
-
-    {               reduce using rule 56 (WHILE_INSTRUCTION -> WHILE ( RELATION_EXP ) INSTRUCTION .)
-    BREAK           reduce using rule 56 (WHILE_INSTRUCTION -> WHILE ( RELATION_EXP ) INSTRUCTION .)
-    CONTINUE        reduce using rule 56 (WHILE_INSTRUCTION -> WHILE ( RELATION_EXP ) INSTRUCTION .)
-    ID              reduce using rule 56 (WHILE_INSTRUCTION -> WHILE ( RELATION_EXP ) INSTRUCTION .)
-    IF              reduce using rule 56 (WHILE_INSTRUCTION -> WHILE ( RELATION_EXP ) INSTRUCTION .)
-    WHILE           reduce using rule 56 (WHILE_INSTRUCTION -> WHILE ( RELATION_EXP ) INSTRUCTION .)
-    FOR             reduce using rule 56 (WHILE_INSTRUCTION -> WHILE ( RELATION_EXP ) INSTRUCTION .)
-    PRINT           reduce using rule 56 (WHILE_INSTRUCTION -> WHILE ( RELATION_EXP ) INSTRUCTION .)
-    RETURN          reduce using rule 56 (WHILE_INSTRUCTION -> WHILE ( RELATION_EXP ) INSTRUCTION .)
-    $end            reduce using rule 56 (WHILE_INSTRUCTION -> WHILE ( RELATION_EXP ) INSTRUCTION .)
-    }               reduce using rule 56 (WHILE_INSTRUCTION -> WHILE ( RELATION_EXP ) INSTRUCTION .)
-    ELSE            reduce using rule 56 (WHILE_INSTRUCTION -> WHILE ( RELATION_EXP ) INSTRUCTION .)
-
-
-state 103
-
-    (57) FOR_INSTRUCTION -> FOR ID = ARITHMETIC_EXP : . ARITHMETIC_EXP INSTRUCTION
-    (46) ARITHMETIC_EXP -> . ARITHMETIC_EXP ARITHMETIC_OP ARITHMETIC_EXP
-    (47) ARITHMETIC_EXP -> . ( ARITHMETIC_EXP )
-    (48) ARITHMETIC_EXP -> . ARITHMETIC_OP_UNARY ARITHMETIC_EXP
-    (49) ARITHMETIC_EXP -> . VALUE
-    (44) ARITHMETIC_OP_UNARY -> . +
-    (45) ARITHMETIC_OP_UNARY -> . -
-    (13) VALUE -> . INTNUM
-    (14) VALUE -> . FLOATNUM
-    (15) VALUE -> . ID
-    (16) VALUE -> . STRING
-    (17) VALUE -> . EYE ( ARITHMETIC_EXP )
-    (18) VALUE -> . ZEROS ( ARITHMETIC_EXP )
-    (19) VALUE -> . ONES ( ARITHMETIC_EXP )
-    (20) VALUE -> . VECTOR
-    (21) VALUE -> . ID VECTOR
-    (22) VALUE -> . VALUE '
-    (12) VECTOR -> . [ LIST_VALUE ]
-
-    (               shift and go to state 46
-    +               shift and go to state 49
-    -               shift and go to state 50
-    INTNUM          shift and go to state 34
-    FLOATNUM        shift and go to state 35
-    ID              shift and go to state 36
-    STRING          shift and go to state 37
-    EYE             shift and go to state 38
-    ZEROS           shift and go to state 39
-    ONES            shift and go to state 40
-    [               shift and go to state 42
-
-    ARITHMETIC_EXP                 shift and go to state 109
-    ARITHMETIC_OP_UNARY            shift and go to state 47
-    VALUE                          shift and go to state 48
-    VECTOR                         shift and go to state 41
-
-state 104
-
-    (17) VALUE -> EYE ( ARITHMETIC_EXP ) .
-
-    ,               reduce using rule 17 (VALUE -> EYE ( ARITHMETIC_EXP ) .)
-    '               reduce using rule 17 (VALUE -> EYE ( ARITHMETIC_EXP ) .)
-    ;               reduce using rule 17 (VALUE -> EYE ( ARITHMETIC_EXP ) .)
-    +               reduce using rule 17 (VALUE -> EYE ( ARITHMETIC_EXP ) .)
-    -               reduce using rule 17 (VALUE -> EYE ( ARITHMETIC_EXP ) .)
-    *               reduce using rule 17 (VALUE -> EYE ( ARITHMETIC_EXP ) .)
-    /               reduce using rule 17 (VALUE -> EYE ( ARITHMETIC_EXP ) .)
-    DOTADD          reduce using rule 17 (VALUE -> EYE ( ARITHMETIC_EXP ) .)
-    DOTSUB          reduce using rule 17 (VALUE -> EYE ( ARITHMETIC_EXP ) .)
-    DOTMUL          reduce using rule 17 (VALUE -> EYE ( ARITHMETIC_EXP ) .)
-    DOTDIV          reduce using rule 17 (VALUE -> EYE ( ARITHMETIC_EXP ) .)
-    ]               reduce using rule 17 (VALUE -> EYE ( ARITHMETIC_EXP ) .)
-    GT              reduce using rule 17 (VALUE -> EYE ( ARITHMETIC_EXP ) .)
-    LT              reduce using rule 17 (VALUE -> EYE ( ARITHMETIC_EXP ) .)
-    LE              reduce using rule 17 (VALUE -> EYE ( ARITHMETIC_EXP ) .)
-    GE              reduce using rule 17 (VALUE -> EYE ( ARITHMETIC_EXP ) .)
-    NE              reduce using rule 17 (VALUE -> EYE ( ARITHMETIC_EXP ) .)
-    EQ              reduce using rule 17 (VALUE -> EYE ( ARITHMETIC_EXP ) .)
-    )               reduce using rule 17 (VALUE -> EYE ( ARITHMETIC_EXP ) .)
-    :               reduce using rule 17 (VALUE -> EYE ( ARITHMETIC_EXP ) .)
-    {               reduce using rule 17 (VALUE -> EYE ( ARITHMETIC_EXP ) .)
-    BREAK           reduce using rule 17 (VALUE -> EYE ( ARITHMETIC_EXP ) .)
-    CONTINUE        reduce using rule 17 (VALUE -> EYE ( ARITHMETIC_EXP ) .)
-    ID              reduce using rule 17 (VALUE -> EYE ( ARITHMETIC_EXP ) .)
-    IF              reduce using rule 17 (VALUE -> EYE ( ARITHMETIC_EXP ) .)
-    WHILE           reduce using rule 17 (VALUE -> EYE ( ARITHMETIC_EXP ) .)
-    FOR             reduce using rule 17 (VALUE -> EYE ( ARITHMETIC_EXP ) .)
-    PRINT           reduce using rule 17 (VALUE -> EYE ( ARITHMETIC_EXP ) .)
-    RETURN          reduce using rule 17 (VALUE -> EYE ( ARITHMETIC_EXP ) .)
-
-
-state 105
-
-    (18) VALUE -> ZEROS ( ARITHMETIC_EXP ) .
-
-    ,               reduce using rule 18 (VALUE -> ZEROS ( ARITHMETIC_EXP ) .)
-    '               reduce using rule 18 (VALUE -> ZEROS ( ARITHMETIC_EXP ) .)
-    ;               reduce using rule 18 (VALUE -> ZEROS ( ARITHMETIC_EXP ) .)
-    +               reduce using rule 18 (VALUE -> ZEROS ( ARITHMETIC_EXP ) .)
-    -               reduce using rule 18 (VALUE -> ZEROS ( ARITHMETIC_EXP ) .)
-    *               reduce using rule 18 (VALUE -> ZEROS ( ARITHMETIC_EXP ) .)
-    /               reduce using rule 18 (VALUE -> ZEROS ( ARITHMETIC_EXP ) .)
-    DOTADD          reduce using rule 18 (VALUE -> ZEROS ( ARITHMETIC_EXP ) .)
-    DOTSUB          reduce using rule 18 (VALUE -> ZEROS ( ARITHMETIC_EXP ) .)
-    DOTMUL          reduce using rule 18 (VALUE -> ZEROS ( ARITHMETIC_EXP ) .)
-    DOTDIV          reduce using rule 18 (VALUE -> ZEROS ( ARITHMETIC_EXP ) .)
-    ]               reduce using rule 18 (VALUE -> ZEROS ( ARITHMETIC_EXP ) .)
-    GT              reduce using rule 18 (VALUE -> ZEROS ( ARITHMETIC_EXP ) .)
-    LT              reduce using rule 18 (VALUE -> ZEROS ( ARITHMETIC_EXP ) .)
-    LE              reduce using rule 18 (VALUE -> ZEROS ( ARITHMETIC_EXP ) .)
-    GE              reduce using rule 18 (VALUE -> ZEROS ( ARITHMETIC_EXP ) .)
-    NE              reduce using rule 18 (VALUE -> ZEROS ( ARITHMETIC_EXP ) .)
-    EQ              reduce using rule 18 (VALUE -> ZEROS ( ARITHMETIC_EXP ) .)
-    )               reduce using rule 18 (VALUE -> ZEROS ( ARITHMETIC_EXP ) .)
-    :               reduce using rule 18 (VALUE -> ZEROS ( ARITHMETIC_EXP ) .)
-    {               reduce using rule 18 (VALUE -> ZEROS ( ARITHMETIC_EXP ) .)
-    BREAK           reduce using rule 18 (VALUE -> ZEROS ( ARITHMETIC_EXP ) .)
-    CONTINUE        reduce using rule 18 (VALUE -> ZEROS ( ARITHMETIC_EXP ) .)
-    ID              reduce using rule 18 (VALUE -> ZEROS ( ARITHMETIC_EXP ) .)
-    IF              reduce using rule 18 (VALUE -> ZEROS ( ARITHMETIC_EXP ) .)
-    WHILE           reduce using rule 18 (VALUE -> ZEROS ( ARITHMETIC_EXP ) .)
-    FOR             reduce using rule 18 (VALUE -> ZEROS ( ARITHMETIC_EXP ) .)
-    PRINT           reduce using rule 18 (VALUE -> ZEROS ( ARITHMETIC_EXP ) .)
-    RETURN          reduce using rule 18 (VALUE -> ZEROS ( ARITHMETIC_EXP ) .)
-
-
-state 106
-
-    (19) VALUE -> ONES ( ARITHMETIC_EXP ) .
-
-    ,               reduce using rule 19 (VALUE -> ONES ( ARITHMETIC_EXP ) .)
-    '               reduce using rule 19 (VALUE -> ONES ( ARITHMETIC_EXP ) .)
-    ;               reduce using rule 19 (VALUE -> ONES ( ARITHMETIC_EXP ) .)
-    +               reduce using rule 19 (VALUE -> ONES ( ARITHMETIC_EXP ) .)
-    -               reduce using rule 19 (VALUE -> ONES ( ARITHMETIC_EXP ) .)
-    *               reduce using rule 19 (VALUE -> ONES ( ARITHMETIC_EXP ) .)
-    /               reduce using rule 19 (VALUE -> ONES ( ARITHMETIC_EXP ) .)
-    DOTADD          reduce using rule 19 (VALUE -> ONES ( ARITHMETIC_EXP ) .)
-    DOTSUB          reduce using rule 19 (VALUE -> ONES ( ARITHMETIC_EXP ) .)
-    DOTMUL          reduce using rule 19 (VALUE -> ONES ( ARITHMETIC_EXP ) .)
-    DOTDIV          reduce using rule 19 (VALUE -> ONES ( ARITHMETIC_EXP ) .)
-    ]               reduce using rule 19 (VALUE -> ONES ( ARITHMETIC_EXP ) .)
-    GT              reduce using rule 19 (VALUE -> ONES ( ARITHMETIC_EXP ) .)
-    LT              reduce using rule 19 (VALUE -> ONES ( ARITHMETIC_EXP ) .)
-    LE              reduce using rule 19 (VALUE -> ONES ( ARITHMETIC_EXP ) .)
-    GE              reduce using rule 19 (VALUE -> ONES ( ARITHMETIC_EXP ) .)
-    NE              reduce using rule 19 (VALUE -> ONES ( ARITHMETIC_EXP ) .)
-    EQ              reduce using rule 19 (VALUE -> ONES ( ARITHMETIC_EXP ) .)
-    )               reduce using rule 19 (VALUE -> ONES ( ARITHMETIC_EXP ) .)
-    :               reduce using rule 19 (VALUE -> ONES ( ARITHMETIC_EXP ) .)
-    {               reduce using rule 19 (VALUE -> ONES ( ARITHMETIC_EXP ) .)
-    BREAK           reduce using rule 19 (VALUE -> ONES ( ARITHMETIC_EXP ) .)
-    CONTINUE        reduce using rule 19 (VALUE -> ONES ( ARITHMETIC_EXP ) .)
-    ID              reduce using rule 19 (VALUE -> ONES ( ARITHMETIC_EXP ) .)
-    IF              reduce using rule 19 (VALUE -> ONES ( ARITHMETIC_EXP ) .)
-    WHILE           reduce using rule 19 (VALUE -> ONES ( ARITHMETIC_EXP ) .)
-    FOR             reduce using rule 19 (VALUE -> ONES ( ARITHMETIC_EXP ) .)
-    PRINT           reduce using rule 19 (VALUE -> ONES ( ARITHMETIC_EXP ) .)
-    RETURN          reduce using rule 19 (VALUE -> ONES ( ARITHMETIC_EXP ) .)
-
-
-state 107
-
-    (53) ASSIGN_EXP -> ID [ LIST_VALUE ] ASSIGN_OP ARITHMETIC_EXP . ;
-    (46) ARITHMETIC_EXP -> ARITHMETIC_EXP . ARITHMETIC_OP ARITHMETIC_EXP
-    (25) ARITHMETIC_OP -> . +
-    (26) ARITHMETIC_OP -> . -
-    (27) ARITHMETIC_OP -> . *
-    (28) ARITHMETIC_OP -> . /
-    (29) ARITHMETIC_OP -> . DOTADD
-    (30) ARITHMETIC_OP -> . DOTSUB
-    (31) ARITHMETIC_OP -> . DOTMUL
-    (32) ARITHMETIC_OP -> . DOTDIV
-
-    ;               shift and go to state 110
-    +               shift and go to state 68
-    -               shift and go to state 69
-    *               shift and go to state 70
-    /               shift and go to state 71
-    DOTADD          shift and go to state 72
-    DOTSUB          shift and go to state 73
-    DOTMUL          shift and go to state 74
-    DOTDIV          shift and go to state 75
-
-    ARITHMETIC_OP                  shift and go to state 67
-
-state 108
-
-    (55) IF_INSTRUCTION -> IF ( RELATION_EXP ) INSTRUCTION ELSE . INSTRUCTION
-    (3) INSTRUCTION -> . { START }
-    (4) INSTRUCTION -> . ASSIGN_EXP
-    (5) INSTRUCTION -> . IF_INSTRUCTION
-    (6) INSTRUCTION -> . WHILE_INSTRUCTION
-    (7) INSTRUCTION -> . FOR_INSTRUCTION
-    (8) INSTRUCTION -> . PRINT_FUN
-    (9) INSTRUCTION -> . RETURN_FUN
-    (10) INSTRUCTION -> . BREAK ;
-    (11) INSTRUCTION -> . CONTINUE ;
-    (52) ASSIGN_EXP -> . ID ASSIGN_OP ARITHMETIC_EXP ;
-    (53) ASSIGN_EXP -> . ID [ LIST_VALUE ] ASSIGN_OP ARITHMETIC_EXP ;
-    (54) IF_INSTRUCTION -> . IF ( RELATION_EXP ) INSTRUCTION
-    (55) IF_INSTRUCTION -> . IF ( RELATION_EXP ) INSTRUCTION ELSE INSTRUCTION
-    (56) WHILE_INSTRUCTION -> . WHILE ( RELATION_EXP ) INSTRUCTION
-    (57) FOR_INSTRUCTION -> . FOR ID = ARITHMETIC_EXP : ARITHMETIC_EXP INSTRUCTION
-    (58) PRINT_FUN -> . PRINT LIST_VALUE ;
-    (59) RETURN_FUN -> . RETURN LIST_VALUE ;
-
-    {               shift and go to state 3
-    BREAK           shift and go to state 10
-    CONTINUE        shift and go to state 11
-    ID              shift and go to state 12
-    IF              shift and go to state 13
-    WHILE           shift and go to state 14
-    FOR             shift and go to state 15
-    PRINT           shift and go to state 16
-    RETURN          shift and go to state 17
-
-    INSTRUCTION                    shift and go to state 111
-    ASSIGN_EXP                     shift and go to state 4
-    IF_INSTRUCTION                 shift and go to state 5
-    WHILE_INSTRUCTION              shift and go to state 6
-    FOR_INSTRUCTION                shift and go to state 7
-    PRINT_FUN                      shift and go to state 8
-    RETURN_FUN                     shift and go to state 9
-
-state 109
-
-    (57) FOR_INSTRUCTION -> FOR ID = ARITHMETIC_EXP : ARITHMETIC_EXP . INSTRUCTION
-    (46) ARITHMETIC_EXP -> ARITHMETIC_EXP . ARITHMETIC_OP ARITHMETIC_EXP
-    (3) INSTRUCTION -> . { START }
-    (4) INSTRUCTION -> . ASSIGN_EXP
-    (5) INSTRUCTION -> . IF_INSTRUCTION
-    (6) INSTRUCTION -> . WHILE_INSTRUCTION
-    (7) INSTRUCTION -> . FOR_INSTRUCTION
-    (8) INSTRUCTION -> . PRINT_FUN
-    (9) INSTRUCTION -> . RETURN_FUN
-    (10) INSTRUCTION -> . BREAK ;
-    (11) INSTRUCTION -> . CONTINUE ;
-    (25) ARITHMETIC_OP -> . +
-    (26) ARITHMETIC_OP -> . -
-    (27) ARITHMETIC_OP -> . *
-    (28) ARITHMETIC_OP -> . /
-    (29) ARITHMETIC_OP -> . DOTADD
-    (30) ARITHMETIC_OP -> . DOTSUB
-    (31) ARITHMETIC_OP -> . DOTMUL
-    (32) ARITHMETIC_OP -> . DOTDIV
-    (52) ASSIGN_EXP -> . ID ASSIGN_OP ARITHMETIC_EXP ;
-    (53) ASSIGN_EXP -> . ID [ LIST_VALUE ] ASSIGN_OP ARITHMETIC_EXP ;
-    (54) IF_INSTRUCTION -> . IF ( RELATION_EXP ) INSTRUCTION
-    (55) IF_INSTRUCTION -> . IF ( RELATION_EXP ) INSTRUCTION ELSE INSTRUCTION
-    (56) WHILE_INSTRUCTION -> . WHILE ( RELATION_EXP ) INSTRUCTION
-    (57) FOR_INSTRUCTION -> . FOR ID = ARITHMETIC_EXP : ARITHMETIC_EXP INSTRUCTION
-    (58) PRINT_FUN -> . PRINT LIST_VALUE ;
-    (59) RETURN_FUN -> . RETURN LIST_VALUE ;
-
-    {               shift and go to state 3
-    BREAK           shift and go to state 10
-    CONTINUE        shift and go to state 11
-    +               shift and go to state 68
-    -               shift and go to state 69
-    *               shift and go to state 70
-    /               shift and go to state 71
-    DOTADD          shift and go to state 72
-    DOTSUB          shift and go to state 73
-    DOTMUL          shift and go to state 74
-    DOTDIV          shift and go to state 75
-    ID              shift and go to state 12
-    IF              shift and go to state 13
-    WHILE           shift and go to state 14
-    FOR             shift and go to state 15
-    PRINT           shift and go to state 16
-    RETURN          shift and go to state 17
-
-    INSTRUCTION                    shift and go to state 112
-    ARITHMETIC_OP                  shift and go to state 67
-    ASSIGN_EXP                     shift and go to state 4
-    IF_INSTRUCTION                 shift and go to state 5
-    WHILE_INSTRUCTION              shift and go to state 6
-    FOR_INSTRUCTION                shift and go to state 7
-    PRINT_FUN                      shift and go to state 8
-    RETURN_FUN                     shift and go to state 9
-
-state 110
-
-    (53) ASSIGN_EXP -> ID [ LIST_VALUE ] ASSIGN_OP ARITHMETIC_EXP ; .
-
-    {               reduce using rule 53 (ASSIGN_EXP -> ID [ LIST_VALUE ] ASSIGN_OP ARITHMETIC_EXP ; .)
-    BREAK           reduce using rule 53 (ASSIGN_EXP -> ID [ LIST_VALUE ] ASSIGN_OP ARITHMETIC_EXP ; .)
-    CONTINUE        reduce using rule 53 (ASSIGN_EXP -> ID [ LIST_VALUE ] ASSIGN_OP ARITHMETIC_EXP ; .)
-    ID              reduce using rule 53 (ASSIGN_EXP -> ID [ LIST_VALUE ] ASSIGN_OP ARITHMETIC_EXP ; .)
-    IF              reduce using rule 53 (ASSIGN_EXP -> ID [ LIST_VALUE ] ASSIGN_OP ARITHMETIC_EXP ; .)
-    WHILE           reduce using rule 53 (ASSIGN_EXP -> ID [ LIST_VALUE ] ASSIGN_OP ARITHMETIC_EXP ; .)
-    FOR             reduce using rule 53 (ASSIGN_EXP -> ID [ LIST_VALUE ] ASSIGN_OP ARITHMETIC_EXP ; .)
-    PRINT           reduce using rule 53 (ASSIGN_EXP -> ID [ LIST_VALUE ] ASSIGN_OP ARITHMETIC_EXP ; .)
-    RETURN          reduce using rule 53 (ASSIGN_EXP -> ID [ LIST_VALUE ] ASSIGN_OP ARITHMETIC_EXP ; .)
-    $end            reduce using rule 53 (ASSIGN_EXP -> ID [ LIST_VALUE ] ASSIGN_OP ARITHMETIC_EXP ; .)
-    }               reduce using rule 53 (ASSIGN_EXP -> ID [ LIST_VALUE ] ASSIGN_OP ARITHMETIC_EXP ; .)
-    ELSE            reduce using rule 53 (ASSIGN_EXP -> ID [ LIST_VALUE ] ASSIGN_OP ARITHMETIC_EXP ; .)
-
-
-state 111
-
-    (55) IF_INSTRUCTION -> IF ( RELATION_EXP ) INSTRUCTION ELSE INSTRUCTION .
-
-    {               reduce using rule 55 (IF_INSTRUCTION -> IF ( RELATION_EXP ) INSTRUCTION ELSE INSTRUCTION .)
-    BREAK           reduce using rule 55 (IF_INSTRUCTION -> IF ( RELATION_EXP ) INSTRUCTION ELSE INSTRUCTION .)
-    CONTINUE        reduce using rule 55 (IF_INSTRUCTION -> IF ( RELATION_EXP ) INSTRUCTION ELSE INSTRUCTION .)
-    ID              reduce using rule 55 (IF_INSTRUCTION -> IF ( RELATION_EXP ) INSTRUCTION ELSE INSTRUCTION .)
-    IF              reduce using rule 55 (IF_INSTRUCTION -> IF ( RELATION_EXP ) INSTRUCTION ELSE INSTRUCTION .)
-    WHILE           reduce using rule 55 (IF_INSTRUCTION -> IF ( RELATION_EXP ) INSTRUCTION ELSE INSTRUCTION .)
-    FOR             reduce using rule 55 (IF_INSTRUCTION -> IF ( RELATION_EXP ) INSTRUCTION ELSE INSTRUCTION .)
-    PRINT           reduce using rule 55 (IF_INSTRUCTION -> IF ( RELATION_EXP ) INSTRUCTION ELSE INSTRUCTION .)
-    RETURN          reduce using rule 55 (IF_INSTRUCTION -> IF ( RELATION_EXP ) INSTRUCTION ELSE INSTRUCTION .)
-    $end            reduce using rule 55 (IF_INSTRUCTION -> IF ( RELATION_EXP ) INSTRUCTION ELSE INSTRUCTION .)
-    }               reduce using rule 55 (IF_INSTRUCTION -> IF ( RELATION_EXP ) INSTRUCTION ELSE INSTRUCTION .)
-    ELSE            reduce using rule 55 (IF_INSTRUCTION -> IF ( RELATION_EXP ) INSTRUCTION ELSE INSTRUCTION .)
-
-
-state 112
-
-    (57) FOR_INSTRUCTION -> FOR ID = ARITHMETIC_EXP : ARITHMETIC_EXP INSTRUCTION .
-
-    {               reduce using rule 57 (FOR_INSTRUCTION -> FOR ID = ARITHMETIC_EXP : ARITHMETIC_EXP INSTRUCTION .)
-    BREAK           reduce using rule 57 (FOR_INSTRUCTION -> FOR ID = ARITHMETIC_EXP : ARITHMETIC_EXP INSTRUCTION .)
-    CONTINUE        reduce using rule 57 (FOR_INSTRUCTION -> FOR ID = ARITHMETIC_EXP : ARITHMETIC_EXP INSTRUCTION .)
-    ID              reduce using rule 57 (FOR_INSTRUCTION -> FOR ID = ARITHMETIC_EXP : ARITHMETIC_EXP INSTRUCTION .)
-    IF              reduce using rule 57 (FOR_INSTRUCTION -> FOR ID = ARITHMETIC_EXP : ARITHMETIC_EXP INSTRUCTION .)
-    WHILE           reduce using rule 57 (FOR_INSTRUCTION -> FOR ID = ARITHMETIC_EXP : ARITHMETIC_EXP INSTRUCTION .)
-    FOR             reduce using rule 57 (FOR_INSTRUCTION -> FOR ID = ARITHMETIC_EXP : ARITHMETIC_EXP INSTRUCTION .)
-    PRINT           reduce using rule 57 (FOR_INSTRUCTION -> FOR ID = ARITHMETIC_EXP : ARITHMETIC_EXP INSTRUCTION .)
-    RETURN          reduce using rule 57 (FOR_INSTRUCTION -> FOR ID = ARITHMETIC_EXP : ARITHMETIC_EXP INSTRUCTION .)
-    $end            reduce using rule 57 (FOR_INSTRUCTION -> FOR ID = ARITHMETIC_EXP : ARITHMETIC_EXP INSTRUCTION .)
-    }               reduce using rule 57 (FOR_INSTRUCTION -> FOR ID = ARITHMETIC_EXP : ARITHMETIC_EXP INSTRUCTION .)
-    ELSE            reduce using rule 57 (FOR_INSTRUCTION -> FOR ID = ARITHMETIC_EXP : ARITHMETIC_EXP INSTRUCTION .)
+    (10) EXPRESSION -> ( EXPRESSION ] .
+
+    +               reduce using rule 10 (EXPRESSION -> ( EXPRESSION ] .)
+    -               reduce using rule 10 (EXPRESSION -> ( EXPRESSION ] .)
+    *               reduce using rule 10 (EXPRESSION -> ( EXPRESSION ] .)
+    /               reduce using rule 10 (EXPRESSION -> ( EXPRESSION ] .)
+    MUL             reduce using rule 10 (EXPRESSION -> ( EXPRESSION ] .)
+    DOTDIV          reduce using rule 10 (EXPRESSION -> ( EXPRESSION ] .)
+    $end            reduce using rule 10 (EXPRESSION -> ( EXPRESSION ] .)
+    ]               reduce using rule 10 (EXPRESSION -> ( EXPRESSION ] .)
 
