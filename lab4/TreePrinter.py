@@ -19,7 +19,7 @@ class TreePrinter:
         print("| "*indent + "\"" + str(self.value) + "\"")
     @addToClass(AST.Int)
     def printTree(self, indent=0):
-        print("| "*indent +str(self.value)+ " " + str(self.poz))
+        print("| "*indent +str(self.value))
     @addToClass(AST.Float)
     def printTree(self, indent=0):
         print("| "*indent + str(self.value))
@@ -34,7 +34,7 @@ class TreePrinter:
         if(isinstance(self.value, AST.Node)):
             self.value.printTree(indent) ## indent ++
         else:
-            print("| "*indent + str(self.value) + " " + str(self.poz))
+            print("| "*indent + str(self.value))
 
     @addToClass(AST.InstructionSet)
     def printTree(self, indent=0):
@@ -92,7 +92,9 @@ class TreePrinter:
 
     @addToClass(AST.Ref)
     def printTree(self, indent=0):
-        print("| "*indent + self.target)
+        print(self.target.value)
+        #print("| "*indent + self.target.value)
+        self.target.printTree(indent)
         print("| "*indent + "Ref")
         for node in self.nodes:
             node.printTree(indent+1)

@@ -40,23 +40,22 @@ good_operations_and_types = {
     ("int", "vector", "+") : "vector",
     ("int", "vector", "*") : "vector",
 
-    ("vector", "vector", "DOTADD") : "vector",
-    ("vector", "vector", "DOTSUB") : "vector",
-    ("vector", "vector", "DOTMUL") : "vector",
-    ("vector", "vector", "DOTDIV") : "vector",
+    ("vector", "vector", ".+") : "vector",
+    ("vector", "vector", ".-") : "vector",
+    ("vector", "vector", ".*") : "vector",
+    ("vector", "vector", "./") : "vector",
 
     ("int", "int", "CMP") : "int",
     ("float", "float", "CMP") : "int",
     ("int", "float", "CMP") : "int",
     ("float", "int", "CMP") : "int",
 
-    ("vector", "vector", "EQ") : "int",
-    ("string", "string", "EQ") : "int",
-    ("vector", "vector", "NE") : "int",
-    ("string", "string", "NE") : "int"
+    ("vector", "vector", "==") : "int",
+    ("string", "string", "==") : "int",
+    ("vector", "vector", "!=") : "int",
+    ("string", "string", "!=") : "int"
 }
 
-symbols = SymbolTable()
 
 class ValueType():
     def __init__(self, node, value=None):
@@ -67,10 +66,6 @@ class ValueType():
             self.type = "float"
         elif(isinstance(node, AST.String)):
             self.type = "string"
-        elif(isinstance(node, AST.Id)):
-            self.type = symbols.get(node.value)
-            #self.type = "id"
-            self.target = node.value
         elif(isinstance(node, AST.Vector)): # vector
             self.type = "vector"
             if(isinstance(node.nodes[0], AST.Vector)): # [[1,2], [3+5,4]]
@@ -108,11 +103,12 @@ class NodeVisitor(object):
 
 
 class TypeChecker(NodeVisitor):
-    # zwracamy AST.Int itp... + AST.Vector
     """
     czyli do każdego noda sprawdzamy wszystkie potrzebne nody dzieci i potem sprawdzamy czy da sie wykonać operacje na nich
     
     """
+    def __init__(self):
+        self.symbols = SymbolTable()
     def visit_String(self, node):
         return ValueType(node)
 
@@ -123,7 +119,7 @@ class TypeChecker(NodeVisitor):
         return ValueType(node)
 
     def visit_Vector(self, node): # [[1,2], [3+5,4], 34]
-        # różna długości wektorów
+        # różne długości wektorów
         # różne typy
         val_inside_type = self.visit(node.nodes[0])
         if(val_inside_type.type == "vector"):
@@ -149,7 +145,11 @@ class TypeChecker(NodeVisitor):
             
 
     def visit_Id(self, node):
-        return ValueType(node)
+        value = ValueType(self.symbols.get(node.value).type)
+        if(value.type == "vector"):
+            value.shape = self.symbols.get(node.value).shape
+        value.target = node.value
+        return value
 
     def visit_Value(self, node):
         return self.visit(node.value) 
@@ -165,24 +165,27 @@ class TypeChecker(NodeVisitor):
         valueType = self.visit(node.value)
         if(valueType.type != "int"):
             raise BaseException("Eye with not int")
-        return ValueType("vector", (self.value, self.value))
+        return ValueType("vector", (node.value.value.value, node.value.value.value))
 
     def visit_Zeros(self, node):
         valueType = self.visit(node.value)
         if(valueType.type != "int"):
             raise BaseException("Zeros with not int")
-        return ValueType("vector", (self.value, self.value))
+        return ValueType("vector", (node.value.value.value, node.value.value.value))
 
     def visit_Ones(self, node):
         valueType = self.visit(node.value)
         if(valueType.type != "int"):
             raise BaseException("Ones with not int")
-        return ValueType("vector", (self.value, self.value))
+        return ValueType("vector", (node.value.value.value, node.value.value.value))
 
     def visit_BinExpr(self, node):
         type1 = self.visit(node.left)     # type1 = node.left.accept(self) 
         type2 = self.visit(node.right)    # type2 = node.right.accept(self)
         op    = node.op
+        if(type1.type == "vector" and type2.type == "vector"):
+            if(type1.shape != type2.shape):
+                raise BaseException("Wrong dimentions in expresion")
         if( not (type1.type, type2.type, op) in good_operations_and_types):
             raise BaseException("Wrong operators")
         return ValueType(good_operations_and_types[(type1.type, type2.type, op)])
@@ -195,17 +198,18 @@ class TypeChecker(NodeVisitor):
         type2 = self.visit(node.right)
         op    = node.op
         if( not (type1.type, type2.type, op) in good_operations_and_types 
-            or not (type1.type, type2.type, "CMP") in good_operations_and_types):
+            and not (type1.type, type2.type, "CMP") in good_operations_and_types):
             raise BaseException("Wrong compare operators")
         return ValueType("int")
 
     def visit_Assign(self, node):   ##      wsadzanie do tablicy ID
-        type_target = self.visit(node.target) 
-
         type_value = self.visit(node.value)
         op    = node.op
         if(op == "="): 
+            if(not isinstance(node.target, AST.Ref)):
+                self.symbols.put(node.target.value, type_value)
             return type_value
+        type_target = self.visit(node.target) 
         op = op[:-1]
         if( not (type_target.type, type_value.type, op) in good_operations_and_types):
             if(not (type_target.type, type_value.type, "."+op) in good_operations_and_types):
@@ -213,14 +217,17 @@ class TypeChecker(NodeVisitor):
             else:
                 op = "." + op
         out_valueType = ValueType(good_operations_and_types[(type_target.type, type_value.type, op)]) 
-        symbols.put(type_target.target, out_valueType.type)
+        if(not isinstance(node.target, AST.Ref)):
+            self.symbols.put(type_target.target, out_valueType)
         return out_valueType
 
-    def visit_Ref(self, node): # A[1,2,3] = 1
+    def visit_Ref(self, node): # A[1,2] = 1
         type_target = self.visit(node.target)  
         if(type_target.type != "vector"):
             raise BaseException("Reference to not vector")
-        for node in self.nodes:
+        if(len(node.nodes) > 2):
+            raise BaseException("Reference with too long vector")
+        for node in node.nodes:
             type_node = self.visit(node)   
             if(type_node.type != "int"):
                 raise BaseException("Wrong access operator value")
@@ -228,21 +235,28 @@ class TypeChecker(NodeVisitor):
         
 
     def visit_IfExp(self, node):
+        self.symbols = self.symbols.create_new_scope(True)  
         self.visit(node.cond)  
         self.visit(node.body)  
-        if(node.orelse): self.visit(node.orelse)  
+        if(node.orelse): self.visit(node.orelse) 
+        self.symbols = self.symbols.leave_scope() 
 
     def visit_While(self, node):
+        self.symbols = self.symbols.create_new_scope(True)  
         self.visit(node.test)  
-        self.visit(node.body)  
+        self.visit(node.body)
+        self.symbols = self.symbols.leave_scope()
 
     def visit_For(self, node):  # dodaje do przestrzeni nazw
-        iter_type = self.visit(node.itera)
+        self.symbols = self.symbols.create_new_scope(True)  
+        iter_type = node.itera.value # self.visit(node.itera)
+        self.symbols.put(iter_type, ValueType("int"))
         rangeStart = self.visit(node.rangeStart)
         if(rangeStart.type != "int"):   raise BaseException("rangeStart not int")
         rangeEnd = self.visit(node.rangeEnd)
         if(rangeEnd.type != "int"):   raise BaseException("rangeEnd not int")
         self.visit(node.body)
+        self.symbols = self.symbols.leave_scope()
 
     def visit_Print(self, node):
         for val in node.nodes:
@@ -253,10 +267,12 @@ class TypeChecker(NodeVisitor):
             self.visit(val)
 
     def visit_Break(self, node):
-        pass
+        if(not self.symbols.isInLoopScope()):
+            raise BaseException("Break not in scope")
 
     def visit_Continue(self, node):     # sprawdzanie scopa
-        pass
+        if(not self.symbols.isInLoopScope()):
+            raise BaseException("Continue not in scope")
 
     def visit_InstructionSet(self, node):
         for val in node.nodes:
@@ -264,6 +280,11 @@ class TypeChecker(NodeVisitor):
     
     def visit_Instruction(self, node):
         try:
-            self.visit(node.node)
+            if(isinstance(node.node, AST.InstructionSet)):
+                self.symbols = self.symbols.create_new_scope(False)
+                self.visit(node.node)
+                self.symbols = self.symbols.leave_scope()
+            else:
+                self.visit(node.node)
         except BaseException as e:
             print("ERROR: [" + str(node.poz) + "] " + str(e))

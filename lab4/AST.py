@@ -133,7 +133,7 @@ class Print(Node):
 
 
 class Return(Node):
-    def __init__(self, value, poz):
+    def __init__(self, nodes, poz):
         self.poz = poz
         self.nodes = nodes  # node list
 

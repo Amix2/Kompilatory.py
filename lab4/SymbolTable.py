@@ -9,17 +9,23 @@ class SymbolTable(object):
     def __init__(self, parent=None): # parent scope and symbol table name
         self.vars_dict = {}
         self.parent = parent
+        self.inLoopScope = False
 
     def put(self, name, value): # value is node
         self.vars_dict[name] = value
+        #print(self.vars_dict)
 
     def get(self, name): # get variable symbol or fundef from <name> entry
         if(name in self.vars_dict): return self.vars_dict[name]
-        if(self.parent is None):    raise BaseException("Value not found")
+        if(self.parent is None):    raise BaseException("Value not found " + str(name))
         else:   return self.parent.get(name)
 
-    def create_new_scope(self):
+    def isInLoopScope(self):
+        return self.inLoopScope
+
+    def create_new_scope(self, isInLoop=False):
         newScope = SymbolTable(self)
+        newScope.inLoopScope = isInLoop
         return newScope
 
     def leave_scope(self):
