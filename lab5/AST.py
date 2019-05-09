@@ -32,6 +32,7 @@ class Id(Node):
 
 class Value(Node):
     def __init__(self, value, poz):
+        print("QQQ VVALUEEEEEEEEEEEEEEE")
         self.poz = poz
         self.value = value  # node or not
 
