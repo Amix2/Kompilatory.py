@@ -1,5 +1,6 @@
 # visit.py
 # Updated 2013-06-20 to fix bug on line 38
+# fixed retardation with __name__
 
 import inspect
 
@@ -20,7 +21,7 @@ def when(param_type):
   # dispatcher is an function object
   def f(fn):
     frame = inspect.currentframe().f_back
-    dispatcher = frame.f_locals[fn.func_name]
+    dispatcher = frame.f_locals[fn.__name__]
     if not isinstance(dispatcher, Dispatcher):
       dispatcher = dispatcher.dispatcher
     dispatcher.add_target(param_type, fn)
@@ -45,10 +46,7 @@ class Dispatcher(object):
     if d is not None:
       return d(*args, **kw)
     else:
-      issub = issubclass
-      t = self.targets
-      ks = t.iterkeys()
-      return [ t[k](*args, **kw) for k in ks if issub(typ, k) ]
+      return [ self.targets[k](*args, **kw) for k in self.targets.items() if issubclass(typ, k.__class__) ]
 
   def add_target(self, typ, target):
     self.targets[typ] = target
