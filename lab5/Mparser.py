@@ -85,18 +85,18 @@ def p_basic_value(p):
              | ID_GR '[' LIST_VALUE ']'
              | VALUE "'" """
     if(len(p) == 2):
-        p[0] = AST.Value(p[1], p.lineno(1))
+        p[0] = p[1]
     elif(len(p) == 3):
-        p[0] = AST.Value(AST.Transpose(AST.Value(p[1], p.lineno(1)), p.lineno(1)), p.lineno(1))
+        p[0] = AST.Transpose(p[1], p.lineno(1))
     else:
         if(p[2] == "[") :
-            p[0] = AST.Value(AST.Ref(p[1], p[3], p.lineno(1)), p.lineno(1))
+            p[0] = AST.Ref(p[1], p[3], p.lineno(1))
         elif(p[1].upper() == "EYE"):
-            p[0] = AST.Value(AST.Eye(p[3], p.lineno(3)), p.lineno(3))
+            p[0] = AST.Eye(p[3], p.lineno(3))
         elif(p[1].upper() == "ZEROS"):
-            p[0] = AST.Value(AST.Zeros(p[3], p.lineno(3)), p.lineno(3))
+            p[0] = AST.Zeros(p[3], p.lineno(3))
         elif(p[1].upper() == "ONES"):
-            p[0] = AST.Value(AST.Ones(p[3], p.lineno(3)), p.lineno(3) )
+            p[0] = AST.Ones(p[3], p.lineno(3))
     
 
 def p_basic_list_values(p):

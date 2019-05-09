@@ -8,6 +8,10 @@ import ply.yacc as yacc
 from TreePrinter import TreePrinter
 from TypeChecker import TypeChecker
 
+import sys
+import ply.yacc as yacc
+from Interpreter import Interpreter
+
 if __name__ == '__main__':
 
     try:
@@ -22,18 +26,19 @@ if __name__ == '__main__':
     lexer.input(text)
 
     # Tokenize
-    while True:
-        tok = lexer.token()
-        if not tok: 
-            break    # No more input
-        column = scanner.find_column(text,tok)
-        print("(%d,%d): %s(%s)" %(tok.lineno, column, tok.type, tok.value))
+    #while True:
+      #  tok = lexer.token()
+      #  if not tok: 
+    #       break    # No more input
+      #  column = scanner.find_column(text,tok)
+     #   print("(%d,%d): %s(%s)" %(tok.lineno, column, tok.type, tok.value))
     print("===========================")
     parser = Mparser.parser
-    ast = parser.parse(text, lexer=scanner.lexer, tracking=True)
+    ast = parser.parse(text, lexer=lexer, tracking=True)
     ast.printTree()
 
     # Below code shows how to use visitor
     typeChecker = TypeChecker()   
     typeChecker.visit(ast)   # or alternatively ast.accept(typeChecker)
 
+    ast.accept(Interpreter())

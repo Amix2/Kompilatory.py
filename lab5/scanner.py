@@ -73,7 +73,7 @@ def t_COMMENT(t):
 
 def t_newline(t):
     r'\n'
-    t.lexer.lineno += len(t.value)
+    t.lexer.lineno += 1
 
 def find_column(input, token):
     line_start = input.rfind('\n', 0, token.lexpos) + 1

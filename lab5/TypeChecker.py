@@ -165,26 +165,29 @@ class TypeChecker(NodeVisitor):
         valueType = self.visit(node.value)
         if(valueType.type != "int"):
             raise BaseException("Eye with not int")
-        return ValueType("vector", (node.value.value.value, node.value.value.value))
+        return ValueType("vector", (node.value.value, node.value.value))
 
     def visit_Zeros(self, node):
         valueType = self.visit(node.value)
         if(valueType.type != "int"):
             raise BaseException("Zeros with not int")
-        return ValueType("vector", (node.value.value.value, node.value.value.value))
+        return ValueType("vector", (node.value.value, node.value.value))
 
     def visit_Ones(self, node):
         valueType = self.visit(node.value)
         if(valueType.type != "int"):
             raise BaseException("Ones with not int")
-        return ValueType("vector", (node.value.value.value, node.value.value.value))
+        return ValueType("vector", (node.value.value, node.value.value))
 
     def visit_BinExpr(self, node):
         type1 = self.visit(node.left)     # type1 = node.left.accept(self) 
         type2 = self.visit(node.right)    # type2 = node.right.accept(self)
         op    = node.op
         if(type1.type == "vector" and type2.type == "vector"):
-            if(type1.shape != type2.shape):
+            #print(type1.shape, type2.shape)
+            if((type1.shape != type2.shape and (op=="-" or op=="+"))
+                or (type1.shape != type2.shape[::-1] and (op=="*" or op=="/"))
+                or (type2.shape[0] != type2.shape[1] and op=="/")):
                 raise BaseException("Wrong dimentions in expresion")
         if( not (type1.type, type2.type, op) in good_operations_and_types):
             raise BaseException("Wrong operators")
