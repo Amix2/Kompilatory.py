@@ -55,13 +55,6 @@ def p_instruction(p):
     else:
         p[0] = p[2]
 
-def p_break(p):
-    """BREAK_GR : BREAK ';' """
-    p[0] = AST.Break(p.lineno(1))
-
-def p_continue(p):
-    """CONTINUE_GR : CONTINUE ';' """
-    p[0] = AST.Continue(p.lineno(1))
 
 def p_basic_vector(p):
     """VECTOR : '[' LIST_VALUE ']'"""
@@ -201,6 +194,13 @@ def p_fun_print(p):
 def p_fun_return(p):
     """RETURN_FUN : RETURN LIST_VALUE ';'"""
     p[0] = AST.Return(p[2], p.lineno(2))
+def p_break(p):
+    """BREAK_GR : BREAK ';' """
+    p[0] = AST.Break(p.lineno(1))
+
+def p_continue(p):
+    """CONTINUE_GR : CONTINUE ';' """
+    p[0] = AST.Continue(p.lineno(1))
 
 
 parser = yacc.yacc()

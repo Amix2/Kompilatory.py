@@ -1,5 +1,7 @@
 A = 1;
 B = "we";
+break;
+
 if(A == B) {
     A = 1;
 }
