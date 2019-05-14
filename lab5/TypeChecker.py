@@ -24,21 +24,21 @@ good_operations_and_types = {
 
     ("string", "string", "+") : "string",
 
-    ("vector", "float", "+") : "vector",
-    ("vector", "float", "-") : "vector",
-    ("vector", "float", "*") : "vector",
-    ("vector", "float", "/") : "vector",
+    ("vector", "float", ".+") : "vector",
+    ("vector", "float", ".-") : "vector",
+    ("vector", "float", ".*") : "vector",
+    ("vector", "float", "./") : "vector",
     
-    ("float", "vector", "+") : "vector",
-    ("float", "vector", "*") : "vector",
+    ("float", "vector", ".+") : "vector",
+    ("float", "vector", ".*") : "vector",
 
-    ("vector", "int", "+") : "vector",
-    ("vector", "int", "-") : "vector",
-    ("vector", "int", "*") : "vector",
-    ("vector", "int", "/") : "vector",
+    ("vector", "int", ".+") : "vector",
+    ("vector", "int", ".-") : "vector",
+    ("vector", "int", ".*") : "vector",
+    ("vector", "int", "./") : "vector",
     
-    ("int", "vector", "+") : "vector",
-    ("int", "vector", "*") : "vector",
+    ("int", "vector", ".+") : "vector",
+    ("int", "vector", ".*") : "vector",
 
     ("vector", "vector", ".+") : "vector",
     ("vector", "vector", ".-") : "vector",
@@ -211,6 +211,8 @@ class TypeChecker(NodeVisitor):
         if(op == "="): 
             if(not isinstance(node.target, AST.Ref)):
                 self.symbols.put(node.target.value, type_value)
+            else:
+                self.visit(node.target)
             return type_value
         type_target = self.visit(node.target) 
         op = op[:-1]
@@ -224,16 +226,21 @@ class TypeChecker(NodeVisitor):
             self.symbols.put(type_target.target, out_valueType)
         return out_valueType
 
-    def visit_Ref(self, node): # A[1,2] = 1
+    def visit_Ref(self, node): # A[1,2]
         type_target = self.visit(node.target)  
         if(type_target.type != "vector"):
             raise BaseException("Reference to not vector")
         if(len(node.nodes) > 2):
             raise BaseException("Reference with too long vector")
+        #print("QQQQQQQQQQQQQQQQQQQ",type_target.shape,len(node.nodes) )
+        if(type_target.shape[0] == 1 and len(node.nodes) != 1
+            or type_target.shape[0] != 1 and len(node.nodes) == 1):
+            raise BaseException("Wrong dimentions")
         for node in node.nodes:
             type_node = self.visit(node)   
             if(type_node.type != "int"):
                 raise BaseException("Wrong access operator value")
+        
         return ValueType("float")
         
 

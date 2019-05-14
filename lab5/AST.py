@@ -2,7 +2,7 @@
 
 class Node(object):
     def accept(self, visitor):
-        visitor.visit(self)
+        return visitor.visit(self)
     pass
 
 
@@ -123,9 +123,9 @@ class While(Node):
 class For(Node):
     def __init__(self, itera, rangeStart, rangeEnd, body, poz):
         self.poz = poz
-        self.itera = itera  # node
-        self.rangeStart = rangeStart  # node
-        self.rangeEnd = rangeEnd  # node
+        self.itera = itera  # node ID_GR
+        self.rangeStart = rangeStart  # node VAL
+        self.rangeEnd = rangeEnd  # node VAL(int?)
         self.body = body  # node
 
 

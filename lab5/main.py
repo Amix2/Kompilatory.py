@@ -7,6 +7,7 @@ import Mparser
 import ply.yacc as yacc
 from TreePrinter import TreePrinter
 from TypeChecker import TypeChecker
+from Exceptions import *
 
 import sys
 import ply.yacc as yacc
@@ -35,10 +36,12 @@ if __name__ == '__main__':
     print("===========================")
     parser = Mparser.parser
     ast = parser.parse(text, lexer=lexer, tracking=True)
-    ast.printTree()
+    #ast.printTree()
 
     # Below code shows how to use visitor
     typeChecker = TypeChecker()   
     typeChecker.visit(ast)   # or alternatively ast.accept(typeChecker)
-
-    ast.accept(Interpreter())
+    try:
+      ast.accept(Interpreter())
+    except ReturnValueException as e:
+      print(e)
