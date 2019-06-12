@@ -2,4 +2,3 @@ A = ones(2);
 B = ones(2);
 q = 2;
 C = q .*A;
-
