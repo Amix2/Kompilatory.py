@@ -1,4 +1,3 @@
-
 import sys
 import ply.lex as lex
 import scanner

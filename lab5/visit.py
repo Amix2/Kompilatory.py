@@ -1,7 +1,7 @@
 # visit.py
 # Updated 2013-06-20 to fix bug on line 38
 # fixed retardation with __name__
-
+                
 import inspect
 
 __all__ = ['on', 'when']

@@ -1,6 +1,6 @@
 import sys
 import ply
-
+   
 reserved = {
     'for' : 'FOR',
     'if' : 'IF',

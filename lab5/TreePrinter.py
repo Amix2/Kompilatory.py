@@ -1,6 +1,6 @@
 from __future__ import print_function
 import AST
-import inspect
+import inspect    
 
 def addToClass(cls):
     def decorator(func):

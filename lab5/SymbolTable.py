@@ -1,5 +1,4 @@
 #!/usr/bin/python
-
 class SymbolTable(object):
     """ Zwraca wartość zmmiennej oraz informacje o przestreni nazw (czy w if, while, for)
     get(var_name) -> zwraca wartość z tego poziomu lub najbliższego poniżej

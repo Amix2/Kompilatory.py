@@ -1,7 +1,7 @@
 #!/usr/bin/python
 import AST
 from SymbolTable import SymbolTable
-
+          
 good_operations_and_types = {
     ("int", "int", "+") : "int",
     ("int", "int", "-") : "int",

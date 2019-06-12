@@ -1,5 +1,4 @@
 #!/usr/bin/python
-
 import scanner
 import ply.yacc as yacc
 import AST
